@@ -1355,9 +1355,11 @@
             <div class="field-group" style="flex: 1; min-width: 200px;">
               <label>Select Preset to Test</label>
               <select id="variance-preset-select">
-                <option value="most-predictable">most-predictable (T: 0.0, topK: 1) — Expect 100% Identical</option>
+                <option value="most-predictable">most-predictable (T: 0.0, topK: 1) — Fully Deterministic</option>
                 <option value="predictable">predictable (T: 0.3, topK: 32) — Very Low Variance</option>
-                <option value="balanced">balanced (T: 1.0, topK: 64) — Moderate Variance</option>
+                <option value="slightly-predictable">slightly-predictable (T: 0.7, topK: 64) — Controlled Coherence</option>
+                <option value="balanced" selected>balanced (T: 1.0, topK: 64) — Moderate Variance</option>
+                <option value="slightly-creative">slightly-creative (T: 1.1, topK: 72) — Expressive Variance</option>
                 <option value="creative">creative (T: 1.15, topK: 80) — High Divergence</option>
                 <option value="most-creative">most-creative (T: 1.2, topK: 100) — Maximum Entropy</option>
               </select>

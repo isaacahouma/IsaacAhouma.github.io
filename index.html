@@ -1679,8 +1679,8 @@ const SAMPLE_PROMPTS = {
     user: "If 5 machines make 5 widgets in 5 minutes, how many minutes do 100 machines take to make 100 widgets?"
   },
   json_schema: {
-    system: "You are an automated extraction pipeline. Output clean formatted JSON with appointee, title, and organization.",
-    user: "Extract data as JSON from: 'Dr. Sarah Chen was appointed Chief AI Architect at DeepMind.'"
+    system: "You are an automated travel assistant. Extract flight_number, origin, destination, and departure_time as clean JSON.",
+    user: "Extract data as JSON from: 'Flight AC840 departing Vancouver (YVR) at 14:30 arriving London Heathrow (LHR) at 07:45+1.'"
   },
   regex_code: {
     system: "You are a developer. Provide a clean JavaScript regex literal with a 1-line JSDoc comment.",
@@ -2022,16 +2022,16 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
     result = map[presetId] || map["balanced"];
   }
 
-  // 5. JSON Entity Schema
-  else if (pLower.includes("json") || pLower.includes("sarah chen")) {
+  // 5. JSON Flight Itinerary Schema
+  else if (pLower.includes("json") || pLower.includes("flight") || pLower.includes("ac840") || pLower.includes("vancouver")) {
     const map = {
-      "most-predictable": `{\n  "appointee": "Dr. Sarah Chen",\n  "title": "Chief AI Architect",\n  "organization": "DeepMind"\n}`,
-      "predictable": `{\n  "executive": "Dr. Sarah Chen",\n  "role": "Chief AI Architect",\n  "company": "DeepMind",\n  "verified": true\n}`,
-      "slightly-predictable": `{\n  "name": "Dr. Sarah Chen",\n  "position": "Chief AI Architect",\n  "organization": "DeepMind",\n  "effective_date": "Current"\n}`,
-      "balanced": `{\n  "person": "Dr. Sarah Chen",\n  "leadership_role": "Chief AI Architect",\n  "affiliation": "DeepMind"\n}`,
-      "slightly-creative": `{\n  "leader": "Dr. Sarah Chen",\n  "designation": "Chief AI Architect",\n  "organization": "DeepMind",\n  "domain": "Artificial Intelligence"\n}`,
-      "creative": `{\n  "architect": "Dr. Sarah Chen",\n  "executive_mandate": "Chief AI Architect @ DeepMind",\n  "status": "Appointed"\n}`,
-      "most-creative": `{\n  "visionary": "Dr. Sarah Chen",\n  "appointment": {\n    "title": "Chief AI Architect",\n    "entity": "DeepMind"\n  }\n}`
+      "most-predictable": `{\n  "flight_number": "AC840",\n  "origin": "Vancouver (YVR)",\n  "destination": "London Heathrow (LHR)",\n  "departure_time": "14:30",\n  "arrival_time": "07:45+1"\n}`,
+      "predictable": `{\n  "flight_number": "AC840",\n  "departure": {\n    "airport": "Vancouver (YVR)",\n    "time": "14:30"\n  },\n  "arrival": {\n    "airport": "London Heathrow (LHR)",\n    "time": "07:45+1"\n  }\n}`,
+      "slightly-predictable": `{\n  "flight": "AC840",\n  "origin_code": "YVR",\n  "destination_code": "LHR",\n  "departs": "14:30",\n  "arrives": "07:45 (+1 day)"\n}`,
+      "balanced": `{\n  "flight": "AC840",\n  "route": "YVR -> LHR",\n  "scheduled_departure": "14:30",\n  "scheduled_arrival": "07:45+1",\n  "status": "Scheduled"\n}`,
+      "slightly-creative": `{\n  "itinerary": {\n    "code": "AC840",\n    "from": "Vancouver International (YVR)",\n    "to": "London Heathrow (LHR)",\n    "departure_local": "14:30",\n    "overnight": true\n  }\n}`,
+      "creative": `{\n  "transatlantic_journey": {\n    "flight": "AC840",\n    "departure": "Vancouver (YVR) @ 14:30",\n    "arrival": "London Heathrow (LHR) @ 07:45 (Next Day)",\n    "flight_type": "Long-haul Red-eye"\n  }\n}`,
+      "most-creative": `{\n  "voyage_manifest": {\n    "carrier_flight": "AC840",\n    "origin_hub": "Vancouver (YVR)",\n    "destination_hub": "London Heathrow (LHR)",\n    "takeoff": "14:30",\n    "touchdown": "07:45+1",\n    "tags": ["Transatlantic", "Pacific-to-Atlantic", "RedEye"]\n  }\n}`
     };
     result = map[presetId] || map["balanced"];
   }
@@ -2797,35 +2797,47 @@ async function runVarianceTest() {
       tokens: res.tokens,
       throughput: res.latency > 0 ? (res.tokens / res.latency) : 0
     });
-  }
-
-  // Calculate Determinism Score
-  const firstOutput = completedOutputs[0];
-  let identicalCount = 0;
-  const uniqueSet = new Set(completedOutputs.filter(Boolean));
+  // Group identical runs into distinct variation clusters
+  const variationGroups = [];
+  const runVariationMap = [];
 
   completedOutputs.forEach((output, idx) => {
-    const isIdenticalToFirst = (output && output === firstOutput);
-    if (isIdenticalToFirst) identicalCount++;
+    const matchGroupIndex = variationGroups.findIndex(g => g.text === output);
+    if (matchGroupIndex === -1) {
+      // New unique variation found
+      const newGroupId = variationGroups.length + 1;
+      variationGroups.push({ id: newGroupId, text: output, firstRunIdx: idx });
+      runVariationMap.push({ groupId: newGroupId, isFirstInGroup: true, matchesRunIdx: idx });
+    } else {
+      // Duplicate of an earlier run
+      const matchedGroup = variationGroups[matchGroupIndex];
+      runVariationMap.push({ groupId: matchedGroup.id, isFirstInGroup: false, matchesRunIdx: matchedGroup.firstRunIdx });
+    }
+  });
 
+  completedOutputs.forEach((output, idx) => {
+    const info = runVariationMap[idx];
     const badge = document.createElement("span");
+
     if (idx === 0) {
       badge.className = "match-badge match-badge-identical";
-      badge.textContent = "Baseline Run";
-    } else if (isIdenticalToFirst) {
+      badge.textContent = "Baseline (Var #1)";
+    } else if (!info.isFirstInGroup) {
       badge.className = "match-badge match-badge-identical";
-      badge.textContent = "✓ 100% Identical Match";
+      badge.textContent = `✓ Matches Run #${info.matchesRunIdx + 1}`;
     } else {
       badge.className = "match-badge match-badge-divergent";
-      badge.textContent = "✦ Unique Variation";
+      badge.textContent = `✦ Variation #${info.groupId}`;
     }
     runCards[idx].card.querySelector(".result-card-header").appendChild(badge);
   });
 
-  const determinismScore = completedOutputs.length > 0 ? Math.round((identicalCount / numRuns) * 100) : 0;
-  document.getElementById("var-stat-determinism").textContent = `${determinismScore}%`;
-  document.getElementById("var-stat-determinism").style.color = (determinismScore === 100) ? "var(--accent-green)" : "var(--accent-purple)";
-  document.getElementById("var-stat-unique").textContent = `${uniqueSet.size} of ${numRuns}`;
+  const totalUnique = variationGroups.length;
+  const determinismPercent = (totalUnique === 1) ? 100 : Math.max(0, Math.round(((numRuns - totalUnique) / (numRuns - 1)) * 100));
+
+  document.getElementById("var-stat-determinism").textContent = `${totalUnique === 1 ? 100 : determinismPercent}%`;
+  document.getElementById("var-stat-determinism").style.color = (totalUnique === 1) ? "var(--accent-green)" : "var(--accent-purple)";
+  document.getElementById("var-stat-unique").textContent = `${totalUnique} of ${numRuns}`;
 
   updateMetricsTab();
   runBtn.disabled = false;

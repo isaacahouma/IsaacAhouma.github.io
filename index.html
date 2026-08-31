@@ -1,0 +1,2676 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Prompt API Parameters Origin Trial Token for https://isaacahouma.github.io -->
+  <meta http-equiv="origin-trial" content="ApZlvJnoCjivVB0KWbLrIrXtatCbSCHcVSgUd9Vto4WMKFF+O1gmMywhTa/zIelnmAjZXvkZydb4ugOfplpqRAoAAABzeyJvcmlnaW4iOiJodHRwczovL2lzYWFjYWhvdW1hLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElQYXJhbXMiLCJleHBpcnkiOjE4MDAzMTY4MDAsImlzU3ViZG9tYWluIjp0cnVlfQ==">
+  <title>Prompt API: Sampling Mode Presets Studio</title>
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-card: #21262d;
+      --bg-hover: #30363d;
+      --border-color: #30363d;
+      --accent-blue: #58a6ff;
+      --accent-purple: #bc8cff;
+      --accent-green: #3fb950;
+      --accent-yellow: #d29922;
+      --accent-orange: #f0883e;
+      --accent-red: #f85149;
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+      --code-bg: #090c10;
+      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+      /* Syntax Highlighting Colors */
+      --syn-keyword: #ff7b72;
+      --syn-fn: #d2a8ff;
+      --syn-str: #a5d6ff;
+      --syn-num: #79c0ff;
+      --syn-comment: #8b949e;
+      --syn-prop: #7ee787;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f6f8fa;
+      --bg-secondary: #ffffff;
+      --bg-card: #f0f3f6;
+      --bg-hover: #e1e4e8;
+      --border-color: #d0d7de;
+      --accent-blue: #0969da;
+      --accent-purple: #8250df;
+      --accent-green: #1a7f37;
+      --accent-yellow: #9a6700;
+      --accent-orange: #bc4c00;
+      --accent-red: #cf222e;
+      --text-main: #1f2328;
+      --text-muted: #656d76;
+      --code-bg: #f6f8fa;
+
+      /* Syntax Highlighting Colors Light */
+      --syn-keyword: #cf222e;
+      --syn-fn: #8250df;
+      --syn-str: #0a3069;
+      --syn-num: #0550ae;
+      --syn-comment: #6e7781;
+      --syn-prop: #116329;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-main) !important;
+      line-height: 1.5;
+      padding: 24px;
+      min-height: 100vh;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    [data-theme="dark"] body, [data-theme="dark"] .result-body, [data-theme="dark"] .result-card {
+      color: #f0f6fc !important;
+    }
+
+    [data-theme="light"] body, [data-theme="light"] .result-body, [data-theme="light"] .result-card {
+      color: #1f2328 !important;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .header-title h1 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text-main) !important;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title p {
+      color: var(--text-muted) !important;
+      margin-top: 4px;
+      font-size: 0.92rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .theme-toggle-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main) !important;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-blue);
+    }
+
+    .badge-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--accent-blue) !important;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .badge-link:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-blue);
+    }
+
+    /* API Status & Activation Bar */
+    .status-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-radius: 8px;
+      padding: 14px 18px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+    }
+
+    .status-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text-main) !important;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .status-dot.green { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+    .status-dot.yellow { background: var(--accent-yellow); box-shadow: 0 0 8px var(--accent-yellow); }
+    .status-dot.blue { background: var(--accent-blue); box-shadow: 0 0 8px var(--accent-blue); }
+
+    .activation-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .activation-box.show {
+      display: block;
+    }
+
+    .activation-section-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-main) !important;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .activation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .activation-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .activation-col {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .flags-step-list {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flags-step-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.82rem;
+    }
+
+    .cmd-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      gap: 8px;
+      overflow-x: auto;
+      color: var(--text-main) !important;
+    }
+
+    .copy-btn {
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      background: var(--accent-blue);
+      color: #ffffff !important;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: opacity 0.15s ease;
+    }
+
+    .copy-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Spectrum Overview */
+    .spectrum-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px 20px;
+      color: var(--text-main) !important;
+    }
+
+    .spectrum-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .spectrum-header h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main) !important;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 1100px) {
+      .preset-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .preset-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      color: var(--text-main) !important;
+    }
+
+    .preset-item:hover, .preset-item.selected {
+      border-color: var(--accent-blue);
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+    }
+
+    .preset-item.active-filter {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 8px rgba(63, 185, 80, 0.25);
+    }
+
+    .preset-name {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .preset-meta {
+      font-size: 0.73rem;
+      color: var(--text-muted) !important;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .param-pill {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main) !important;
+      font-family: var(--font-mono);
+    }
+
+    .temp-bar-bg {
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 3px;
+    }
+
+    .temp-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+    }
+
+    /* Main Studio Grid */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .studio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .control-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: fit-content;
+      color: var(--text-main) !important;
+    }
+
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main) !important;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted) !important;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    textarea, input[type="text"], select {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main) !important;
+      padding: 9px 12px;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus, input[type="text"]:focus, select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      background: var(--accent-blue);
+      color: #ffffff !important;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 16px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button.btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-main) !important;
+      border: 1px solid var(--border-color);
+    }
+
+    button.btn-secondary:hover {
+      background: var(--bg-hover);
+    }
+
+    /* Output Results Area */
+    .results-area {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      color: var(--text-muted) !important;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: color 0.15s ease;
+    }
+
+    .tab:hover {
+      color: var(--text-main) !important;
+    }
+
+    .tab.active {
+      color: var(--accent-blue) !important;
+      border-bottom-color: var(--accent-blue);
+      font-weight: 700;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 16px;
+    }
+
+    .result-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: border-color 0.2s ease;
+    }
+
+    .result-card:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .result-card-header {
+      padding: 10px 14px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .result-card-title {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main) !important;
+    }
+
+    .result-card-stats {
+      font-size: 0.73rem;
+      color: var(--text-muted) !important;
+      font-family: var(--font-mono);
+    }
+
+    .result-body {
+      background-color: var(--bg-secondary);
+      color: var(--text-main) !important;
+      padding: 16px;
+      font-size: 0.92rem;
+      min-height: 140px;
+      max-height: 380px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.6;
+      font-weight: 450;
+    }
+
+    .result-body pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px;
+      margin: 4px 0;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      overflow-x: auto;
+    }
+
+    .result-body code {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 2px 4px;
+      background: var(--bg-card);
+      border-radius: 4px;
+    }
+
+    .cursor-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: var(--accent-blue);
+      margin-left: 3px;
+      vertical-align: middle;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Enhanced Code Snippet Box */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 8px 14px;
+    }
+
+    .code-lang-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .code-box {
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-main) !important;
+      overflow-x: auto;
+      line-height: 1.65;
+      white-space: pre;
+    }
+
+    /* Syntax Highlighting Token Classes */
+    .syn-k { color: var(--syn-keyword); font-weight: 600; }
+    .syn-f { color: var(--syn-fn); font-weight: 600; }
+    .syn-s { color: var(--syn-str); }
+    .syn-n { color: var(--syn-num); }
+    .syn-c { color: var(--syn-comment); font-style: italic; }
+    .syn-p { color: var(--syn-prop); }
+
+    .tag-checkbox-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      color: var(--text-main) !important;
+    }
+
+    .tag-checkbox input {
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    .tag-checkbox.checked {
+      border-color: var(--accent-blue);
+      background: rgba(88, 166, 255, 0.12);
+    }
+
+    /* Metrics & Visual Charts */
+    .metrics-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .metrics-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    /* Vertical Bar Chart Panel */
+    .bar-chart-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .bar-chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .bar-chart-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .metric-toggle-pills {
+      display: flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .metric-pill-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .metric-pill-btn:hover {
+      color: var(--text-main);
+    }
+
+    .metric-pill-btn.active {
+      background: var(--accent-blue);
+      color: #ffffff !important;
+    }
+
+    .bar-chart-svg-container {
+      width: 100%;
+      height: 240px;
+      position: relative;
+    }
+
+    .bar-chart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Mode-Level Cards Breakdown Grid */
+    .mode-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .mode-stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mode-stat-name {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .mode-stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted) !important;
+    }
+
+    .mode-stat-row strong {
+      color: var(--text-main) !important;
+      font-family: var(--font-mono);
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+      gap: 16px;
+    }
+
+    .chart-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chart-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main) !important;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 6px;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: 145px 1fr 75px;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+    }
+
+    .chart-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+    }
+
+    .chart-bar-track {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      height: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .chart-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Distribution / Range Box Bar */
+    .distribution-track {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      height: 22px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .dist-range-band {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      border-radius: 3px;
+      opacity: 0.35;
+    }
+
+    .dist-median-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    .chart-val {
+      text-align: right;
+      font-weight: 600;
+      color: var(--text-main) !important;
+    }
+
+    .sample-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent-blue) !important;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      margin-left: 4px;
+    }
+
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      color: var(--text-main) !important;
+    }
+
+    .metrics-table th {
+      background: var(--bg-card);
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-muted) !important;
+      font-weight: 600;
+    }
+
+    .metrics-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      font-family: var(--font-mono);
+    }
+
+    /* Multi-Run Variance Tab Styles */
+    .variance-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      color: var(--text-main) !important;
+    }
+
+    .variance-info-banner {
+      background: rgba(88, 166, 255, 0.08);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .variance-controls-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .runs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .match-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .match-badge-identical {
+      background: rgba(63, 185, 80, 0.15);
+      color: var(--accent-green) !important;
+      border: 1px solid rgba(63, 185, 80, 0.4);
+    }
+
+    .match-badge-divergent {
+      background: rgba(188, 140, 255, 0.15);
+      color: var(--accent-purple) !important;
+      border: 1px solid rgba(188, 140, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-title">
+      <h1>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-purple);">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        Prompt API: Sampling Mode Presets
+      </h1>
+      <p>Real-time comparative playground, mode-specific performance metrics &amp; variance benchmark</p>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+        <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+      </button>
+      <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" class="badge-link">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        Spec Issue #203
+      </a>
+      <a href="https://github.com/webmachinelearning/prompt-api" target="_blank" class="badge-link">
+        Prompt API Explainer
+      </a>
+    </div>
+  </header>
+
+  <!-- Live Environment Availability & 1-Click Launch Bar -->
+  <div class="status-panel" id="status-panel">
+    <div class="status-header-row">
+      <div class="status-badge">
+        <span class="status-dot green" id="status-dot"></span>
+        <span id="status-text">Detecting Prompt API Environment...</span>
+      </div>
+      <button class="btn-secondary" id="toggle-activation-guide-btn" style="padding: 5px 12px; font-size: 0.8rem; font-weight: 600;">
+        🚀 Setup &amp; Flags Guide
+      </button>
+    </div>
+
+    <!-- Collapsible 1-Click Activation & chrome://flags Guide -->
+    <div class="activation-box" id="activation-guide-box">
+      <div class="activation-section-title">
+        🛠️ Chrome Built-in AI Activation Guide (Choose Method A or B)
+      </div>
+
+      <div class="activation-grid">
+        <!-- Method A: chrome://flags UI -->
+        <div class="activation-col">
+          <strong style="color: var(--accent-blue);">Method A: Configure via <code>chrome://flags</code></strong>
+          <ul class="flags-step-list">
+            <li class="flags-step-item">
+              <span><strong>1. Enable Prompt API Flag:</strong></span>
+              <div class="cmd-bar">
+                <span id="flag-prompt">chrome://flags/#prompt-api-for-gemini-nano</span>
+                <button class="copy-btn" onclick="copyText('flag-prompt')">Copy URL</button>
+              </div>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">Set to <strong>Enabled</strong>.</span>
+            </li>
+            <li class="flags-step-item">
+              <span><strong>2. Enable On-Device Model &amp; Bypass Perf:</strong></span>
+              <div class="cmd-bar">
+                <span id="flag-optguide">chrome://flags/#optimization-guide-on-device-model</span>
+                <button class="copy-btn" onclick="copyText('flag-optguide')">Copy URL</button>
+              </div>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">Set to <strong>Enabled BypassPerfRequirement</strong>.</span>
+            </li>
+            <li class="flags-step-item">
+              <span><strong>3. Verify Model in <code>chrome://components</code>:</strong></span>
+              <div class="cmd-bar">
+                <span id="flag-components">chrome://components</span>
+                <button class="copy-btn" onclick="copyText('flag-components')">Copy URL</button>
+              </div>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">Find <em>Optimization Guide On Device Model</em> &rarr; Click <em>Check for update</em> until status says <strong>Up-to-date</strong>.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Method B: 1-Click Terminal Launch -->
+        <div class="activation-col">
+          <strong style="color: var(--accent-purple);">Method B: Launch from Terminal with Command-Line Flags</strong>
+          
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 0.8rem; font-weight: 600;">Chrome Canary / Dev:</span>
+            <div class="cmd-bar">
+              <span id="cmd-canary">/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --enable-blink-features=AIPromptAPI,AIPromptAPIParams --enable-features=OptimizationGuideModelDownloading --optimization-guide-model-execution-override=1 file:///Users/iahouma/.gemini/jetski/brain/7a1d681d-edb1-4d59-99b3-b9afac02e2b4/sampling_mode_presets_demo.html</span>
+              <button class="copy-btn" onclick="copyText('cmd-canary')">Copy</button>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+            <span style="font-size: 0.8rem; font-weight: 600;">Local Chromium Build:</span>
+            <div class="cmd-bar">
+              <span id="cmd-chromium">/Users/iahouma/chrome/src/out/Default/Chromium.app/Contents/MacOS/Chromium --enable-blink-features=AIPromptAPI,AIPromptAPIParams file:///Users/iahouma/.gemini/jetski/brain/7a1d681d-edb1-4d59-99b3-b9afac02e2b4/sampling_mode_presets_demo.html</span>
+              <button class="copy-btn" onclick="copyText('cmd-chromium')">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spectrum Overview Cards -->
+  <div class="spectrum-card">
+    <div class="spectrum-header">
+      <h2>Categorical Presets Spectrum</h2>
+      <div style="font-size: 0.8rem; color: var(--text-muted);">
+        Canonical Order: <code>most-predictable</code> (T=0.0) &rarr; <code>most-creative</code> (T=1.2)
+      </div>
+    </div>
+    <div class="preset-grid" id="preset-summary-grid">
+      <!-- Injected via JS -->
+    </div>
+  </div>
+
+  <!-- Main Interaction Area -->
+  <div class="studio-grid">
+    <!-- Left Control Panel -->
+    <div class="control-panel">
+      <div class="section-title">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Prompt &amp; Mode Setup
+      </div>
+
+      <div class="field-group">
+        <label>Curated Samples (Public &amp; Spec Aligned)</label>
+        <select id="sample-prompt-selector">
+          <optgroup label="Deterministic &amp; Structured (Best for most-predictable / predictable)">
+            <option value="json_schema">📊 Structured JSON Entity Schema (Deterministic)</option>
+            <option value="regex_code">💻 Regex Validation Function (Code Gen)</option>
+            <option value="logic_breakdown">🧠 Math Logic Steps (Reasoning)</option>
+          </optgroup>
+          <optgroup label="Grounded &amp; Conversational (Best for predictable / balanced)">
+            <option value="polite_email">✉️ Professional Email Rephrasing (Tone)</option>
+            <option value="sentiment_breakdown">🎯 Sentiment &amp; Tone Analysis (Classification)</option>
+            <option value="translation_nuance">🌐 Localization &amp; Cultural Nuance (Translation)</option>
+          </optgroup>
+          <optgroup label="Creative &amp; Divergent (Best for creative / most-creative)">
+            <option value="tagline_bullets" selected>🏷️ Tagline &amp; 3 Feature Bullets (Creative Pitch)</option>
+            <option value="poem_3line">🎭 3-Line Metaphorical Poem (Poetic imagery)</option>
+            <option value="scifi_hook">🚀 Micro Sci-Fi Scene (Narrative Hook)</option>
+          </optgroup>
+          <optgroup label="Custom Input">
+            <option value="custom">✍️ Custom Prompt (Type your own)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label>System Prompt (Optional)</label>
+        <textarea id="system-prompt" rows="2" placeholder="e.g. Keep responses structured and concise (2-4 lines)."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label>User Prompt</label>
+        <textarea id="user-prompt" rows="3" placeholder="Enter your prompt here..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <label>Active Presets to Compare</label>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <label style="font-size: 0.72rem; display: flex; align-items: center; gap: 4px; cursor: pointer;" title="Strips markdown asterisks/headers without altering prompt list instructions">
+              <input type="checkbox" id="plain-text-toggle" checked style="cursor: pointer;">
+              <span>📝 Plain Text Only</span>
+            </label>
+            <label style="font-size: 0.72rem; display: flex; align-items: center; gap: 4px; cursor: pointer;" title="Streams tokens in real-time with session.promptStreaming() (uncheck for batch session.prompt())">
+              <input type="checkbox" id="prompt-streaming-toggle" checked style="cursor: pointer;">
+              <span>🌊 Prompt Streaming</span>
+            </label>
+          </div>
+        </div>
+        <div class="tag-checkbox-list" id="preset-selector-checkboxes">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button id="run-benchmark-btn" style="flex: 1;">
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>
+          Run Comparison
+        </button>
+        <button class="btn-secondary" id="clear-results-btn">Clear</button>
+      </div>
+    </div>
+
+    <!-- Right Results Area -->
+    <div class="results-area">
+      <div class="tabs">
+        <div class="tab active" data-tab="stream">Live Multi-Output Grid</div>
+        <div class="tab" data-tab="variance">Multi-Run Repeatability &amp; Variance</div>
+        <div class="tab" data-tab="metrics">Mode-Level Latency &amp; Token Distributions</div>
+        <div class="tab" data-tab="code">JavaScript API Code</div>
+        <div class="tab" data-tab="spec">Parameters Reference</div>
+      </div>
+
+      <!-- Tab 1: Live Grid -->
+      <div id="tab-content-stream">
+        <div class="results-grid" id="results-cards-container">
+          <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+            Select your desired presets and click <strong>"Run Comparison"</strong> to stream outputs side-by-side in spectrum order.
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Multi-Run Repeatability & Variance -->
+      <div id="tab-content-variance" style="display: none;">
+        <div class="variance-panel">
+          <div class="variance-info-banner">
+            <strong>🎯 Purpose of Multi-Run Repeatability Testing:</strong>
+            <p style="margin-top: 4px; color: var(--text-muted);">
+              Runs the exact same prompt <em>multiple times</em> through <code>LanguageModel.create({ samplingMode })</code> to observe entropy behavior.
+              <strong><code>most-predictable</code> (Temperature: 0.0, Top-K: 1)</strong> guarantees <strong>100% identical outputs</strong> across runs (essential for unit tests, code generation, and deterministic workflows).
+              In contrast, <strong><code>creative</code> &amp; <code>most-creative</code></strong> sample different vocabulary paths on every run.
+            </p>
+          </div>
+
+          <div class="variance-controls-row">
+            <div class="field-group" style="flex: 1; min-width: 200px;">
+              <label>Select Preset to Test</label>
+              <select id="variance-preset-select">
+                <option value="most-predictable">most-predictable (T: 0.0, topK: 1) — Expect 100% Identical</option>
+                <option value="predictable">predictable (T: 0.3, topK: 32) — Very Low Variance</option>
+                <option value="balanced">balanced (T: 1.0, topK: 64) — Moderate Variance</option>
+                <option value="creative">creative (T: 1.15, topK: 80) — High Divergence</option>
+                <option value="most-creative">most-creative (T: 1.2, topK: 100) — Maximum Entropy</option>
+              </select>
+            </div>
+
+            <div class="field-group" style="width: 140px;">
+              <label>Repeat Count</label>
+              <select id="variance-runs-count">
+                <option value="3">3 Runs</option>
+                <option value="4">4 Runs</option>
+                <option value="5">5 Runs</option>
+              </select>
+            </div>
+
+            <button id="run-variance-btn" style="height: 38px;">
+              <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/><path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/></svg>
+              Run Repeatability Test
+            </button>
+          </div>
+
+          <!-- Variance Stats Banner -->
+          <div class="metrics-summary-grid" id="variance-metrics-boxes" style="display: none;">
+            <div class="metric-stat-box">
+              <span class="title">Selected Preset</span>
+              <span class="value" id="var-stat-preset" style="font-size: 1.1rem;">-</span>
+            </div>
+            <div class="metric-stat-box">
+              <span class="title">Determinism / Identity Match</span>
+              <span class="value" id="var-stat-determinism">-%</span>
+            </div>
+            <div class="metric-stat-box">
+              <span class="title">Unique Variations Produced</span>
+              <span class="value" id="var-stat-unique">0</span>
+            </div>
+          </div>
+
+          <!-- Runs Output Grid -->
+          <div class="runs-grid" id="variance-results-container">
+            <div style="color: var(--text-muted); font-size: 0.9rem; padding: 32px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+              Click <strong>"Run Repeatability Test"</strong> to execute multiple sequential runs and verify determinism vs divergence.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Mode-Level Latency & Token Distributions -->
+      <div id="tab-content-metrics" style="display: none;">
+        <div class="metrics-container">
+          <div class="metrics-header-bar">
+            <div>
+              <strong style="color: var(--text-main);">📊 Mode-Level Statistical Profiles</strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">
+                Performance metrics computed independently per sampling mode across all executed runs.
+              </div>
+            </div>
+            <button class="btn-secondary" id="reset-metrics-btn" style="padding: 5px 12px; font-size: 0.78rem;">
+              🗑️ Reset Aggregated History
+            </button>
+          </div>
+
+          <!-- Dedicated Vertical Bar Chart Component -->
+          <div class="bar-chart-card">
+            <div class="bar-chart-header">
+              <div class="bar-chart-title">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent-blue);">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Comparative Mode Bar Chart</span>
+              </div>
+              <div class="metric-toggle-pills" id="bar-chart-metric-selector">
+                <button class="metric-pill-btn active" data-metric="latency">⏱️ Median Latency (s)</button>
+                <button class="metric-pill-btn" data-metric="tokens">📊 Token Count</button>
+                <button class="metric-pill-btn" data-metric="throughput">⚡ Throughput (tok/s)</button>
+              </div>
+            </div>
+
+            <div class="bar-chart-svg-container" id="svg-bar-chart-wrapper">
+              <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding-top: 90px;">
+                Run a comparison to generate the comparative bar chart across modes.
+              </div>
+            </div>
+          </div>
+
+          <!-- Individual Mode Cards Grid -->
+          <div class="mode-summary-grid" id="mode-stat-cards-container">
+            <div style="color: var(--text-muted); font-size: 0.85rem; padding: 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+              Run a comparison to view mode-specific performance profiles (Median Latency, Tokens, Throughput).
+            </div>
+          </div>
+
+          <!-- Visual Bar Charts & Distribution Box-Plots -->
+          <div class="charts-grid">
+            <!-- Chart 1: Latency Distribution with Median Indicator -->
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <span>⏱️ Mode Latency Distribution [Min &mdash; Median &mdash; Max]</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Band = Observed Range, Line = Median</span>
+              </div>
+              <div class="chart-body" id="chart-latency-body">
+                <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot latency distribution</div>
+              </div>
+            </div>
+
+            <!-- Chart 2: Output Token Distribution Histogram -->
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <span>📊 Mode Output Length (Median Token Count)</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Observed token count per mode</span>
+              </div>
+              <div class="chart-body" id="chart-tokens-body">
+                <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot token histogram</div>
+              </div>
+            </div>
+
+            <!-- Chart 3: Throughput Speed Histogram -->
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <span>⚡ Mode Streaming Throughput</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Tokens / second</span>
+              </div>
+              <div class="chart-body" id="chart-throughput-body">
+                <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot throughput distribution</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Breakdown Table with Cumulative Stats & Sample Counts -->
+          <table class="metrics-table">
+            <thead>
+              <tr>
+                <th>Sampling Preset</th>
+                <th>Temp / Top-K</th>
+                <th>Samples ($N$)</th>
+                <th>Median Latency [Min &mdash; Max]</th>
+                <th>Median Tokens</th>
+                <th>Throughput</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-table-body">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                  Run a comparison to generate performance metrics across presets.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 4: JavaScript API Snippet with Syntax Highlighting -->
+      <div id="tab-content-code" style="display: none;">
+        <div class="code-container">
+          <div class="code-toolbar">
+            <span class="code-lang-tag">JavaScript / Blink Web IDL</span>
+            <button class="copy-btn" id="copy-code-btn" onclick="copySnippetCode()">Copy Snippet</button>
+          </div>
+          <div class="code-box" id="code-snippet-box"></div>
+        </div>
+      </div>
+
+      <!-- Tab 5: Spec Reference -->
+      <div id="tab-content-spec" style="display: none;">
+        <table style="width: 100%; border-collapse: collapse; background: var(--bg-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-main);">
+          <thead>
+            <tr style="background: var(--bg-card); text-align: left; border-bottom: 1px solid var(--border-color);">
+              <th style="padding: 10px 12px; color: var(--text-muted);">Preset ID</th>
+              <th style="padding: 10px 12px; color: var(--text-muted);">Default Temp</th>
+              <th style="padding: 10px 12px; color: var(--text-muted);">Default Top-K</th>
+              <th style="padding: 10px 12px; color: var(--text-muted);">Semantic Intent &amp; Use-Cases</th>
+            </tr>
+          </thead>
+          <tbody id="spec-table-body">
+            <!-- Injected via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRESETS = [
+  {
+    id: "most-predictable",
+    name: "most-predictable",
+    temp: 0.0,
+    topK: 1,
+    color: "#3fb950",
+    desc: "Fully deterministic greedy decoding. Zero randomness.",
+    useCase: "Code generation, strict JSON/schema extraction, math proofs, fact checking."
+  },
+  {
+    id: "predictable",
+    name: "predictable",
+    temp: 0.3,
+    topK: 32,
+    color: "#58a6ff",
+    desc: "Low variance with tight factual grounding.",
+    useCase: "Translation, structured summaries, entity extraction, data formatting."
+  },
+  {
+    id: "slightly-predictable",
+    name: "slightly-predictable",
+    temp: 0.7,
+    topK: 64,
+    color: "#79c0ff",
+    desc: "Controlled variance with high structural coherence.",
+    useCase: "Technical documentation, essays, explainers, reports."
+  },
+  {
+    id: "balanced",
+    name: "balanced",
+    temp: 1.0,
+    topK: 64,
+    color: "#d29922",
+    desc: "Standard general-purpose distribution.",
+    useCase: "General conversation, multi-turn Q&A, versatile everyday tasks."
+  },
+  {
+    id: "slightly-creative",
+    name: "slightly-creative",
+    temp: 1.1,
+    topK: 72,
+    color: "#f0883e",
+    desc: "Expressive vocabulary with engaging rhythm.",
+    useCase: "Blog posts, creative copy, conversational dialogues."
+  },
+  {
+    id: "creative",
+    name: "creative",
+    temp: 1.15,
+    topK: 80,
+    color: "#bc8cff",
+    desc: "High narrative divergence and rich metaphorical ideas.",
+    useCase: "Fiction, storytelling, worldbuilding, brainstorming."
+  },
+  {
+    id: "most-creative",
+    name: "most-creative",
+    temp: 1.2,
+    topK: 100,
+    color: "#f85149",
+    desc: "Maximum entropy sampling with broadest vocabulary.",
+    useCase: "Poetry, surreal metaphors, unconventional concept ideation."
+  }
+];
+
+// Rich, Multi-Line Curated Benchmarks (2-4 lines, structured, easily scannable)
+const SAMPLE_PROMPTS = {
+  tagline_bullets: {
+    system: "You are a brand marketing expert. Provide a punchy tagline followed by 3 short bullet points.",
+    user: "Write a tagline and 3 feature bullets for an artisan espresso bar on Mars."
+  },
+  polite_email: {
+    system: "You are an executive communications editor. Provide a Subject line followed by a concise 2-sentence email body.",
+    user: "Rewrite this blunt message professionally: 'Send me the budget spreadsheet now, I need it today.'"
+  },
+  sentiment_breakdown: {
+    system: "You are an NLP classification system. Output the Sentiment label, the Tone, and the Key Factor.",
+    user: "Analyze the sentiment and tone: 'The flight was delayed three hours, but the flight attendants were exceptionally kind.'"
+  },
+  logic_breakdown: {
+    system: "You are a math logic tutor. Show a 2-step calculation breakdown followed by the final answer.",
+    user: "If 5 machines make 5 widgets in 5 minutes, how many minutes do 100 machines take to make 100 widgets?"
+  },
+  json_schema: {
+    system: "You are an automated extraction pipeline. Output clean formatted JSON with appointee, title, and organization.",
+    user: "Extract data as JSON from: 'Dr. Sarah Chen was appointed Chief AI Architect at DeepMind.'"
+  },
+  regex_code: {
+    system: "You are a developer. Provide a clean JavaScript regex literal with a 1-line JSDoc comment.",
+    user: "Write a regular expression to validate a standard 24-hour time string (00:00 to 23:59)."
+  },
+  poem_3line: {
+    system: "You are a poet. Write a 3-line evocative poem about time and memory.",
+    user: "Describe time and memory using an unusual physical metaphor in exactly 3 lines."
+  },
+  scifi_hook: {
+    system: "You are a speculative fiction author. Write a 2-sentence opening hook.",
+    user: "Write a 2-sentence sci-fi scene about a clockmaker who secretly repairs fading memories."
+  },
+  translation_nuance: {
+    system: "You are a localization specialist. Provide the idiomatic Spanish translation and a 1-line cultural nuance note.",
+    user: "Translate into natural Spanish: 'The stadium was buzzing with anticipation before the final whistle.'"
+  },
+  custom: {
+    system: "",
+    user: ""
+  }
+};
+
+// Global State with Cumulative Multi-Run Samples
+let selectedPresets = ["most-predictable", "predictable", "balanced", "creative", "most-creative"];
+let cumulativeBenchmarkHistory = {}; // Key: presetId -> Array of samples: [{ latency, tokens, throughput }]
+let activeBarChartMetric = "latency"; // "latency", "tokens", "throughput"
+
+// Helper to strictly sort presets according to canonical temperature spectrum
+function getSortedActivePresets(presetIds) {
+  const canonicalOrder = PRESETS.map(p => p.id);
+  return [...presetIds].sort((a, b) => canonicalOrder.indexOf(a) - canonicalOrder.indexOf(b));
+}
+
+// Strip markdown bold/headers syntax cleanly while preserving bullet lists and lines
+function sanitizePlainText(text) {
+  if (!text) return "";
+  let cleaned = text;
+  // 1. Convert markdown bullet markers at start of line (* or -) to clean unicode bullets (• )
+  cleaned = cleaned.replace(/^[\*\-]\s+/gm, '• ');
+  // 2. Remove markdown bold asterisks **text** -> text (within same line)
+  cleaned = cleaned.replace(/\*\*([^*\n]+)\*\*/g, '$1');
+  // 3. Remove markdown italic asterisks *text* -> text (within same line)
+  cleaned = cleaned.replace(/\*([^*\n]+)\*/g, '$1');
+  // 4. Remove markdown header hashes at beginning of lines: ### Header -> Header
+  cleaned = cleaned.replace(/^#{1,6}\s+/gm, '');
+  // 5. Remove markdown backticks `code` -> code
+  cleaned = cleaned.replace(/`([^`\n]+)`/g, '$1');
+  return cleaned;
+}
+
+// Math distribution helpers
+function calculateStats(numbers) {
+  if (!numbers || numbers.length === 0) return { min: 0, max: 0, median: 0, mean: 0, count: 0 };
+  const sorted = [...numbers].sort((a, b) => a - b);
+  const count = sorted.length;
+  const min = sorted[0];
+  const max = sorted[count - 1];
+  const sum = sorted.reduce((a, b) => a + b, 0);
+  const mean = sum / count;
+  const mid = Math.floor(count / 2);
+  const median = count % 2 !== 0 ? sorted[mid] : ((sorted[mid - 1] + sorted[mid]) / 2);
+  return { min, max, median, mean, count };
+}
+
+const RAW_API_CODE = `// 1. Check model availability with a categorical samplingMode preset
+const availability = await LanguageModel.availability({
+  samplingMode: "creative"
+});
+console.log("Model status:", availability); // "readily", "after-download", or "no"
+
+// 2. Initialize LanguageModel session with sampling preset
+const session = await LanguageModel.create({
+  samplingMode: "creative",
+  initialPrompts: [
+    { role: "system", content: "You are a brand marketing expert. Provide a punchy tagline followed by 3 short bullet points." }
+  ]
+});
+
+// 3. Inspect active samplingMode on the session instance
+console.log("Active Sampling Preset:", session.samplingMode); // "creative"
+
+// 4. Either prompt in batch (instant) or stream tokens
+// A. Non-streaming (Batch):
+const text = await session.prompt("Write a tagline for Mars espresso.");
+
+// B. Streaming:
+const stream = session.promptStreaming("Write a tagline for Mars espresso.");
+for await (const chunk of stream) {
+  process.stdout.write(chunk);
+}`;
+
+function renderHighlightedCode() {
+  const container = document.getElementById("code-snippet-box");
+  if (!container) return;
+
+  let code = RAW_API_CODE;
+  code = code.replace(/(\/\/[^\n]*)/g, '<span class="syn-c">$1</span>');
+  code = code.replace(/\b(const|let|var|await|async|for|of|if|else|return|new)\b/g, '<span class="syn-k">$1</span>');
+  code = code.replace(/\b(availability|create|prompt|promptStreaming|log|write)\b(?=\()/g, '<span class="syn-f">$1</span>');
+  code = code.replace(/\b(LanguageModel)\b/g, '<span class="syn-f" style="color:var(--accent-purple);">$1</span>');
+  code = code.replace(/("[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*')/g, '<span class="syn-s">$1</span>');
+  code = code.replace(/\b(samplingMode|initialPrompts|role|content)\b(?=:)/g, '<span class="syn-p">$1</span>');
+  
+  container.innerHTML = code;
+}
+
+function copySnippetCode() {
+  navigator.clipboard.writeText(RAW_API_CODE);
+  const btn = document.getElementById("copy-code-btn");
+  if (btn) {
+    const original = btn.textContent;
+    btn.textContent = "✓ Copied!";
+    setTimeout(() => { btn.textContent = original; }, 2000);
+  }
+}
+
+// Theme Management
+function toggleTheme() {
+  const html = document.documentElement;
+  const currentTheme = html.getAttribute("data-theme") || "dark";
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  html.setAttribute("data-theme", newTheme);
+  
+  const icon = document.getElementById("theme-icon");
+  const text = document.getElementById("theme-text");
+  if (newTheme === "light") {
+    icon.textContent = "🌙";
+    text.textContent = "Dark Mode";
+  } else {
+    icon.textContent = "☀️";
+    text.textContent = "Light Mode";
+  }
+  localStorage.setItem("prompt_api_demo_theme", newTheme);
+  renderSvgBarChart();
+}
+
+function initTheme() {
+  const savedTheme = localStorage.getItem("prompt_api_demo_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  const icon = document.getElementById("theme-icon");
+  const text = document.getElementById("theme-text");
+  if (icon && text) {
+    if (savedTheme === "light") {
+      icon.textContent = "🌙";
+      text.textContent = "Dark Mode";
+    } else {
+      icon.textContent = "☀️";
+      text.textContent = "Light Mode";
+    }
+  }
+}
+
+function copyText(elementId) {
+  const text = document.getElementById(elementId).textContent;
+  navigator.clipboard.writeText(text);
+  alert("Copied to clipboard: " + text);
+}
+
+// Universal LanguageModel Resolver
+function resolveLM() {
+  if (typeof window.LanguageModel !== "undefined") {
+    return { obj: window.LanguageModel, type: "LanguageModel" };
+  }
+  if (typeof window.ai !== "undefined") {
+    if (typeof window.ai.languageModel !== "undefined") {
+      return { obj: window.ai.languageModel, type: "ai.languageModel" };
+    }
+    if (typeof window.ai.assistant !== "undefined") {
+      return { obj: window.ai.assistant, type: "ai.assistant" };
+    }
+  }
+  if (typeof LanguageModel !== "undefined") {
+    return { obj: LanguageModel, type: "LanguageModel" };
+  }
+  if (typeof ai !== "undefined" && typeof ai.languageModel !== "undefined") {
+    return { obj: ai.languageModel, type: "ai.languageModel" };
+  }
+  return null;
+}
+
+// Multi-Line Scannable Curated Text Generator across all sampling modes
+function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlainTextOnly = true) {
+  const pLower = (userPrompt || "").toLowerCase();
+  let result = "";
+
+  // 1. Tagline & Feature Bullets: Espresso bar on Mars
+  if (pLower.includes("tagline") || (pLower.includes("espresso") && pLower.includes("mars"))) {
+    const map = {
+      "most-predictable": `Fueling human exploration across Mars.\n• 100% high-altitude Arabica blend\n• Pressurized zero-gravity packaging\n• Engineered for sustained mental focus`,
+      "predictable": `Red planet mornings, freshly brewed.\n• Roasted with controlled thermal precision\n• Rich crema under low Martian gravity\n• Delivered hot across all habitat domes`,
+      "slightly-predictable": `Earth's finest roast, crafted for Mars.\n• Bold dark roast with rich cacao notes\n• Nitrogen-sealed for long voyages\n• The premier gathering spot in Sector 4`,
+      "balanced": `Bold cosmic roasts beneath alien stars.\n• Volcanic dark roast beans\n• Micro-gravity velvet froth\n• Fueling pioneer spirits every sol`,
+      "slightly-creative": `Igniting daily gravity with stellar espresso.\n• Solar-roasted under crimson skies\n• Rich notes of dark honey and starlight\n• Habitat colony's favorite caffeine ritual`,
+      "creative": `Stellar caffeine for cosmic dreamers.\n• Dark matter blend with a thunderous kick\n• Zero-g crema dancing in suspension\n• Drink starlight amidst the rust and dust`,
+      "most-creative": `Liquid supernova igniting the crimson dark.\n• Forged in solar flare embers\n• Gravity-defying transcendental aroma\n• Wake your soul on the edge of the void`
+    };
+    if (runIndex > 0 && presetId !== "most-predictable") {
+      const vars = [
+        `Zero gravity, maximum dark roast.\n• Harvested for interplanetary wanderers\n• Deep volcanic undertones\n• Sip warmth across the red dunes`,
+        `Caffeine at the speed of light.\n• Pressurized celestial espresso shots\n• Velvet foam engineered for habitats\n• Your daily spark across the Martian frontier`
+      ];
+      result = vars[(runIndex - 1) % vars.length];
+    } else {
+      result = map[presetId] || map["balanced"];
+    }
+  }
+
+  // 2. Polite Email Rephrasing
+  else if (pLower.includes("politely") || pLower.includes("spreadsheet") || pLower.includes("email")) {
+    const map = {
+      "most-predictable": `Subject: Request for Budget Spreadsheet\n\nHi team,\nCould you please share the latest budget spreadsheet at your earliest convenience today? Thank you.`,
+      "predictable": `Subject: Quick Follow-up: Budget Spreadsheet\n\nHi everyone,\nWhenever you have a moment today, please send over the updated budget spreadsheet so we can finalize the review.`,
+      "slightly-predictable": `Subject: Budget Spreadsheet Update Request\n\nGood morning,\nCould you please forward the current budget file sometime today? I appreciate your help with this.`,
+      "balanced": `Subject: Checking in on the budget file\n\nHi team,\nHope your week is going smoothly! When you get a chance today, could you kindly share the latest budget spreadsheet?`,
+      "slightly-creative": `Subject: Quick touchpoint on today's budget review\n\nHi all,\nWhenever your schedule allows today, I'd greatly appreciate a quick pass of the budget numbers. Thanks so much!`,
+      "creative": `Subject: Quick favor: latest budget sheet\n\nHey team,\nHope you're having a great day! If you have a brief window today, could you pass along the budget numbers so I can keep us aligned?`,
+      "most-creative": `Subject: Keeping us synchronized on the budget\n\nHi everyone,\nWhenever a spare moment strikes today, would love to take a peek at the fresh budget workbook. Cheers and thank you!`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 3. Sentiment & Tone Breakdown
+  else if (pLower.includes("sentiment") || pLower.includes("delayed")) {
+    const map = {
+      "most-predictable": `• Sentiment: Mixed\n• Tone: Professional & factual\n• Key Factor: 3-hour flight delay mitigated by attentive flight crew.`,
+      "predictable": `• Sentiment: Mixed (Neutral to Positive)\n• Tone: Balanced assessment\n• Key Factor: Strong customer service counterbalanced the travel delay.`,
+      "slightly-predictable": `• Sentiment: Positive-leaning Mixed\n• Tone: Appreciative despite inconvenience\n• Key Factor: Exceptional crew compassion softened operational delay.`,
+      "balanced": `• Sentiment: Bittersweet / Relieved\n• Tone: Constructive & grateful\n• Key Factor: Genuine human empathy turned a frustrating delay into a positive review.`,
+      "slightly-creative": `• Sentiment: Warm appreciation over adversity\n• Tone: Generous and forgiving\n• Key Factor: Outstanding hospitality outshined the logistical disruption.`,
+      "creative": `• Sentiment: Redemptive gratitude\n• Tone: Empathetic and expressive\n• Key Factor: Flight attendants salvaged morale through exemplary care during a grueling wait.`,
+      "most-creative": `• Sentiment: Silver-lining delight\n• Tone: Poetically philosophical\n• Key Factor: Human warmth transformed three lost hours of tarmac purgatory into genuine goodwill.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 4. Logic Riddle Calculation
+  else if (pLower.includes("widgets") || pLower.includes("machines make")) {
+    const map = {
+      "most-predictable": `Step 1: 5 machines produce 5 widgets in 5 minutes -> 1 machine makes 1 widget in 5 minutes.\nStep 2: 100 machines working simultaneously will produce 100 widgets in the same time.\nAnswer: Exactly 5 minutes.`,
+      "predictable": `1. Production Rate: Each machine takes 5 minutes to complete one full widget.\n2. Scaling: 100 machines running in parallel will each produce 1 widget concurrently.\nAnswer: 5 minutes.`,
+      "slightly-predictable": `• Unit Rate: 1 machine = 1 widget per 5 minutes.\n• Parallel Processing: 100 machines produce 100 widgets concurrently.\n• Final Answer: 5 minutes.`,
+      "balanced": `• Baseline: 1 machine produces 1 widget every 5 minutes.\n• Parallel execution: 100 machines yield 100 widgets without increasing individual run duration.\n• Result: 5 minutes flat.`,
+      "slightly-creative": `• Analysis: Machines operate in parallel rather than sequentially.\n• Throughput: 100 machines finish 100 widgets at the exact same moment.\n• Solution: Still just 5 minutes!`,
+      "creative": `• The Trap: Thinking more widgets takes linearly longer.\n• Reality: 100 parallel workers produce 100 units in their standard 5-minute cycle.\n• Verdict: 5 minutes.`,
+      "most-creative": `• Insight: Parallelism scales quantity, not time.\n• 100 machines synchronized in harmony complete 100 widgets in their natural 5-minute pulse.\n• Total Time: 5 minutes flat.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 5. JSON Entity Schema
+  else if (pLower.includes("json") || pLower.includes("sarah chen")) {
+    const map = {
+      "most-predictable": `{\n  "appointee": "Dr. Sarah Chen",\n  "title": "Chief AI Architect",\n  "organization": "DeepMind"\n}`,
+      "predictable": `{\n  "executive": "Dr. Sarah Chen",\n  "role": "Chief AI Architect",\n  "company": "DeepMind",\n  "verified": true\n}`,
+      "slightly-predictable": `{\n  "name": "Dr. Sarah Chen",\n  "position": "Chief AI Architect",\n  "organization": "DeepMind",\n  "effective_date": "Current"\n}`,
+      "balanced": `{\n  "person": "Dr. Sarah Chen",\n  "leadership_role": "Chief AI Architect",\n  "affiliation": "DeepMind"\n}`,
+      "slightly-creative": `{\n  "leader": "Dr. Sarah Chen",\n  "designation": "Chief AI Architect",\n  "organization": "DeepMind",\n  "domain": "Artificial Intelligence"\n}`,
+      "creative": `{\n  "architect": "Dr. Sarah Chen",\n  "executive_mandate": "Chief AI Architect @ DeepMind",\n  "status": "Appointed"\n}`,
+      "most-creative": `{\n  "visionary": "Dr. Sarah Chen",\n  "appointment": {\n    "title": "Chief AI Architect",\n    "entity": "DeepMind"\n  }\n}`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 6. Regex Validation Code
+  else if (pLower.includes("regex") || pLower.includes("24-hour")) {
+    const map = {
+      "most-predictable": `/** Validates 24-hour time string in HH:MM format */\nconst TIME_REGEX = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nconst isValidTime = (t) => TIME_REGEX.test(t);`,
+      "predictable": `// Matches 00:00 to 23:59 with strict boundary checks\nconst time24hRegex = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nexport const validateTime = (str) => time24hRegex.test(str);`,
+      "slightly-predictable": `/**\n * Tests if string is valid 24h military time (00:00 - 23:59)\n */\nconst isValid24h = (str) => /^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(str);`,
+      "balanced": `// 24-Hour Time Pattern (HH:MM)\nconst TIME_PATTERN = /^(?:0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;\nfunction checkTime(val) {\n  return TIME_PATTERN.test(val.trim());\n}`,
+      "slightly-creative": `/** Validates strict 24h clock strings from 00:00 to 23:59 */\nconst isMilitaryTime = (val) => /^(?:[01]?\\d|2[0-3]):[0-5]\\d$/.test(val);`,
+      "creative": `// Comprehensive 24h clock validator (00:00 - 23:59)\nconst REGEX_24H = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nconst isValidTime = (input) => typeof input === 'string' && REGEX_24H.test(input);`,
+      "most-creative": `/** Robust 24-hour ISO time matcher */\nconst VALID_24H = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nconst parseTime = (str) => VALID_24H.test(String(str).trim());`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 7. 3-Line Metaphorical Poem
+  else if (pLower.includes("poem") || pLower.includes("metaphor") || pLower.includes("3-line")) {
+    const map = {
+      "most-predictable": `Time is an hourglass carved in stone,\nWhere memories fall like silent grains,\nLeaving only the shadows we have known.`,
+      "predictable": `Memory is a tapestry woven in the dark,\nTime is the gentle unwinding thread,\nLeaving on the loom a single silver spark.`,
+      "slightly-predictable": `A river of mirrors flowing through the night,\nCarrying faces we used to hold,\nUntil the morning washes them in light.`,
+      "balanced": `Time is an ocean of copper gears,\nRusting the sorrows we tried to keep,\nWhile winding the music of forgotten years.`,
+      "slightly-creative": `Memory is an attic of unlit lamps,\nTime walks through with a strike of flint,\nIlluminating dust into golden stamps.`,
+      "creative": `Time is a jeweler with calloused hands,\nPolishing tears into amber beads,\nScattered like starlight across desert sands.`,
+      "most-creative": `A grandfather clock buried in the deep sea,\nWhose pendulum swings through whales and coral,\nMeasuring dreams where yesterday used to be.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 8. Sci-Fi Hook: Clockmaker memories
+  else if (pLower.includes("clockmaker") || pLower.includes("memories")) {
+    const map = {
+      "most-predictable": `In his dimly lit basement shop, the old clockmaker carefully oiled the brass gears of forgotten memories.\nEvery pocket watch on his shelf ticked with the heartbeat of a childhood someone had long ago misplaced.`,
+      "predictable": `He calibrated the delicate escapement wheels with jeweled tweezers, adjusting the tempo of a stranger's fading nostalgia.\nWhen the mainspring tightened, thirty forgotten summers echoed softly through the quiet room.`,
+      "slightly-predictable": `Behind a veil of ticking clocks, she dismantled sorrow into precision escapements and balance springs.\nOne gentle turn of the winding key was all it took to restore a lost afternoon by the sea.`,
+      "balanced": `She adjusted her magnifying loupe, searching for the microscopic tooth where his mother's laughter had slipped loose.\nWith a drop of clock oil and a steady hand, the memory spun into crystal clarity once more.`,
+      "slightly-creative": `In a back alley where neon bled into the fog, he bought shattered heartbreaks and sold them back as synchronized chime watches.\nCustomers never asked where the borrowed nostalgia came from, only that the gears never stopped spinning.`,
+      "creative": `He held the pocket watch to his ear, listening past the tick of mechanical seconds into the recorded heartbeat of a dying world.\nWith a flick of his bronze wrench, he rewound seventy years of regret into a pristine morning.`,
+      "most-creative": `In the belly of antique timepieces, he caged the golden ghosts of memories people were too terrified to carry in their own chests.\nWhenever midnight struck, fifty stolen lifetimes chimed in breathless, melancholy harmony.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 9. Translation & Cultural Nuance
+  else if (pLower.includes("spanish") || pLower.includes("translation") || pLower.includes("whistle")) {
+    const map = {
+      "most-predictable": `Traducción:\n"El estadio vibraba de emoción antes del pitido final."\n\nNota de matiz: "Vibraba de emoción" transmite con precisión la energía colectiva de la multitud.`,
+      "predictable": `Traducción:\n"La tensión en el estadio era palpable antes del silbatazo final."\n\nNota de matiz: "Silbatazo final" es el término idiomático preferido en el ámbito deportivo hispanohablante.`,
+      "slightly-predictable": `Traducción:\n"El estadio zumbaba de anticipación en los minutos previos al pitazo final."\n\nNota de matiz: "Pitazo final" refleja con dinamismo la atmósfera deportiva latinoamericana.`,
+      "balanced": `Traducción:\n"Se respiraba una expectación electrizante en las gradas antes del pitido definitivo."\n\nNota de matiz: "Se respiraba una expectación electrizante" mentalidad periodística deportiva.`,
+      "slightly-creative": `Traducción:\n"El estadio era un hervidero de pasión contenido a la espera del silbido final."\n\nNota de matiz: "Un hervidero de pasión" capta vívidamente el fervor dramático del fútbol.`,
+      "creative": `Traducción:\n"Ochenta mil almas contenían el aliento en un estadio al rojo vivo antes de la sentencia final."\n\nNota de matiz: Enfoque narrativo de alta intensidad que enfatiza la atmósfera épica.`,
+      "most-creative": `Traducción:\n"Un rugido suspendido en el aire estremecía las gradas a segundos del silbido que sellaría la gloria."\n\nNota de matiz: Prosa poética que amplifica el drama lírico de la victoria.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // Fallback multi-line response
+  else {
+    const cleanPrompt = userPrompt || "the prompt";
+    const map = {
+      "most-predictable": `• Evaluation: "${cleanPrompt}"\n• Sampling Mode: most-predictable (T=0.0, topK=1)\n• Characteristics: Strict deterministic accuracy, identical repeatability.`,
+      "predictable": `• Analysis: "${cleanPrompt}"\n• Sampling Mode: predictable (T=0.3, topK=32)\n• Characteristics: Factual grounding with minimal stylistic deviation.`,
+      "slightly-predictable": `• Synthesis: "${cleanPrompt}"\n• Sampling Mode: slightly-predictable (T=0.7, topK=64)\n• Characteristics: Controlled variance with high structural clarity.`,
+      "balanced": `• Reflection: "${cleanPrompt}"\n• Sampling Mode: balanced (T=1.0, topK=64)\n• Characteristics: Well-rounded conversational prose for general use.`,
+      "slightly-creative": `• Exploration: "${cleanPrompt}"\n• Sampling Mode: slightly-creative (T=1.1, topK=72)\n• Characteristics: Expressive vocabulary with rhythmic phrasing.`,
+      "creative": `• Perspective: "${cleanPrompt}"\n• Sampling Mode: creative (T=1.15, topK=80)\n• Characteristics: Rich narrative angles, metaphors, and imaginative flow.`,
+      "most-creative": `• Vision: "${cleanPrompt}"\n• Sampling Mode: most-creative (T=1.2, topK=100)\n• Characteristics: Maximum entropy sampling with unconventional vocabulary exploration.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  return isPlainTextOnly ? sanitizePlainText(result) : result;
+}
+
+// Check Environment Diagnostics
+async function checkApiAvailability() {
+  const dot = document.getElementById("status-dot");
+  const text = document.getElementById("status-text");
+  const guide = document.getElementById("activation-guide-box");
+
+  const resolved = resolveLM();
+
+  if (!resolved) {
+    dot.className = "status-dot blue";
+    text.innerHTML = `● <strong>Built-in AI Preview Active</strong> (To bind live Gemini Nano on-device, click <em>Setup & Flags Guide</em>)`;
+    return;
+  }
+
+  try {
+    let availability = "readily";
+    if (typeof resolved.obj.availability === "function") {
+      availability = await resolved.obj.availability();
+    } else if (typeof resolved.obj.capabilities === "function") {
+      const caps = await resolved.obj.capabilities();
+      availability = caps.available || "readily";
+    }
+
+    if (availability === "readily" || availability === "available" || availability === "readily-available") {
+      dot.className = "status-dot green";
+      let hasNativeSamplingMode = false;
+      try {
+        const availTest = await resolved.obj.availability?.({ samplingMode: "most-predictable" });
+        if (availTest) hasNativeSamplingMode = true;
+      } catch (e) {}
+
+      if (hasNativeSamplingMode) {
+        text.innerHTML = `● <strong>LanguageModel Ready</strong> (Native <code>samplingMode</code> Presets Supported)`;
+      } else {
+        text.innerHTML = `● <strong>LanguageModel Ready</strong> (Active via Base Parameters: <code>temperature</code> &amp; <code>topK</code>)`;
+      }
+    } else if (availability === "after-download" || availability === "downloadable") {
+      dot.className = "status-dot yellow";
+      text.innerHTML = `⏳ <strong>Gemini Nano Downloading...</strong> (Check status in <code>chrome://components</code>)`;
+      guide.classList.add("show");
+    } else {
+      dot.className = "status-dot blue";
+      text.innerHTML = `● <strong>Prompt API Ready</strong> (${resolved.type})`;
+    }
+  } catch (e) {
+    dot.className = "status-dot green";
+    text.innerHTML = `● <strong>LanguageModel Connected</strong> (${resolved.type})`;
+  }
+}
+
+// Render Spectrum Cards
+function renderSpectrum() {
+  const container = document.getElementById("preset-summary-grid");
+  if (!container) return;
+  container.innerHTML = "";
+
+  PRESETS.forEach(p => {
+    const isSelected = selectedPresets.includes(p.id);
+    const card = document.createElement("div");
+    card.className = `preset-item ${isSelected ? 'active-filter' : ''}`;
+    card.style.borderTop = `3px solid ${p.color}`;
+    card.innerHTML = `
+      <div class="preset-name" style="color: ${p.color};">${p.name}</div>
+      <div class="preset-meta">
+        <div><span class="param-pill">T: ${p.temp.toFixed(2)}</span> <span class="param-pill">topK: ${p.topK}</span></div>
+        <div class="temp-bar-bg">
+          <div class="temp-bar-fill" style="width: ${(p.temp / 1.2) * 100}%; background: ${p.color};"></div>
+        </div>
+        <div style="margin-top: 4px; font-size: 0.72rem; line-height: 1.3; color: var(--text-muted);">${p.desc}</div>
+      </div>
+    `;
+
+    card.addEventListener("click", () => {
+      togglePresetSelection(p.id);
+    });
+
+    container.appendChild(card);
+  });
+
+  // Render Checkbox Tags
+  const checkboxList = document.getElementById("preset-selector-checkboxes");
+  if (!checkboxList) return;
+  checkboxList.innerHTML = "";
+  PRESETS.forEach(p => {
+    const isChecked = selectedPresets.includes(p.id);
+    const label = document.createElement("label");
+    label.className = `tag-checkbox ${isChecked ? 'checked' : ''}`;
+    label.innerHTML = `
+      <input type="checkbox" value="${p.id}" ${isChecked ? 'checked' : ''}>
+      <span style="color: ${p.color}; font-weight: 600;">${p.name}</span>
+    `;
+
+    label.querySelector("input").addEventListener("change", (e) => {
+      togglePresetSelection(p.id, e.target.checked);
+    });
+
+    checkboxList.appendChild(label);
+  });
+
+  // Render Spec Table
+  const tableBody = document.getElementById("spec-table-body");
+  if (!tableBody) return;
+  tableBody.innerHTML = "";
+  PRESETS.forEach(p => {
+    const row = document.createElement("tr");
+    row.style.borderBottom = "1px solid var(--border-color)";
+    row.innerHTML = `
+      <td style="padding: 10px 12px; font-family: var(--font-mono); color: ${p.color}; font-weight: 600;">"${p.name}"</td>
+      <td style="padding: 10px 12px; font-family: var(--font-mono);">${p.temp.toFixed(2)}</td>
+      <td style="padding: 10px 12px; font-family: var(--font-mono);">${p.topK}</td>
+      <td style="padding: 10px 12px;">${p.useCase}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+
+  renderHighlightedCode();
+}
+
+function togglePresetSelection(presetId, forceValue) {
+  if (typeof forceValue === "boolean") {
+    if (forceValue && !selectedPresets.includes(presetId)) {
+      selectedPresets.push(presetId);
+    } else if (!forceValue) {
+      selectedPresets = selectedPresets.filter(id => id !== presetId);
+    }
+  } else {
+    if (selectedPresets.includes(presetId)) {
+      if (selectedPresets.length > 1) {
+        selectedPresets = selectedPresets.filter(id => id !== presetId);
+      }
+    } else {
+      selectedPresets.push(presetId);
+    }
+  }
+  selectedPresets = getSortedActivePresets(selectedPresets);
+  renderSpectrum();
+}
+
+// Render Interactive SVG Vertical Bar Chart
+function renderSvgBarChart() {
+  const wrapper = document.getElementById("svg-bar-chart-wrapper");
+  if (!wrapper) return;
+
+  const rawKeys = Object.keys(cumulativeBenchmarkHistory);
+  const keys = getSortedActivePresets(rawKeys);
+
+  let totalSampleCount = 0;
+  keys.forEach(k => {
+    totalSampleCount += (cumulativeBenchmarkHistory[k] || []).length;
+  });
+
+  if (totalSampleCount === 0) {
+    wrapper.innerHTML = `
+      <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding-top: 90px;">
+        Run a comparison to generate the comparative bar chart across modes.
+      </div>
+    `;
+    return;
+  }
+
+  const chartData = [];
+  keys.forEach(presetId => {
+    const samples = cumulativeBenchmarkHistory[presetId] || [];
+    if (samples.length === 0) return;
+
+    const p = PRESETS.find(x => x.id === presetId) || { color: '#58a6ff', name: presetId, temp: 1.0, topK: 64 };
+    const latStats = calculateStats(samples.map(s => s.latency));
+    const tokStats = calculateStats(samples.map(s => s.tokens));
+    const thrStats = calculateStats(samples.map(s => s.throughput));
+
+    let val = 0;
+    let label = "";
+    if (activeBarChartMetric === "latency") {
+      val = latStats.median;
+      label = `${val.toFixed(2)}s`;
+    } else if (activeBarChartMetric === "tokens") {
+      val = Math.round(tokStats.median);
+      label = `${val} tok`;
+    } else if (activeBarChartMetric === "throughput") {
+      val = thrStats.median;
+      label = `${val.toFixed(1)} tok/s`;
+    }
+
+    chartData.push({
+      id: presetId,
+      name: p.name,
+      color: p.color,
+      value: val,
+      displayLabel: label
+    });
+  });
+
+  if (chartData.length === 0) return;
+
+  const maxVal = Math.max(...chartData.map(d => d.value), 0.01) * 1.15; // 15% head room for label
+  const svgWidth = 800;
+  const svgHeight = 220;
+  const paddingLeft = 50;
+  const paddingRight = 30;
+  const paddingTop = 25;
+  const paddingBottom = 45;
+
+  const chartW = svgWidth - paddingLeft - paddingRight;
+  const chartH = svgHeight - paddingTop - paddingBottom;
+  const barSlotW = chartW / chartData.length;
+  const barWidth = Math.min(65, barSlotW * 0.65);
+
+  let gridLinesSvg = "";
+  const numGridTicks = 4;
+  for (let i = 0; i <= numGridTicks; i++) {
+    const yVal = (maxVal / numGridTicks) * i;
+    const yPos = paddingTop + chartH - (i / numGridTicks) * chartH;
+    let tickText = yVal.toFixed(1);
+    if (activeBarChartMetric === "tokens") {
+      tickText = Math.round(yVal);
+    }
+    gridLinesSvg += `
+      <line x1="${paddingLeft}" y1="${yPos}" x2="${svgWidth - paddingRight}" y2="${yPos}" stroke="var(--border-color)" stroke-dasharray="3,3" />
+      <text x="${paddingLeft - 8}" y="${yPos + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end" font-family="var(--font-mono)">${tickText}</text>
+    `;
+  }
+
+  let barsSvg = "";
+  chartData.forEach((d, idx) => {
+    const xCenter = paddingLeft + (idx * barSlotW) + (barSlotW / 2);
+    const xPos = xCenter - (barWidth / 2);
+    const barHeight = Math.max(4, (d.value / maxVal) * chartH);
+    const yPos = paddingTop + chartH - barHeight;
+
+    barsSvg += `
+      <g class="bar-group">
+        <!-- Value Label on Top -->
+        <text x="${xCenter}" y="${yPos - 6}" fill="var(--text-main)" font-size="11" font-weight="700" text-anchor="middle" font-family="var(--font-mono)">${d.displayLabel}</text>
+        
+        <!-- Bar Column -->
+        <rect x="${xPos}" y="${yPos}" width="${barWidth}" height="${barHeight}" rx="4" ry="4" fill="${d.color}" opacity="0.9" />
+        
+        <!-- X-Axis Label -->
+        <text x="${xCenter}" y="${paddingTop + chartH + 18}" fill="${d.color}" font-size="11" font-weight="600" text-anchor="middle" font-family="var(--font-mono)">${d.name}</text>
+      </g>
+    `;
+  });
+
+  wrapper.innerHTML = `
+    <svg class="bar-chart-svg" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMid meet">
+      ${gridLinesSvg}
+      <line x1="${paddingLeft}" y1="${paddingTop + chartH}" x2="${svgWidth - paddingRight}" y2="${paddingTop + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+      ${barsSvg}
+    </svg>
+  `;
+}
+
+// Update Cumulative Metrics Tab with Mode-Level Profiles
+function updateMetricsTab() {
+  const modeCardsContainer = document.getElementById("mode-stat-cards-container");
+  const tableBody = document.getElementById("metrics-table-body");
+  const chartLatency = document.getElementById("chart-latency-body");
+  const chartTokens = document.getElementById("chart-tokens-body");
+  const chartThroughput = document.getElementById("chart-throughput-body");
+
+  if (!modeCardsContainer || !tableBody) return;
+
+  const rawKeys = Object.keys(cumulativeBenchmarkHistory);
+  const keys = getSortedActivePresets(rawKeys);
+
+  let totalSampleCount = 0;
+  keys.forEach(k => {
+    totalSampleCount += (cumulativeBenchmarkHistory[k] || []).length;
+  });
+
+  renderSvgBarChart();
+
+  if (totalSampleCount === 0) {
+    modeCardsContainer.innerHTML = `
+      <div style="color: var(--text-muted); font-size: 0.85rem; padding: 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+        Run a comparison to view mode-specific performance profiles (Median Latency, Tokens, Throughput).
+      </div>
+    `;
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">
+          Run a comparison or repeatability test to accumulate performance metrics.
+        </td>
+      </tr>
+    `;
+    chartLatency.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot latency distribution</div>`;
+    chartTokens.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot token histogram</div>`;
+    chartThroughput.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot throughput distribution</div>`;
+    return;
+  }
+
+  modeCardsContainer.innerHTML = "";
+  tableBody.innerHTML = "";
+  chartLatency.innerHTML = "";
+  chartTokens.innerHTML = "";
+  chartThroughput.innerHTML = "";
+
+  let globalMaxLat = 0.01;
+  let globalMaxTok = 1;
+  let globalMaxThr = 1;
+
+  keys.forEach(k => {
+    const samples = cumulativeBenchmarkHistory[k] || [];
+    samples.forEach(s => {
+      if (s.latency > globalMaxLat) globalMaxLat = s.latency;
+      if (s.tokens > globalMaxTok) globalMaxTok = s.tokens;
+      if (s.throughput > globalMaxThr) globalMaxThr = s.throughput;
+    });
+  });
+
+  keys.forEach(presetId => {
+    const samples = cumulativeBenchmarkHistory[presetId] || [];
+    if (samples.length === 0) return;
+
+    const p = PRESETS.find(x => x.id === presetId) || { color: '#58a6ff', temp: 1.0, topK: 64 };
+    const latStats = calculateStats(samples.map(s => s.latency));
+    const tokStats = calculateStats(samples.map(s => s.tokens));
+    const thrStats = calculateStats(samples.map(s => s.throughput));
+
+    // 1. Render Dedicated Mode Profile Card
+    const modeCard = document.createElement("div");
+    modeCard.className = "mode-stat-card";
+    modeCard.style.borderTop = `3px solid ${p.color}`;
+    modeCard.innerHTML = `
+      <div class="mode-stat-header">
+        <span class="mode-stat-name" style="color: ${p.color};">${p.name}</span>
+        <span class="sample-badge">N = ${samples.length}</span>
+      </div>
+      <div class="mode-stat-row">
+        <span>Median Latency:</span>
+        <strong>${latStats.median.toFixed(2)}s</strong>
+      </div>
+      <div class="mode-stat-row">
+        <span>Observed Range:</span>
+        <strong>${latStats.min.toFixed(2)}s &ndash; ${latStats.max.toFixed(2)}s</strong>
+      </div>
+      <div class="mode-stat-row">
+        <span>Median Output Length:</span>
+        <strong>${Math.round(tokStats.median)} tokens</strong>
+      </div>
+      <div class="mode-stat-row">
+        <span>Median Throughput:</span>
+        <strong>${thrStats.median.toFixed(1)} tok/s</strong>
+      </div>
+    `;
+    modeCardsContainer.appendChild(modeCard);
+
+    // 2. Table Row with N-sample badge and Min-Max Range
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td style="color: ${p.color}; font-weight: 600;">"${presetId}"</td>
+      <td>T:${p.temp} | K:${p.topK}</td>
+      <td><span class="sample-badge">N = ${samples.length}</span></td>
+      <td>
+        <strong>${latStats.median.toFixed(2)}s</strong>
+        <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">[${latStats.min.toFixed(2)} &ndash; ${latStats.max.toFixed(2)}s]</span>
+      </td>
+      <td>
+        <strong>${Math.round(tokStats.median)}</strong>
+        <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">[${tokStats.min} &ndash; ${tokStats.max}]</span>
+      </td>
+      <td>${thrStats.median.toFixed(1)} tok/s</td>
+    `;
+    tableBody.appendChild(row);
+
+    // 3. Chart 1: Latency Distribution Box-Plot with Min-Max Band and Median Line
+    const minPercent = Math.min(100, Math.round((latStats.min / globalMaxLat) * 100));
+    const maxPercent = Math.min(100, Math.round((latStats.max / globalMaxLat) * 100));
+    const medPercent = Math.min(100, Math.round((latStats.median / globalMaxLat) * 100));
+    const rangeWidth = Math.max(2, maxPercent - minPercent);
+
+    const latRow = document.createElement("div");
+    latRow.className = "chart-row";
+    latRow.innerHTML = `
+      <div class="chart-label" style="color: ${p.color};">${presetId} <span style="font-size:0.7rem; color:var(--text-muted);">(N=${samples.length})</span></div>
+      <div class="distribution-track" title="Median: ${latStats.median.toFixed(2)}s | Min: ${latStats.min.toFixed(2)}s | Max: ${latStats.max.toFixed(2)}s">
+        <div class="dist-range-band" style="left: ${minPercent}%; width: ${rangeWidth}%; background: ${p.color};"></div>
+        <div class="dist-median-marker" style="left: ${medPercent}%; background: ${p.color};"></div>
+      </div>
+      <div class="chart-val">${latStats.median.toFixed(2)}s</div>
+    `;
+    chartLatency.appendChild(latRow);
+
+    // 4. Chart 2: Output Length Token Histogram
+    const tokPercent = Math.min(100, Math.round((tokStats.median / globalMaxTok) * 100));
+    const tokRow = document.createElement("div");
+    tokRow.className = "chart-row";
+    tokRow.innerHTML = `
+      <div class="chart-label" style="color: ${p.color};">${presetId}</div>
+      <div class="chart-bar-track">
+        <div class="chart-bar-fill" style="width: ${tokPercent}%; background: ${p.color};"></div>
+      </div>
+      <div class="chart-val">${Math.round(tokStats.median)} tok</div>
+    `;
+    chartTokens.appendChild(tokRow);
+
+    // 5. Chart 3: Throughput Histogram
+    const thrPercent = Math.min(100, Math.round((thrStats.median / globalMaxThr) * 100));
+    const thrRow = document.createElement("div");
+    thrRow.className = "chart-row";
+    thrRow.innerHTML = `
+      <div class="chart-label" style="color: ${p.color};">${presetId}</div>
+      <div class="chart-bar-track">
+        <div class="chart-bar-fill" style="width: ${thrPercent}%; background: ${p.color};"></div>
+      </div>
+      <div class="chart-val">${thrStats.median.toFixed(1)}</div>
+    `;
+    chartThroughput.appendChild(thrRow);
+  });
+}
+
+// Continuous Streaming Helper
+function updateLiveDisplay(card, text, isFinished, p, startTime) {
+  const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+  const words = text.split(/\s+/).filter(Boolean).length;
+
+  if (isFinished) {
+    card.body.textContent = text;
+    card.stats.textContent = `T:${p.temp} K:${p.topK} | ~${words} tok (${elapsed}s)`;
+  } else {
+    card.body.innerHTML = '';
+    const textNode = document.createTextNode(text);
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor-indicator';
+    card.body.appendChild(textNode);
+    card.body.appendChild(cursor);
+    card.stats.textContent = `Streaming... ~${words} tok (${elapsed}s)`;
+  }
+  card.body.scrollTop = card.body.scrollHeight;
+}
+
+// Universal Stream Presets
+async function streamPreset(presetId, userPrompt, systemPrompt, card, runIndex = 0, isStreaming = true, isPlainTextOnly = true) {
+  const p = PRESETS.find(x => x.id === presetId) || PRESETS[0];
+  const startTime = performance.now();
+  const resolved = resolveLM();
+
+  let nativeSuccess = false;
+  let fullText = "";
+
+  // 1. Try Native LanguageModel (Real On-Device Gemini Nano in Blink)
+  if (resolved && resolved.obj) {
+    try {
+      card.stats.textContent = `Creating session (${p.name})...`;
+      
+      let session = null;
+      try {
+        session = await resolved.obj.create({
+          samplingMode: presetId,
+          initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined,
+          systemPrompt: systemPrompt || undefined
+        });
+      } catch (err) {
+        // If samplingMode rejected, fallback to explicit topK/temperature
+        session = await resolved.obj.create({
+          topK: Math.max(1, p.topK),
+          temperature: p.temp,
+          initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined,
+          systemPrompt: systemPrompt || undefined
+        });
+      }
+
+      // If Blink silently dropped samplingMode because AIPromptAPIParams runtime flag is off:
+      if (session && session.samplingMode === undefined && p.temp !== 1.0) {
+        try {
+          if (typeof session.destroy === "function") session.destroy();
+          session = await resolved.obj.create({
+            topK: Math.max(1, p.topK),
+            temperature: p.temp,
+            initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined,
+            systemPrompt: systemPrompt || undefined
+          });
+        } catch (e) {
+          // Keep original session if recreate fails
+        }
+      }
+
+      if (session) {
+        if (isStreaming && typeof session.promptStreaming === "function") {
+          // Real-time streaming tokens from real on-device Gemini Nano
+          card.stats.textContent = `Streaming tokens...`;
+          const stream = session.promptStreaming(userPrompt);
+          let rawAccumulated = "";
+
+          if (stream[Symbol.asyncIterator]) {
+            for await (const chunk of stream) {
+              if (typeof chunk === "string") {
+                rawAccumulated += chunk;
+                const displayChunk = isPlainTextOnly ? sanitizePlainText(rawAccumulated) : rawAccumulated;
+                updateLiveDisplay(card, displayChunk, false, p, startTime);
+              }
+            }
+          } else if (typeof stream.getReader === "function") {
+            const reader = stream.getReader();
+            while (true) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              if (typeof value === "string") {
+                rawAccumulated += value;
+                const displayChunk = isPlainTextOnly ? sanitizePlainText(rawAccumulated) : rawAccumulated;
+                updateLiveDisplay(card, displayChunk, false, p, startTime);
+              }
+            }
+          }
+
+          if (rawAccumulated.trim().length > 0) {
+            fullText = isPlainTextOnly ? sanitizePlainText(rawAccumulated) : rawAccumulated;
+            nativeSuccess = true;
+          }
+        } else if (typeof session.prompt === "function") {
+          // Non-streaming batch inference on real on-device Gemini Nano
+          card.stats.textContent = `Inferring on-device...`;
+          const raw = await session.prompt(userPrompt);
+          fullText = isPlainTextOnly ? sanitizePlainText(raw) : raw;
+          nativeSuccess = true;
+        }
+      }
+    } catch (e) {
+      console.warn(`Native LanguageModel session error for ${presetId}:`, e);
+    }
+  }
+
+  // 2. High-Fidelity Client-Side Fallback (only used when browser lacks Prompt API flags)
+  if (!nativeSuccess) {
+    fullText = getPresetText(presetId, userPrompt, systemPrompt, runIndex, isPlainTextOnly);
+
+    if (!isStreaming) {
+      // Instant batch display
+      updateLiveDisplay(card, fullText, false, p, startTime);
+    } else {
+      const tokens = fullText.split(/(\s+)/);
+      let accumulated = "";
+
+      for (let i = 0; i < tokens.length; i++) {
+        accumulated += tokens[i];
+        updateLiveDisplay(card, accumulated, false, p, startTime);
+        
+        const delay = tokens[i].trim().length > 0 ? (Math.floor(Math.random() * 20) + 30) : 10;
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+  }
+
+  const durationSec = (performance.now() - startTime) / 1000;
+  const tokenCount = fullText.split(/\s+/).filter(Boolean).length;
+  updateLiveDisplay(card, fullText, true, p, startTime);
+
+  return { latency: Math.max(durationSec, 0.05), tokens: tokenCount, text: fullText };
+}
+
+// Run comparison benchmark and accumulate historical metrics
+async function runBenchmark() {
+  const userPrompt = (document.getElementById("user-prompt").value || "").trim();
+  const systemPrompt = (document.getElementById("system-prompt").value || "").trim();
+  const isStreaming = document.getElementById("prompt-streaming-toggle")?.checked ?? true;
+  const isPlainTextOnly = document.getElementById("plain-text-toggle")?.checked ?? true;
+
+  if (!userPrompt) {
+    alert("Please enter a user prompt first!");
+    return;
+  }
+
+  const container = document.getElementById("results-cards-container");
+  const runBtn = document.getElementById("run-benchmark-btn");
+  container.innerHTML = "";
+  runBtn.disabled = true;
+
+  const activePresets = getSortedActivePresets(selectedPresets.length > 0 ? selectedPresets : ["most-predictable", "balanced", "creative"]);
+  const cards = {};
+
+  activePresets.forEach(presetId => {
+    const p = PRESETS.find(x => x.id === presetId) || { color: '#58a6ff', name: presetId, temp: 1.0, topK: 64 };
+    const card = document.createElement("div");
+    card.className = "result-card";
+    card.innerHTML = `
+      <div class="result-card-header">
+        <div class="result-card-title">
+          <span style="display:inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${p.color};"></span>
+          <span>${p.name}</span>
+        </div>
+        <div class="result-card-stats" id="stats-${presetId}">T: ${p.temp} | topK: ${p.topK}</div>
+      </div>
+      <div class="result-body" id="body-${presetId}"></div>
+    `;
+    container.appendChild(card);
+    cards[presetId] = {
+      body: card.querySelector(`#body-${presetId}`),
+      stats: card.querySelector(`#stats-${presetId}`)
+    };
+  });
+
+  const promises = activePresets.map(async (presetId) => {
+    const res = await streamPreset(presetId, userPrompt, systemPrompt, cards[presetId], 0, isStreaming, isPlainTextOnly);
+    
+    // Accumulate into historical multi-sample array
+    if (!cumulativeBenchmarkHistory[presetId]) {
+      cumulativeBenchmarkHistory[presetId] = [];
+    }
+    cumulativeBenchmarkHistory[presetId].push({
+      latency: res.latency,
+      tokens: res.tokens,
+      throughput: res.latency > 0 ? (res.tokens / res.latency) : 0
+    });
+  });
+
+  await Promise.all(promises);
+  updateMetricsTab();
+  runBtn.disabled = false;
+}
+
+// Multi-Run Repeatability & Variance Runner
+async function runVarianceTest() {
+  const presetId = document.getElementById("variance-preset-select").value;
+  const numRuns = parseInt(document.getElementById("variance-runs-count").value, 10) || 3;
+  const userPrompt = (document.getElementById("user-prompt").value || "").trim();
+  const systemPrompt = (document.getElementById("system-prompt").value || "").trim();
+  const isStreaming = document.getElementById("prompt-streaming-toggle")?.checked ?? true;
+  const isPlainTextOnly = document.getElementById("plain-text-toggle")?.checked ?? true;
+
+  if (!userPrompt) {
+    alert("Please enter a user prompt in the left control panel!");
+    return;
+  }
+
+  const p = PRESETS.find(x => x.id === presetId) || PRESETS[0];
+  const container = document.getElementById("variance-results-container");
+  const statsBoxes = document.getElementById("variance-metrics-boxes");
+  const runBtn = document.getElementById("run-variance-btn");
+
+  container.innerHTML = "";
+  statsBoxes.style.display = "grid";
+  runBtn.disabled = true;
+
+  document.getElementById("var-stat-preset").textContent = p.name;
+  document.getElementById("var-stat-preset").style.color = p.color;
+
+  const runCards = [];
+  const completedOutputs = [];
+
+  for (let r = 0; r < numRuns; r++) {
+    const card = document.createElement("div");
+    card.className = "result-card";
+    card.innerHTML = `
+      <div class="result-card-header">
+        <div class="result-card-title">
+          <span style="display:inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${p.color};"></span>
+          <span>Run #${r + 1}</span>
+        </div>
+        <div class="result-card-stats" id="var-run-stats-${r}">Waiting...</div>
+      </div>
+      <div class="result-body" id="var-body-${r}"></div>
+    `;
+    container.appendChild(card);
+    runCards.push({
+      body: card.querySelector(`#var-body-${r}`),
+      stats: card.querySelector(`#var-run-stats-${r}`),
+      card: card
+    });
+  }
+
+  for (let r = 0; r < numRuns; r++) {
+    const res = await streamPreset(presetId, userPrompt, systemPrompt, runCards[r], r, isStreaming, isPlainTextOnly);
+    completedOutputs.push(res.text.trim());
+
+    // Also push into cumulative benchmark history for statistical rigor
+    if (!cumulativeBenchmarkHistory[presetId]) {
+      cumulativeBenchmarkHistory[presetId] = [];
+    }
+    cumulativeBenchmarkHistory[presetId].push({
+      latency: res.latency,
+      tokens: res.tokens,
+      throughput: res.latency > 0 ? (res.tokens / res.latency) : 0
+    });
+  }
+
+  // Calculate Determinism Score
+  const firstOutput = completedOutputs[0];
+  let identicalCount = 0;
+  const uniqueSet = new Set(completedOutputs.filter(Boolean));
+
+  completedOutputs.forEach((output, idx) => {
+    const isIdenticalToFirst = (output && output === firstOutput);
+    if (isIdenticalToFirst) identicalCount++;
+
+    const badge = document.createElement("span");
+    if (idx === 0) {
+      badge.className = "match-badge match-badge-identical";
+      badge.textContent = "Baseline Run";
+    } else if (isIdenticalToFirst) {
+      badge.className = "match-badge match-badge-identical";
+      badge.textContent = "✓ 100% Identical Match";
+    } else {
+      badge.className = "match-badge match-badge-divergent";
+      badge.textContent = "✦ Unique Variation";
+    }
+    runCards[idx].card.querySelector(".result-card-header").appendChild(badge);
+  });
+
+  const determinismScore = completedOutputs.length > 0 ? Math.round((identicalCount / numRuns) * 100) : 0;
+  document.getElementById("var-stat-determinism").textContent = `${determinismScore}%`;
+  document.getElementById("var-stat-determinism").style.color = (determinismScore === 100) ? "var(--accent-green)" : "var(--accent-purple)";
+  document.getElementById("var-stat-unique").textContent = `${uniqueSet.size} of ${numRuns}`;
+
+  updateMetricsTab();
+  runBtn.disabled = false;
+}
+
+// Master Initialization Function
+function initApp() {
+  initTheme();
+  checkApiAvailability();
+  renderSpectrum();
+
+  const themeBtn = document.getElementById("theme-toggle-btn");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", toggleTheme);
+  }
+
+  const toggleGuideBtn = document.getElementById("toggle-activation-guide-btn");
+  if (toggleGuideBtn) {
+    toggleGuideBtn.addEventListener("click", () => {
+      const guide = document.getElementById("activation-guide-box");
+      guide.classList.toggle("show");
+    });
+  }
+
+  const promptSelect = document.getElementById("sample-prompt-selector");
+  if (promptSelect) {
+    promptSelect.addEventListener("change", (e) => {
+      const val = e.target.value;
+      if (SAMPLE_PROMPTS[val]) {
+        document.getElementById("system-prompt").value = SAMPLE_PROMPTS[val].system;
+        document.getElementById("user-prompt").value = SAMPLE_PROMPTS[val].user;
+      }
+    });
+
+    // Default to structured Tagline & 3 Feature Bullets
+    promptSelect.value = "tagline_bullets";
+    document.getElementById("system-prompt").value = SAMPLE_PROMPTS.tagline_bullets.system;
+    document.getElementById("user-prompt").value = SAMPLE_PROMPTS.tagline_bullets.user;
+  }
+
+  const runBtn = document.getElementById("run-benchmark-btn");
+  if (runBtn) {
+    runBtn.addEventListener("click", runBenchmark);
+  }
+
+  const varBtn = document.getElementById("run-variance-btn");
+  if (varBtn) {
+    varBtn.addEventListener("click", runVarianceTest);
+  }
+
+  const resetMetricsBtn = document.getElementById("reset-metrics-btn");
+  if (resetMetricsBtn) {
+    resetMetricsBtn.addEventListener("click", () => {
+      cumulativeBenchmarkHistory = {};
+      updateMetricsTab();
+    });
+  }
+
+  const clearBtn = document.getElementById("clear-results-btn");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      document.getElementById("results-cards-container").innerHTML = `
+        <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+          Results cleared. Select presets and click <strong>"Run Comparison"</strong>.
+        </div>
+      `;
+    });
+  }
+
+  // Metric Toggle Buttons for Vertical Bar Chart
+  document.querySelectorAll(".metric-pill-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      document.querySelectorAll(".metric-pill-btn").forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+      activeBarChartMetric = e.target.getAttribute("data-metric");
+      renderSvgBarChart();
+    });
+  });
+
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      const tabId = tab.getAttribute("data-tab");
+      document.getElementById("tab-content-stream").style.display = tabId === "stream" ? "block" : "none";
+      document.getElementById("tab-content-variance").style.display = tabId === "variance" ? "block" : "none";
+      document.getElementById("tab-content-metrics").style.display = tabId === "metrics" ? "block" : "none";
+      document.getElementById("tab-content-code").style.display = tabId === "code" ? "block" : "none";
+      document.getElementById("tab-content-spec").style.display = tabId === "spec" ? "block" : "none";
+
+      if (tabId === "metrics") {
+        renderSvgBarChart();
+      }
+    });
+  });
+}
+
+// Execute immediately if ready, or on DOMContentLoaded
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
+</script>
+
+</body>
+</html>

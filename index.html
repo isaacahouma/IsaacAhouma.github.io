@@ -357,9 +357,11 @@
 
     .preset-name {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       font-weight: 700;
-      word-break: break-all;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .preset-meta {
@@ -2172,9 +2174,9 @@ function renderSpectrum() {
     card.className = `preset-item ${isSelected ? 'active-filter' : ''}`;
     card.style.borderTop = `3px solid ${p.color}`;
     card.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-        <div class="preset-name" style="color: ${p.color};">${p.name}</div>
-        <button class="card-code-btn" onclick="openCodeModal('${p.id}'); event.stopPropagation();" title="Inspect executable JavaScript code">💻 JS Code</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:4px; margin-bottom:4px;">
+        <div class="preset-name" style="color: ${p.color};" title="${p.name}">${p.name}</div>
+        <button class="card-code-btn" onclick="openCodeModal('${p.id}'); event.stopPropagation();" title="Inspect JavaScript Code" style="padding: 2px 5px; font-size: 0.68rem; white-space: nowrap; flex-shrink: 0;">💻 JS</button>
       </div>
       <div class="preset-meta">
         <div><span class="param-pill">T: ${p.temp.toFixed(2)}</span> <span class="param-pill">topK: ${p.topK}</span></div>

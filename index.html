@@ -1262,19 +1262,19 @@
         <label>Curated Samples (Public &amp; Spec Aligned)</label>
         <select id="sample-prompt-selector">
           <optgroup label="Deterministic &amp; Structured (Best for most-predictable / predictable)">
-            <option value="json_schema">📊 Structured JSON Entity Schema (Deterministic)</option>
-            <option value="regex_code">💻 Regex Validation Function (Code Gen)</option>
-            <option value="logic_breakdown">🧠 Math Logic Steps (Reasoning)</option>
+            <option value="json_schema">📊 Flight Itinerary Schema Extraction (Deterministic)</option>
+            <option value="regex_code">💻 24-Hour Time Regex Generator (Code Gen)</option>
+            <option value="logic_breakdown">🧠 Multi-Step Parallel Rate Logic (Reasoning)</option>
           </optgroup>
-          <optgroup label="Grounded &amp; Conversational (Best for predictable / balanced)">
-            <option value="polite_email">✉️ Professional Email Rephrasing (Tone)</option>
-            <option value="sentiment_breakdown">🎯 Sentiment &amp; Tone Analysis (Classification)</option>
-            <option value="translation_nuance">🌐 Localization &amp; Cultural Nuance (Translation)</option>
+          <optgroup label="Grounded &amp; Nuanced (Best for predictable / balanced)">
+            <option value="crisis_email">✉️ Architecture Crisis Email Rewrite (Tone Modulation)</option>
+            <option value="sentiment_breakdown">🎯 Ceramic Delivery Friction &amp; Delight (Multi-Aspect NLP)</option>
+            <option value="translation_nuance">🌐 Spanish Football Idiom &amp; Localization (Nuance)</option>
           </optgroup>
           <optgroup label="Creative &amp; Divergent (Best for creative / most-creative)">
-            <option value="tagline_bullets" selected>🏷️ Tagline &amp; 3 Feature Bullets (Creative Pitch)</option>
-            <option value="poem_3line">🎭 3-Line Metaphorical Poem (Poetic imagery)</option>
-            <option value="scifi_hook">🚀 Micro Sci-Fi Scene (Narrative Hook)</option>
+            <option value="airship_pitch" selected>🏷️ Solar Cargo Airship Pitch &amp; 3 Bullets (Green Logistics)</option>
+            <option value="poem_3line">🎭 Radio Frequency Metaphor in 3 Lines (Tactile Acoustics)</option>
+            <option value="butcher_thriller">🔪 Seville Butcher Micro-Thriller (Suspense Hook)</option>
           </optgroup>
           <optgroup label="Custom Input">
             <option value="custom">✍️ Custom Prompt (Type your own)</option>
@@ -1666,17 +1666,17 @@ const PRESETS = [
 
 // Rich, Multi-Line Curated Benchmarks (2-4 lines, structured, easily scannable)
 const SAMPLE_PROMPTS = {
-  tagline_bullets: {
-    system: "You are a brand marketing expert. Provide a punchy tagline followed by 3 short bullet points.",
-    user: "Write a tagline and 3 feature bullets for an artisan espresso bar on Mars."
+  airship_pitch: {
+    system: "You are a clean-tech product strategist. Provide a punchy tagline followed by 3 short bullet points highlighting engineering advantages.",
+    user: "Write a punchy tagline and 3 feature bullets for a silent, solar-powered cargo airship designed for remote island freight."
   },
-  polite_email: {
-    system: "You are an executive communications editor. Provide a Subject line followed by a concise 2-sentence email body.",
-    user: "Rewrite this blunt message professionally: 'Send me the budget spreadsheet now, I need it today.'"
+  crisis_email: {
+    system: "You are an executive communications advisor. Provide a professional Subject line and a diplomatic 2-sentence email body that de-escalates tension.",
+    user: "Rewrite this blunt message professionally: 'The client rejected the architectural blueprint and demands an emergency review in 30 minutes.'"
   },
   sentiment_breakdown: {
-    system: "You are an NLP classification system. Output the Sentiment label, the Tone, and the Key Factor.",
-    user: "Analyze the sentiment and tone: 'The flight was delayed three hours, but the flight attendants were exceptionally kind.'"
+    system: "You are an advanced customer insights analyst. Output the Primary Sentiment, the Customer Friction, and the Resolution Impact.",
+    user: "Analyze customer sentiment and friction: 'The handmade ceramic espresso set arrived cracked, but customer service overnighted a replacement with a handwritten apology note and a bag of artisan coffee beans.'"
   },
   logic_breakdown: {
     system: "You are a math logic tutor. Show a 2-step calculation breakdown followed by the final answer.",
@@ -1691,16 +1691,16 @@ const SAMPLE_PROMPTS = {
     user: "Write a regular expression to validate a standard 24-hour time string (00:00 to 23:59)."
   },
   poem_3line: {
-    system: "You are a poet. Write a 3-line evocative poem about time and memory.",
-    user: "Describe time and memory using an unusual physical metaphor in exactly 3 lines."
+    system: "You are a poet. Write a 3-line tactile poem about acoustic resonance.",
+    user: "Describe the concept of an old forgotten radio frequency using an unusual physical or tactile metaphor in exactly 3 lines."
   },
-  scifi_hook: {
-    system: "You are a speculative fiction author. Write a 2-sentence opening hook.",
-    user: "Write a 2-sentence sci-fi scene about a clockmaker who secretly repairs fading memories."
+  butcher_thriller: {
+    system: "You are a noir thriller author. Write a 2-sentence suspense opening hook with sharp sensory tension.",
+    user: "Write a 2-sentence suspense hook about a celebrated jamón butcher in Seville who secretly cultivates an illegal heirloom tomato greenhouse behind his walk-in meat locker."
   },
   translation_nuance: {
     system: "You are a localization specialist. Provide the idiomatic Spanish translation and a 1-line cultural nuance note.",
-    user: "Translate into natural Spanish: 'The stadium was buzzing with anticipation before the final whistle.'"
+    user: "Translate into natural Spanish with a nuance note: 'The goalkeeper pulled off a miracle save in the dying seconds of stoppage time.'"
   },
   custom: {
     system: "",
@@ -1962,21 +1962,21 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
   const pLower = (userPrompt || "").toLowerCase();
   let result = "";
 
-  // 1. Tagline & Feature Bullets: Espresso bar on Mars
-  if (pLower.includes("tagline") || (pLower.includes("espresso") && pLower.includes("mars"))) {
+  // 1. Tagline & Feature Bullets: Solar Cargo Airship
+  if (pLower.includes("airship") || pLower.includes("cargo") || (pLower.includes("tagline") && pLower.includes("island"))) {
     const map = {
-      "most-predictable": `Fueling human exploration across Mars.\n• 100% high-altitude Arabica blend\n• Pressurized zero-gravity packaging\n• Engineered for sustained mental focus`,
-      "predictable": `Red planet mornings, freshly brewed.\n• Roasted with controlled thermal precision\n• Rich crema under low Martian gravity\n• Delivered hot across all habitat domes`,
-      "slightly-predictable": `Earth's finest roast, crafted for Mars.\n• Bold dark roast with rich cacao notes\n• Nitrogen-sealed for long voyages\n• The premier gathering spot in Sector 4`,
-      "balanced": `Bold cosmic roasts beneath alien stars.\n• Volcanic dark roast beans\n• Micro-gravity velvet froth\n• Fueling pioneer spirits every sol`,
-      "slightly-creative": `Igniting daily gravity with stellar espresso.\n• Solar-roasted under crimson skies\n• Rich notes of dark honey and starlight\n• Habitat colony's favorite caffeine ritual`,
-      "creative": `Stellar caffeine for cosmic dreamers.\n• Dark matter blend with a thunderous kick\n• Zero-g crema dancing in suspension\n• Drink starlight amidst the rust and dust`,
-      "most-creative": `Liquid supernova igniting the crimson dark.\n• Forged in solar flare embers\n• Gravity-defying transcendental aroma\n• Wake your soul on the edge of the void`
+      "most-predictable": `Silent Wings: Zero-Emission Freight Across Remote Archipelagos.\n• 100% solar-electric propulsion with zero carbon footprint\n• Heavy-lift helium hull engineered for rough ocean crosswinds\n• Direct-to-shore landing requiring no paved runway infrastructure`,
+      "predictable": `Connecting Isolated Islands with Silent Solar Freight.\n• High-efficiency photovoltaic skin providing perpetual daytime lift\n• 15-ton payload capacity optimized for perishable supplies\n• Precision vertical landing on unpaved beaches and reefs`,
+      "slightly-predictable": `Clean Skies, Connected Shores: Next-Generation Island Cargo.\n• Whisper-quiet hybrid solar engines protecting coastal wildlife\n• Autonomous waypoint navigation with real-time maritime telemetry\n• 40% reduction in inter-island freight logistics costs`,
+      "balanced": `Silent Giants of the Sky: Clean Cargo for Remote Horizons.\n• Ultra-lightweight carbon composite airframe powered by sun and wind\n• Day-and-night endurance batteries for continuous maritime routes\n• Eliminating diesel barge dependence across archipelagos`,
+      "slightly-creative": `Riding the Pacific Breeze: The Solar Freight Revolution.\n• Sun-harvesting envelope gliding soundlessly over turquoise lagoons\n• Rapid-deploy container system delivering medical and agricultural cargo\n• A lifeline for remote atolls where traditional cargo ships cannot dock`,
+      "creative": `Whales of the Upper Atmosphere: Clean Trade on Solar Currents.\n• Gliding silently above storm surges on endless solar thermal thermals\n• Bringing vital trade to forgotten islands with the grace of a sailing ship\n• Zero runway, zero emissions, infinite coastal reach`,
+      "most-creative": `Sailing the Sun-Drenched Ether: Ocean Freight Reborn in Clouds.\n• Luminous solar envelopes dancing soundlessly across tropical trade winds\n• Bypassing deep-water ports to drop essential cargo straight into island sands\n• The quietest bridge between isolated shores and global commerce`
     };
     if (runIndex > 0 && presetId !== "most-predictable") {
       const vars = [
-        `Zero gravity, maximum dark roast.\n• Harvested for interplanetary wanderers\n• Deep volcanic undertones\n• Sip warmth across the red dunes`,
-        `Caffeine at the speed of light.\n• Pressurized celestial espresso shots\n• Velvet foam engineered for habitats\n• Your daily spark across the Martian frontier`
+        `Sun-Powered Lifelines Across the Pacific.\n• Silent helium cruisers built for isolated reef communities\n• 10-ton clean cargo bay with rapid roll-on roll-off access\n• Zero emissions, zero engine noise, total archipelago access`,
+        `The Green Highway Above the Waves.\n• Solar-electric airships delivering essential freight without port docks\n• Resilient aerodynamic hull handling unpredictable tropical storms\n• Sustainable logistics for ocean-bound communities`
       ];
       result = vars[(runIndex - 1) % vars.length];
     } else {
@@ -1984,35 +1984,35 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
     }
   }
 
-  // 2. Polite Email Rephrasing
-  else if (pLower.includes("politely") || pLower.includes("spreadsheet") || pLower.includes("email")) {
+  // 2. Diplomatic Crisis Email: Architectural Blueprint Rejection
+  else if (pLower.includes("blueprint") || pLower.includes("architectural") || pLower.includes("30 minutes") || pLower.includes("crisis")) {
     const map = {
-      "most-predictable": `Subject: Request for Budget Spreadsheet\n\nHi team,\nCould you please share the latest budget spreadsheet at your earliest convenience today? Thank you.`,
-      "predictable": `Subject: Quick Follow-up: Budget Spreadsheet\n\nHi everyone,\nWhenever you have a moment today, please send over the updated budget spreadsheet so we can finalize the review.`,
-      "slightly-predictable": `Subject: Budget Spreadsheet Update Request\n\nGood morning,\nCould you please forward the current budget file sometime today? I appreciate your help with this.`,
-      "balanced": `Subject: Checking in on the budget file\n\nHi team,\nHope your week is going smoothly! When you get a chance today, could you kindly share the latest budget spreadsheet?`,
-      "slightly-creative": `Subject: Quick touchpoint on today's budget review\n\nHi all,\nWhenever your schedule allows today, I'd greatly appreciate a quick pass of the budget numbers. Thanks so much!`,
-      "creative": `Subject: Quick favor: latest budget sheet\n\nHey team,\nHope you're having a great day! If you have a brief window today, could you pass along the budget numbers so I can keep us aligned?`,
-      "most-creative": `Subject: Keeping us synchronized on the budget\n\nHi everyone,\nWhenever a spare moment strikes today, would love to take a peek at the fresh budget workbook. Cheers and thank you!`
+      "most-predictable": `Subject: Urgent: Blueprint Review & Client Alignment Meeting\n\nHi team,\nThe client has requested an urgent review of the updated architectural blueprints within the next 30 minutes. Let us convene immediately to consolidate our technical revisions and address their key concerns.`,
+      "predictable": `Subject: Action Required: Client Feedback on Architectural Blueprint\n\nGood morning all,\nThe client has requested an emergency sync in 30 minutes regarding the latest architectural blueprint revisions. Please join the bridge link so we can review the flagged items together beforehand.`,
+      "slightly-predictable": `Subject: Priority Touchpoint: Client Blueprint Feedback & Next Steps\n\nHi team,\nWe just received urgent feedback on the architectural plans, and the client would like a quick sync in 30 minutes. Let's huddle right now to ensure our response is cohesive and constructive.`,
+      "balanced": `Subject: Quick Alignment: Addressing Client Blueprint Notes\n\nHi team,\nThe client reached out with immediate feedback on the blueprint and requested a 30-minute turn-around discussion. Let's jump on a quick prep call to coordinate our technical rationale and next steps.`,
+      "slightly-creative": `Subject: Client Blueprint Check-in: Aligning Ahead of Our Sync\n\nHi everyone,\nThe client has requested an emergency walkthrough of the architectural schematics in 30 minutes. Let's gather for 5 minutes beforehand so we can present clear, calm solutions to their design notes.`,
+      "creative": `Subject: Blueprint Strategy: Turning Client Feedback into Clear Action\n\nHey team,\nOur client wants an emergency sync in 30 minutes to walk through their blueprint concerns. Let's take a quick breath, review their feedback, and guide them through our design adjustments with total clarity.`,
+      "most-creative": `Subject: Steering the Blueprint Vision: Quick Prep for Today's Client Sync\n\nHi all,\nAn urgent revision request just came in from the client for a discussion in 30 minutes. Let's synchronize our technical insights now so we turn their critique into an opportunity for a stronger design!`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 3. Sentiment & Tone Breakdown
-  else if (pLower.includes("sentiment") || pLower.includes("delayed")) {
+  // 3. Multi-Aspect Sentiment & Friction: Cracked Ceramic Set
+  else if (pLower.includes("ceramic") || pLower.includes("espresso set") || pLower.includes("cracked") || pLower.includes("handwritten")) {
     const map = {
-      "most-predictable": `• Sentiment: Mixed\n• Tone: Professional & factual\n• Key Factor: 3-hour flight delay mitigated by attentive flight crew.`,
-      "predictable": `• Sentiment: Mixed (Neutral to Positive)\n• Tone: Balanced assessment\n• Key Factor: Strong customer service counterbalanced the travel delay.`,
-      "slightly-predictable": `• Sentiment: Positive-leaning Mixed\n• Tone: Appreciative despite inconvenience\n• Key Factor: Exceptional crew compassion softened operational delay.`,
-      "balanced": `• Sentiment: Bittersweet / Relieved\n• Tone: Constructive & grateful\n• Key Factor: Genuine human empathy turned a frustrating delay into a positive review.`,
-      "slightly-creative": `• Sentiment: Warm appreciation over adversity\n• Tone: Generous and forgiving\n• Key Factor: Outstanding hospitality outshined the logistical disruption.`,
-      "creative": `• Sentiment: Redemptive gratitude\n• Tone: Empathetic and expressive\n• Key Factor: Flight attendants salvaged morale through exemplary care during a grueling wait.`,
-      "most-creative": `• Sentiment: Silver-lining delight\n• Tone: Poetically philosophical\n• Key Factor: Human warmth transformed three lost hours of tarmac purgatory into genuine goodwill.`
+      "most-predictable": `• Primary Sentiment: Positive (Net Promoter Score: High)\n• Customer Friction: Product transit damage (shattered ceramic set on arrival).\n• Resolution Impact: Rapid proactive replacement + personalized handwritten note and gift converted shipping failure into brand advocacy.`,
+      "predictable": `• Primary Sentiment: Highly Positive & Delighted\n• Customer Friction: Packaging failure resulting in broken ceramics upon delivery.\n• Resolution Impact: Overnighted replacement accompanied by humanized customer care successfully eliminated customer frustration.`,
+      "slightly-predictable": `• Primary Sentiment: Resilient Loyalty (Relieved & Impressed)\n• Customer Friction: Acute initial disappointment from damaged fragile goods.\n• Resolution Impact: Exceptional service recovery speed and high-touch thoughtful gesture (artisan beans) exceeded customer expectations.`,
+      "balanced": `• Primary Sentiment: Grateful Brand Champion\n• Customer Friction: Broken delicate item during freight transit.\n• Resolution Impact: Turning an operational shipping flaw into an emotional connection through immediate replacement and personal empathy.`,
+      "slightly-creative": `• Primary Sentiment: Enthusiastic Gratitude\n• Customer Friction: Heartbreak of unboxing shattered artisan craftsmanship.\n• Resolution Impact: Masterclass in service recovery—genuine human touch and complimentary artisan gift fostered lifelong brand goodwill.`,
+      "creative": `• Primary Sentiment: Redemptive Delight\n• Customer Friction: The sting of shattered pottery replaced by unboxing joy.\n• Resolution Impact: Swift, warm-hearted support turned a logistics nightmare into an unforgettable customer testimonial.`,
+      "most-creative": `• Primary Sentiment: Golden Kintsugi Goodwill\n• Customer Friction: Fragile parcel tragedy turned into an elevated customer romance.\n• Resolution Impact: Lightning-fast empathy and unexpected artisan gifts repaired not just the coffee set, but solidified absolute brand devotion.`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 4. Logic Riddle Calculation
+  // 4. Logic Riddle: Parallel Production Rate
   else if (pLower.includes("widgets") || pLower.includes("machines make")) {
     const map = {
       "most-predictable": `Step 1: 5 machines produce 5 widgets in 5 minutes -> 1 machine makes 1 widget in 5 minutes.\nStep 2: 100 machines working simultaneously will produce 100 widgets in the same time.\nAnswer: Exactly 5 minutes.`,
@@ -2054,44 +2054,44 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
     result = map[presetId] || map["balanced"];
   }
 
-  // 7. 3-Line Metaphorical Poem
-  else if (pLower.includes("poem") || pLower.includes("metaphor") || pLower.includes("3-line")) {
+  // 7. 3-Line Tactile Metaphor Poem: Radio Frequency
+  else if (pLower.includes("radio") || pLower.includes("frequency") || pLower.includes("acoustics") || pLower.includes("poem")) {
     const map = {
-      "most-predictable": `Time is an hourglass carved in stone,\nWhere memories fall like silent grains,\nLeaving only the shadows we have known.`,
-      "predictable": `Memory is a tapestry woven in the dark,\nTime is the gentle unwinding thread,\nLeaving on the loom a single silver spark.`,
-      "slightly-predictable": `A river of mirrors flowing through the night,\nCarrying faces we used to hold,\nUntil the morning washes them in light.`,
-      "balanced": `Time is an ocean of copper gears,\nRusting the sorrows we tried to keep,\nWhile winding the music of forgotten years.`,
-      "slightly-creative": `Memory is an attic of unlit lamps,\nTime walks through with a strike of flint,\nIlluminating dust into golden stamps.`,
-      "creative": `Time is a jeweler with calloused hands,\nPolishing tears into amber beads,\nScattered like starlight across desert sands.`,
-      "most-creative": `A grandfather clock buried in the deep sea,\nWhose pendulum swings through whales and coral,\nMeasuring dreams where yesterday used to be.`
+      "most-predictable": `A copper needle dragging through dust,\nCatching the hum of abandoned voices,\nVibrating cold against the receiver wire.`,
+      "predictable": `Static coats the vacuum tube like winter frost,\nWhere a forgotten melody uncoils in the dark,\nA copper spine shivering with electric ghosts.`,
+      "slightly-predictable": `A thread of rusted wire drawn taut across silence,\nHumming with the warmth of a departed station,\nScattered like iron filings across the night.`,
+      "balanced": `An attic antenna brushing against the cold ionosphere,\nSifting through decades of velvet static,\nTo pull a single warm heartbeat from the ether.`,
+      "slightly-creative": `An empty dial spinning over glass and shadow,\nWhere lost broadcast frequencies gather like cobwebs,\nWaiting for a copper finger to stroke them awake.`,
+      "creative": `A ghost ship trapped in phosphor and copper coils,\nWhose whistle echoes through the crackling salt of static,\nDrowning in the silent ocean between two frequencies.`,
+      "most-creative": `A rusted tuning capacitor asleep under moss,\nHumming a forgotten lullaby into the throat of the dark,\nWhere yesterday's radio waves still drift like radioactive snowfall.`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 8. Sci-Fi Hook: Clockmaker memories
-  else if (pLower.includes("clockmaker") || pLower.includes("memories")) {
+  // 8. Seville Butcher Micro-Thriller (Suspense Hook)
+  else if (pLower.includes("butcher") || pLower.includes("seville") || pLower.includes("jamón") || pLower.includes("greenhouse")) {
     const map = {
-      "most-predictable": `In his dimly lit basement shop, the old clockmaker carefully oiled the brass gears of forgotten memories.\nEvery pocket watch on his shelf ticked with the heartbeat of a childhood someone had long ago misplaced.`,
-      "predictable": `He calibrated the delicate escapement wheels with jeweled tweezers, adjusting the tempo of a stranger's fading nostalgia.\nWhen the mainspring tightened, thirty forgotten summers echoed softly through the quiet room.`,
-      "slightly-predictable": `Behind a veil of ticking clocks, she dismantled sorrow into precision escapements and balance springs.\nOne gentle turn of the winding key was all it took to restore a lost afternoon by the sea.`,
-      "balanced": `She adjusted her magnifying loupe, searching for the microscopic tooth where his mother's laughter had slipped loose.\nWith a drop of clock oil and a steady hand, the memory spun into crystal clarity once more.`,
-      "slightly-creative": `In a back alley where neon bled into the fog, he bought shattered heartbreaks and sold them back as synchronized chime watches.\nCustomers never asked where the borrowed nostalgia came from, only that the gears never stopped spinning.`,
-      "creative": `He held the pocket watch to his ear, listening past the tick of mechanical seconds into the recorded heartbeat of a dying world.\nWith a flick of his bronze wrench, he rewound seventy years of regret into a pristine morning.`,
-      "most-creative": `In the belly of antique timepieces, he caged the golden ghosts of memories people were too terrified to carry in their own chests.\nWhenever midnight struck, fifty stolen lifetimes chimed in breathless, melancholy harmony.`
+      "most-predictable": `Behind three heavy rows of curing Ibérico pork, Mateo unlocked the reinforced freezer door that concealed his basement hydroponic greenhouse.\nWiping his cleaver clean on his apron, he checked the automated grow lights shielding his heirloom tomatoes from the neighborhood guild.`,
+      "predictable": `The heavy freezer door sealed with a frosty hiss, muffling the bustling Seville market outside as he stepped into a warm, emerald sanctuary of basil and vines.\nWhen an unexpected knock rattled the front counter, he carefully hid the pruning shears behind a slab of salted beef and reached for his carving knife.`,
+      "slightly-predictable": `To the guild, he was the city's most respected fifth-generation butcher; behind the sub-zero curing locker, he was an outlaw botanist breathing stolen soil.\nAs footsteps approached the back corridor, he wiped damp fertilizer from his fingers and stepped out onto the bloodstained sawdust floor.`,
+      "balanced": `The butcher shop reeked of salt, iron, and curing fat, but behind the stainless steel racks lay a secret greenhouse fragrant with sunlit rosemary and damp peat.\nHe knew that if the inspection team discovered what was truly growing beneath the meat hooks, thirty years of family reputation would vanish before sunrise.`,
+      "slightly-creative": `Under the cold fluorescence of hanging carcasses, he wiped crimson brine from his hands and slipped through the hidden partition into a tropical burst of clandestine chlorophyll.\nHe had buried forty heirloom tomato varieties where the city inspectors only ever searched for cured ham.`,
+      "creative": `His apron bore the iron stains of his daytime craft, but in the secret damp warmth behind the carcass hooks, his calloused fingers tenderly pruned blossoming nightshade.\nWhen the health tribunal banged on the iron shutters at midnight, the scent of crushed mint gave him away before the bolt could slide shut.`,
+      "most-creative": `In a cathedral of salted ribs and hanging shadow, he was Seville's most devoted carnivore—until the sub-zero locker swung open to reveal a glowing jungle of forbidden heirloom fruit.\nEvery cleaver stroke in the front room was merely acoustic camouflage to drown out the hum of his illegal basement grow lights.`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 9. Translation & Cultural Nuance
-  else if (pLower.includes("spanish") || pLower.includes("translation") || pLower.includes("whistle")) {
+  // 9. Translation & Cultural Nuance: Goalkeeper Stoppage Time Save
+  else if (pLower.includes("goalkeeper") || pLower.includes("stoppage") || pLower.includes("save") || pLower.includes("spanish")) {
     const map = {
-      "most-predictable": `Traducción:\n"El estadio vibraba de emoción antes del pitido final."\n\nNota de matiz: "Vibraba de emoción" transmite con precisión la energía colectiva de la multitud.`,
-      "predictable": `Traducción:\n"La tensión en el estadio era palpable antes del silbatazo final."\n\nNota de matiz: "Silbatazo final" es el término idiomático preferido en el ámbito deportivo hispanohablante.`,
-      "slightly-predictable": `Traducción:\n"El estadio zumbaba de anticipación en los minutos previos al pitazo final."\n\nNota de matiz: "Pitazo final" refleja con dinamismo la atmósfera deportiva latinoamericana.`,
-      "balanced": `Traducción:\n"Se respiraba una expectación electrizante en las gradas antes del pitido definitivo."\n\nNota de matiz: "Se respiraba una expectación electrizante" aporta una cadencia periodística más inmersiva.`,
-      "slightly-creative": `Traducción:\n"El estadio era un hervidero de pasión contenido a la espera del silbido final."\n\nNota de matiz: "Un hervidero de pasión" capta vívidamente el fervor dramático del fútbol.`,
-      "creative": `Traducción:\n"Ochenta mil almas contenían el aliento en un estadio al rojo vivo antes de la sentencia final."\n\nNota de matiz: Enfoque narrativo de alta intensidad que enfatiza la atmósfera épica.`,
-      "most-creative": `Traducción:\n"Un rugido suspendido en el aire estremecía las gradas a segundos del silbido que sellaría la gloria."\n\nNota de matiz: Prosa poética que amplifica el drama lírico de la victoria.`
+      "most-predictable": `Traducción:\n"El guardameta realizó una parada milagrosa en los últimos segundos del tiempo de descuento."\n\nNota de matiz: "Tiempo de descuento" es el término reglamentario y estándar para referirse a los minutos añadidos al final del encuentro.`,
+      "predictable": `Traducción:\n"El portero sacó una mano providencial en los instantes finales del tiempo añadido."\n\nNota de matiz: "Mano providencial" refleja con precisión la épica del momento deportivo sin perder naturalidad periodística.`,
+      "slightly-predictable": `Traducción:\n"El arquero firmó una atajada heroica en el último suspiro del tiempo de compensación."\n\nNota de matiz: "Atajada" y "tiempo de compensación" son las expresiones idiomáticas preferidas en la crónica deportiva latinoamericana.`,
+      "balanced": `Traducción:\n"El portero obró el milagro con una estirada salvadora cuando el partido agonizaba en el descuento."\n\nNota de matiz: "Estirada salvadora" aporta gran dinamismo visual y transmite la angustia del desenlace.`,
+      "slightly-creative": `Traducción:\n"Bajo los palos, el guardameta se vistió de héroe con una intervención colosal en la última jugada del añadido."\n\nNota de matiz: "Se vistió de héroe" capta vívidamente la narrativa emocional del fútbol hispanohablante.`,
+      "creative": `Traducción:\n"El cancerbero rozó la gloria al sacar un balón imposible sobre la bocina en un descuento de infarto."\n\nNota de matiz: "Cancerbero" y "descuento de infarto" enriquecen la crónica con un registro apasionado de alta tensión.`,
+      "most-creative": `Traducción:\n"Un vuelo sobrehumano del arquero blindó la victoria en el último latido de un tiempo extra taquicárdico."\n\nNota de matiz: Metáfora poética de alto impacto lírico reservada para finales de campeonato inolvidables.`
     };
     result = map[presetId] || map["balanced"];
   }
@@ -2887,10 +2887,10 @@ function initApp() {
       }
     });
 
-    // Default to structured Tagline & 3 Feature Bullets
-    promptSelect.value = "tagline_bullets";
-    document.getElementById("system-prompt").value = SAMPLE_PROMPTS.tagline_bullets.system;
-    document.getElementById("user-prompt").value = SAMPLE_PROMPTS.tagline_bullets.user;
+    // Default to structured Clean-Tech Airship Pitch & 3 Bullets
+    promptSelect.value = "airship_pitch";
+    document.getElementById("system-prompt").value = SAMPLE_PROMPTS.airship_pitch.system;
+    document.getElementById("user-prompt").value = SAMPLE_PROMPTS.airship_pitch.user;
   }
 
   const runBtn = document.getElementById("run-benchmark-btn");

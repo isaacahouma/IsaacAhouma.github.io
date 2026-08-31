@@ -1705,7 +1705,7 @@ const SAMPLE_PROMPTS = {
 };
 
 // Global State with Cumulative Multi-Run Samples
-let selectedPresets = ["most-predictable", "predictable", "balanced", "creative", "most-creative"];
+let selectedPresets = ["most-predictable", "predictable", "slightly-predictable", "balanced", "slightly-creative", "creative", "most-creative"];
 let cumulativeBenchmarkHistory = {}; // Key: presetId -> Array of samples: [{ latency, tokens, throughput }]
 let activeBarChartMetric = "latency"; // "latency", "tokens", "throughput"
 

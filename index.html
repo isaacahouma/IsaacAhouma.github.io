@@ -975,6 +975,106 @@
       font-family: var(--font-mono);
     }
 
+    /* Interactive Code Inspector Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 760px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 14px 18px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-main);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 4px;
+      line-height: 1;
+    }
+
+    .modal-close-btn:hover {
+      color: var(--text-main);
+      background: var(--bg-hover);
+    }
+
+    .modal-body {
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-code-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--accent-blue) !important;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+    }
+
+    .card-code-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent-blue);
+    }
+
     /* Multi-Run Variance Tab Styles */
     .variance-panel {
       background: var(--bg-secondary);
@@ -1407,14 +1507,39 @@
         </div>
       </div>
 
-      <!-- Tab 4: JavaScript API Snippet with Syntax Highlighting -->
+      <!-- Tab 4: Interactive JavaScript API Snippet Generator -->
       <div id="tab-content-code" style="display: none;">
+        <div style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong style="color: var(--text-main); font-size: 0.95rem;">💻 Interactive JavaScript Snippet Generator</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+              Generates self-contained, copy-pasteable JavaScript code ready to run directly in your <strong>DevTools Console</strong> or web app.
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <label style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Sampling Mode:</label>
+            <select class="control-select" id="code-tab-preset-select" style="width: auto; padding: 4px 10px; font-size: 0.82rem;">
+              <option value="most-predictable">most-predictable (T: 0.0, K: 1)</option>
+              <option value="predictable">predictable (T: 0.3, K: 32)</option>
+              <option value="slightly-predictable">slightly-predictable (T: 0.7, K: 64)</option>
+              <option value="balanced" selected>balanced (T: 1.0, K: 64)</option>
+              <option value="slightly-creative">slightly-creative (T: 1.1, K: 72)</option>
+              <option value="creative">creative (T: 1.15, K: 80)</option>
+              <option value="most-creative">most-creative (T: 1.2, K: 100)</option>
+            </select>
+          </div>
+        </div>
+
         <div class="code-container">
           <div class="code-toolbar">
-            <span class="code-lang-tag">JavaScript / Blink Web IDL</span>
-            <button class="copy-btn" id="copy-code-btn" onclick="copySnippetCode()">Copy Snippet</button>
+            <span class="code-lang-tag">JavaScript / Chromium Prompt API</span>
+            <button class="copy-btn" id="copy-code-btn" onclick="copySnippetCode()">📋 Copy Snippet</button>
           </div>
           <div class="code-box" id="code-snippet-box"></div>
+        </div>
+
+        <div style="margin-top: 12px; font-size:0.8rem; color:var(--text-muted); line-height: 1.5; background:var(--bg-secondary); padding:10px 14px; border-radius:6px; border:1px solid var(--border-color);">
+          💡 <strong>How to run:</strong> Open DevTools (<kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">F12</kbd> or <kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">Cmd+Option+I</kbd>), paste this code into the <strong>Console</strong>, and press <kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">Enter</kbd>.
         </div>
       </div>
 
@@ -1433,6 +1558,36 @@
             <!-- Injected via JS -->
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Code Inspector Modal -->
+<div class="modal-backdrop" id="code-modal-backdrop" onclick="if(event.target === this) closeCodeModal()">
+  <div class="modal-window">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span>💻 JavaScript Execution Snippet</span>
+        <span class="sample-badge" id="modal-preset-badge">creative</span>
+      </div>
+      <button class="modal-close-btn" onclick="closeCodeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="font-size:0.84rem; color:var(--text-muted);">
+          Copy and run directly in your <strong>Chrome DevTools Console</strong>:
+        </div>
+        <button class="copy-btn" id="modal-copy-btn" onclick="copyModalCode()">📋 Copy Code</button>
+      </div>
+      <div class="code-container" style="margin: 0;">
+        <div class="code-toolbar">
+          <span class="code-lang-tag">JavaScript / Prompt API</span>
+        </div>
+        <div class="code-box" id="modal-code-box"></div>
+      </div>
+      <div style="font-size:0.78rem; color:var(--text-muted); line-height: 1.5; background:var(--bg-secondary); padding:10px 14px; border-radius:6px; border:1px solid var(--border-color);">
+        💡 <strong>Quick Test:</strong> Press <kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">Cmd+Option+J</kbd> (Mac) or <kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">Ctrl+Shift+J</kbd> (Windows/Linux) to open the Console, paste the snippet, and press Enter!
       </div>
     </div>
   </div>
@@ -1591,50 +1746,141 @@ function calculateStats(numbers) {
   return { min, max, median, mean, count };
 }
 
-const RAW_API_CODE = `// 1. Check model availability with a categorical samplingMode preset
+// Syntax highlighter helper
+function highlightJsCode(rawCode) {
+  let code = rawCode;
+  // HTML escape
+  code = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  // Comments
+  code = code.replace(/(\/\/[^\n]*)/g, '<span class="syn-c">$1</span>');
+  // Keywords
+  code = code.replace(/\b(const|let|var|await|async|for|of|if|else|return|new)\b/g, '<span class="syn-k">$1</span>');
+  // Functions
+  code = code.replace(/\b(availability|create|prompt|promptStreaming|log|write|destroy)\b(?=\()/g, '<span class="syn-f">$1</span>');
+  // Classes
+  code = code.replace(/\b(LanguageModel|console)\b/g, '<span class="syn-f" style="color:var(--accent-purple);">$1</span>');
+  // Strings
+  code = code.replace(/("[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*')/g, '<span class="syn-s">$1</span>');
+  // Properties
+  code = code.replace(/\b(samplingMode|systemPrompt|initialPrompts|role|content|temperature|topK)\b(?=:)/g, '<span class="syn-p">$1</span>');
+  return code;
+}
+
+// Generate immediately runnable JavaScript code for DevTools Console / web apps
+function generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming) {
+  const p = PRESETS.find(x => x.id === presetId) || PRESETS[3];
+  const uPrompt = (userPrompt || "Write a tagline and 3 feature bullets for an artisan espresso bar on Mars.").trim();
+  const sPrompt = (systemPrompt || "").trim();
+  const safeUser = uPrompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+  const safeSys = sPrompt ? sPrompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n') : "";
+
+  if (isStreaming) {
+    return `// 1. Check model availability for "${presetId}" preset
 const availability = await LanguageModel.availability({
-  samplingMode: "creative"
+  samplingMode: "${presetId}"
 });
-console.log("Model status:", availability); // "readily", "after-download", or "no"
+console.log("Model Status:", availability);
 
-// 2. Initialize LanguageModel session with sampling preset
+// 2. Initialize LanguageModel session with categorical preset
 const session = await LanguageModel.create({
-  samplingMode: "creative",
-  initialPrompts: [
-    { role: "system", content: "You are a brand marketing expert. Provide a punchy tagline followed by 3 short bullet points." }
-  ]
+  samplingMode: "${presetId}"${safeSys ? `,\n  systemPrompt: "${safeSys}"` : ''}
 });
 
-// 3. Inspect active samplingMode on the session instance
-console.log("Active Sampling Preset:", session.samplingMode); // "creative"
+console.log("Active Preset:", session.samplingMode || "${presetId}");
 
-// 4. Either prompt in batch (instant) or stream tokens
-// A. Non-streaming (Batch):
-const text = await session.prompt("Write a tagline for Mars espresso.");
+// 3. Stream response tokens in Console
+const stream = session.promptStreaming("${safeUser}");
+let fullResponse = "";
 
-// B. Streaming:
-const stream = session.promptStreaming("Write a tagline for Mars espresso.");
 for await (const chunk of stream) {
-  process.stdout.write(chunk);
-}`;
+  fullResponse += chunk;
+}
 
+console.log("\\n=== Response (${presetId}) ===\\n" + fullResponse);`;
+  } else {
+    return `// 1. Check model availability for "${presetId}" preset
+const availability = await LanguageModel.availability({
+  samplingMode: "${presetId}"
+});
+console.log("Model Status:", availability);
+
+// 2. Initialize LanguageModel session with categorical preset
+const session = await LanguageModel.create({
+  samplingMode: "${presetId}"${safeSys ? `,\n  systemPrompt: "${safeSys}"` : ''}
+});
+
+console.log("Active Preset:", session.samplingMode || "${presetId}");
+
+// 3. Generate atomic response
+const response = await session.prompt("${safeUser}");
+console.log("\\n=== Response (${presetId}) ===\\n" + response);`;
+  }
+}
+
+// Active modal code state
+let currentModalCode = "";
+
+// Open interactive Code Inspector Modal for a specific preset
+function openCodeModal(presetId) {
+  const userPrompt = document.getElementById("user-prompt")?.value || "";
+  const systemPrompt = document.getElementById("system-prompt")?.value || "";
+  const isStreaming = document.getElementById("prompt-streaming-toggle")?.checked ?? true;
+  const p = PRESETS.find(x => x.id === presetId) || PRESETS[0];
+
+  currentModalCode = generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming);
+  
+  const box = document.getElementById("modal-code-box");
+  const badge = document.getElementById("modal-preset-badge");
+  const backdrop = document.getElementById("code-modal-backdrop");
+  
+  if (box) box.innerHTML = highlightJsCode(currentModalCode);
+  if (badge) {
+    badge.textContent = `${p.name} (T: ${p.temp}, K: ${p.topK})`;
+    badge.style.color = p.color;
+  }
+  if (backdrop) backdrop.classList.add("show");
+}
+
+function closeCodeModal() {
+  const backdrop = document.getElementById("code-modal-backdrop");
+  if (backdrop) backdrop.classList.remove("show");
+}
+
+function copyModalCode() {
+  if (!currentModalCode) return;
+  navigator.clipboard.writeText(currentModalCode);
+  const btn = document.getElementById("modal-copy-btn");
+  if (btn) {
+    const original = btn.textContent;
+    btn.textContent = "✓ Copied to Clipboard!";
+    setTimeout(() => { btn.textContent = original; }, 2000);
+  }
+}
+
+// Render dynamic code in Tab 4
 function renderHighlightedCode() {
   const container = document.getElementById("code-snippet-box");
   if (!container) return;
 
-  let code = RAW_API_CODE;
-  code = code.replace(/(\/\/[^\n]*)/g, '<span class="syn-c">$1</span>');
-  code = code.replace(/\b(const|let|var|await|async|for|of|if|else|return|new)\b/g, '<span class="syn-k">$1</span>');
-  code = code.replace(/\b(availability|create|prompt|promptStreaming|log|write)\b(?=\()/g, '<span class="syn-f">$1</span>');
-  code = code.replace(/\b(LanguageModel)\b/g, '<span class="syn-f" style="color:var(--accent-purple);">$1</span>');
-  code = code.replace(/("[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*')/g, '<span class="syn-s">$1</span>');
-  code = code.replace(/\b(samplingMode|initialPrompts|role|content)\b(?=:)/g, '<span class="syn-p">$1</span>');
-  
-  container.innerHTML = code;
+  const presetSelect = document.getElementById("code-tab-preset-select");
+  const presetId = presetSelect ? presetSelect.value : "balanced";
+  const userPrompt = document.getElementById("user-prompt")?.value || "";
+  const systemPrompt = document.getElementById("system-prompt")?.value || "";
+  const isStreaming = document.getElementById("prompt-streaming-toggle")?.checked ?? true;
+
+  const rawCode = generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming);
+  container.innerHTML = highlightJsCode(rawCode);
 }
 
 function copySnippetCode() {
-  navigator.clipboard.writeText(RAW_API_CODE);
+  const presetSelect = document.getElementById("code-tab-preset-select");
+  const presetId = presetSelect ? presetSelect.value : "balanced";
+  const userPrompt = document.getElementById("user-prompt")?.value || "";
+  const systemPrompt = document.getElementById("system-prompt")?.value || "";
+  const isStreaming = document.getElementById("prompt-streaming-toggle")?.checked ?? true;
+
+  const rawCode = generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming);
+  navigator.clipboard.writeText(rawCode);
   const btn = document.getElementById("copy-code-btn");
   if (btn) {
     const original = btn.textContent;
@@ -1838,7 +2084,7 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
       "most-predictable": `Traducción:\n"El estadio vibraba de emoción antes del pitido final."\n\nNota de matiz: "Vibraba de emoción" transmite con precisión la energía colectiva de la multitud.`,
       "predictable": `Traducción:\n"La tensión en el estadio era palpable antes del silbatazo final."\n\nNota de matiz: "Silbatazo final" es el término idiomático preferido en el ámbito deportivo hispanohablante.`,
       "slightly-predictable": `Traducción:\n"El estadio zumbaba de anticipación en los minutos previos al pitazo final."\n\nNota de matiz: "Pitazo final" refleja con dinamismo la atmósfera deportiva latinoamericana.`,
-      "balanced": `Traducción:\n"Se respiraba una expectación electrizante en las gradas antes del pitido definitivo."\n\nNota de matiz: "Se respiraba una expectación electrizante" mentalidad periodística deportiva.`,
+      "balanced": `Traducción:\n"Se respiraba una expectación electrizante en las gradas antes del pitido definitivo."\n\nNota de matiz: "Se respiraba una expectación electrizante" aporta una cadencia periodística más inmersiva.`,
       "slightly-creative": `Traducción:\n"El estadio era un hervidero de pasión contenido a la espera del silbido final."\n\nNota de matiz: "Un hervidero de pasión" capta vívidamente el fervor dramático del fútbol.`,
       "creative": `Traducción:\n"Ochenta mil almas contenían el aliento en un estadio al rojo vivo antes de la sentencia final."\n\nNota de matiz: Enfoque narrativo de alta intensidad que enfatiza la atmósfera épica.`,
       "most-creative": `Traducción:\n"Un rugido suspendido en el aire estremecía las gradas a segundos del silbido que sellaría la gloria."\n\nNota de matiz: Prosa poética que amplifica el drama lírico de la victoria.`
@@ -1926,7 +2172,10 @@ function renderSpectrum() {
     card.className = `preset-item ${isSelected ? 'active-filter' : ''}`;
     card.style.borderTop = `3px solid ${p.color}`;
     card.innerHTML = `
-      <div class="preset-name" style="color: ${p.color};">${p.name}</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <div class="preset-name" style="color: ${p.color};">${p.name}</div>
+        <button class="card-code-btn" onclick="openCodeModal('${p.id}'); event.stopPropagation();" title="Inspect executable JavaScript code">💻 JS Code</button>
+      </div>
       <div class="preset-meta">
         <div><span class="param-pill">T: ${p.temp.toFixed(2)}</span> <span class="param-pill">topK: ${p.topK}</span></div>
         <div class="temp-bar-bg">
@@ -2444,7 +2693,10 @@ async function runBenchmark() {
           <span style="display:inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${p.color};"></span>
           <span>${p.name}</span>
         </div>
-        <div class="result-card-stats" id="stats-${presetId}">T: ${p.temp} | topK: ${p.topK}</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="result-card-stats" id="stats-${presetId}">T: ${p.temp} | topK: ${p.topK}</div>
+          <button class="card-code-btn" onclick="openCodeModal('${presetId}'); event.stopPropagation();" title="Inspect & Copy JavaScript Code for this preset">💻 JS Code</button>
+        </div>
       </div>
       <div class="result-body" id="body-${presetId}"></div>
     `;
@@ -2512,7 +2764,10 @@ async function runVarianceTest() {
           <span style="display:inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${p.color};"></span>
           <span>Run #${r + 1}</span>
         </div>
-        <div class="result-card-stats" id="var-run-stats-${r}">Waiting...</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="result-card-stats" id="var-run-stats-${r}">Waiting...</div>
+          <button class="card-code-btn" onclick="openCodeModal('${presetId}'); event.stopPropagation();" title="Inspect & Copy JavaScript Code for this run">💻 JS Code</button>
+        </div>
       </div>
       <div class="result-body" id="var-body-${r}"></div>
     `;
@@ -2659,9 +2914,32 @@ function initApp() {
 
       if (tabId === "metrics") {
         renderSvgBarChart();
+      } else if (tabId === "code") {
+        renderHighlightedCode();
       }
     });
   });
+
+  // Dynamic code update listeners
+  const codePresetSelect = document.getElementById("code-tab-preset-select");
+  if (codePresetSelect) {
+    codePresetSelect.addEventListener("change", renderHighlightedCode);
+  }
+
+  const uPromptInput = document.getElementById("user-prompt");
+  if (uPromptInput) {
+    uPromptInput.addEventListener("input", renderHighlightedCode);
+  }
+
+  const sPromptInput = document.getElementById("system-prompt");
+  if (sPromptInput) {
+    sPromptInput.addEventListener("input", renderHighlightedCode);
+  }
+
+  const streamToggle = document.getElementById("prompt-streaming-toggle");
+  if (streamToggle) {
+    streamToggle.addEventListener("change", renderHighlightedCode);
+  }
 }
 
 // Execute immediately if ready, or on DOMContentLoaded

@@ -1786,7 +1786,7 @@ const session = await LanguageModel.create({
   samplingMode: "${presetId}"${safeSys ? `,\n  systemPrompt: "${safeSys}"` : ''}
 });
 
-console.log("Active Preset:", session.samplingMode || "${presetId}");
+console.log("Active Preset:", session.samplingMode);
 
 // 3. Stream response tokens in Console
 const stream = session.promptStreaming("${safeUser}");
@@ -1809,7 +1809,7 @@ const session = await LanguageModel.create({
   samplingMode: "${presetId}"${safeSys ? `,\n  systemPrompt: "${safeSys}"` : ''}
 });
 
-console.log("Active Preset:", session.samplingMode || "${presetId}");
+console.log("Active Preset:", session.samplingMode);
 
 // 3. Generate atomic response
 const response = await session.prompt("${safeUser}");

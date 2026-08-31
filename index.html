@@ -1667,39 +1667,39 @@ const PRESETS = [
 // Rich, Multi-Line Curated Benchmarks (2-4 lines, structured, easily scannable)
 const SAMPLE_PROMPTS = {
   airship_pitch: {
-    system: "You are a clean-tech product strategist. Provide a punchy tagline followed by 3 short bullet points highlighting engineering advantages.",
+    system: "You are a clean-tech product strategist. Provide a punchy tagline followed by 3 short bullet points. Output ONLY the tagline and bullets with no conversational preamble or intro text.",
     user: "Write a punchy tagline and 3 feature bullets for a silent, solar-powered cargo airship designed for remote island freight."
   },
   crisis_email: {
-    system: "You are an executive communications advisor. Provide a professional Subject line and a diplomatic 2-sentence email body that de-escalates tension.",
+    system: "You are an executive communications advisor. Provide a professional Subject line and a diplomatic 2-sentence email body. Output ONLY the email text with no conversational intro.",
     user: "Rewrite this blunt message professionally: 'The client rejected the architectural blueprint and demands an emergency review in 30 minutes.'"
   },
   sentiment_breakdown: {
-    system: "You are an advanced customer insights analyst. Output the Primary Sentiment, the Customer Friction, and the Resolution Impact.",
+    system: "You are an advanced customer insights analyst. Output the Primary Sentiment, Customer Friction, and Resolution Impact as clean bullet points with no introductory filler.",
     user: "Analyze customer sentiment and friction: 'The handmade ceramic espresso set arrived cracked, but customer service overnighted a replacement with a handwritten apology note and a bag of artisan coffee beans.'"
   },
   logic_breakdown: {
-    system: "You are a math logic tutor. Show a 2-step calculation breakdown followed by the final answer.",
+    system: "You are a math logic tutor. Show a 2-step calculation breakdown followed by the final answer. Output ONLY the steps and answer with no conversational filler.",
     user: "If 5 machines make 5 widgets in 5 minutes, how many minutes do 100 machines take to make 100 widgets?"
   },
   json_schema: {
-    system: "You are an automated travel assistant. Extract flight_number, origin, destination, and departure_time as clean JSON.",
+    system: "You are an automated extraction pipeline. Output ONLY clean, valid JSON with no conversational text or markdown code fences.",
     user: "Extract data as JSON from: 'Flight AC840 departing Vancouver (YVR) at 14:30 arriving London Heathrow (LHR) at 07:45+1.'"
   },
   regex_code: {
-    system: "You are a developer. Provide a clean JavaScript regex literal with a 1-line JSDoc comment.",
+    system: "You are a developer. Output ONLY the clean JavaScript regex literal with a 1-line JSDoc comment and no conversational preamble.",
     user: "Write a regular expression to validate a standard 24-hour time string (00:00 to 23:59)."
   },
   poem_3line: {
-    system: "You are a poet. Write a 3-line tactile poem about acoustic resonance.",
+    system: "You are a poet. Write exactly 3 lines of tactile poetry. Output ONLY the 3 lines of the poem with no title, intro, or commentary.",
     user: "Describe the concept of an old forgotten radio frequency using an unusual physical or tactile metaphor in exactly 3 lines."
   },
   butcher_thriller: {
-    system: "You are a noir thriller author. Write a 2-sentence suspense opening hook with sharp sensory tension.",
+    system: "You are a noir thriller author. Write exactly 2 sentences of a suspense scene. Output ONLY the 2 sentences with no conversational intro, title, or commentary.",
     user: "Write a 2-sentence suspense hook about a celebrated jamón butcher in Seville who secretly cultivates an illegal heirloom tomato greenhouse behind his walk-in meat locker."
   },
   translation_nuance: {
-    system: "You are a localization specialist. Provide the idiomatic Spanish translation and a 1-line cultural nuance note.",
+    system: "You are a localization specialist. Output ONLY the Spanish translation and 1-line cultural nuance note with no conversational greeting or intro.",
     user: "Translate into natural Spanish with a nuance note: 'The goalkeeper pulled off a miracle save in the dying seconds of stoppage time.'"
   },
   custom: {

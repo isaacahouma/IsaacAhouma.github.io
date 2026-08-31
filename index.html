@@ -2307,18 +2307,18 @@ function renderSvgBarChart() {
 
   if (chartData.length === 0) return;
 
-  const maxVal = Math.max(...chartData.map(d => d.value), 0.01) * 1.15; // 15% head room for label
-  const svgWidth = 800;
-  const svgHeight = 220;
-  const paddingLeft = 50;
-  const paddingRight = 30;
+  const maxVal = Math.max(...chartData.map(d => d.value), 0.01) * 1.18; // 18% headroom for value label
+  const svgWidth = 880;
+  const svgHeight = 240;
+  const paddingLeft = 55;
+  const paddingRight = 35;
   const paddingTop = 25;
-  const paddingBottom = 45;
+  const paddingBottom = 50;
 
   const chartW = svgWidth - paddingLeft - paddingRight;
   const chartH = svgHeight - paddingTop - paddingBottom;
   const barSlotW = chartW / chartData.length;
-  const barWidth = Math.min(65, barSlotW * 0.65);
+  const barWidth = Math.min(68, barSlotW * 0.65);
 
   let gridLinesSvg = "";
   const numGridTicks = 4;
@@ -2331,7 +2331,7 @@ function renderSvgBarChart() {
     }
     gridLinesSvg += `
       <line x1="${paddingLeft}" y1="${yPos}" x2="${svgWidth - paddingRight}" y2="${yPos}" stroke="var(--border-color)" stroke-dasharray="3,3" />
-      <text x="${paddingLeft - 8}" y="${yPos + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end" font-family="var(--font-mono)">${tickText}</text>
+      <text x="${paddingLeft - 10}" y="${yPos + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end" font-family="var(--font-mono)">${tickText}</text>
     `;
   }
 
@@ -2339,25 +2339,30 @@ function renderSvgBarChart() {
   chartData.forEach((d, idx) => {
     const xCenter = paddingLeft + (idx * barSlotW) + (barSlotW / 2);
     const xPos = xCenter - (barWidth / 2);
-    const barHeight = Math.max(4, (d.value / maxVal) * chartH);
+    const barHeight = Math.max(6, (d.value / maxVal) * chartH);
     const yPos = paddingTop + chartH - barHeight;
 
     barsSvg += `
-      <g class="bar-group">
+      <g class="bar-group" style="cursor: pointer;">
+        <!-- Hover background track -->
+        <rect x="${xCenter - barSlotW * 0.48}" y="${paddingTop}" width="${barSlotW * 0.96}" height="${chartH}" fill="var(--bg-hover)" opacity="0" class="bar-hover-slot" rx="4">
+          <title>${d.name}: ${d.displayLabel}</title>
+        </rect>
+
         <!-- Value Label on Top -->
-        <text x="${xCenter}" y="${yPos - 6}" fill="var(--text-main)" font-size="11" font-weight="700" text-anchor="middle" font-family="var(--font-mono)">${d.displayLabel}</text>
+        <text x="${xCenter}" y="${yPos - 7}" fill="var(--text-main)" font-size="11" font-weight="700" text-anchor="middle" font-family="var(--font-mono)">${d.displayLabel}</text>
         
         <!-- Bar Column -->
         <rect x="${xPos}" y="${yPos}" width="${barWidth}" height="${barHeight}" rx="4" ry="4" fill="${d.color}" opacity="0.9" />
         
         <!-- X-Axis Label -->
-        <text x="${xCenter}" y="${paddingTop + chartH + 18}" fill="${d.color}" font-size="11" font-weight="600" text-anchor="middle" font-family="var(--font-mono)">${d.name}</text>
+        <text x="${xCenter}" y="${paddingTop + chartH + 20}" fill="${d.color}" font-size="10.5" font-weight="600" text-anchor="middle" font-family="var(--font-mono)">${d.name}</text>
       </g>
     `;
   });
 
   wrapper.innerHTML = `
-    <svg class="bar-chart-svg" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMid meet">
+    <svg class="bar-chart-svg" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto; display: block;">
       ${gridLinesSvg}
       <line x1="${paddingLeft}" y1="${paddingTop + chartH}" x2="${svgWidth - paddingRight}" y2="${paddingTop + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
       ${barsSvg}

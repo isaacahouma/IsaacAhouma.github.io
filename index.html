@@ -2174,12 +2174,12 @@ function renderSpectrum() {
     card.className = `preset-item ${isSelected ? 'active-filter' : ''}`;
     card.style.borderTop = `3px solid ${p.color}`;
     card.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:4px; margin-bottom:4px;">
-        <div class="preset-name" style="color: ${p.color};" title="${p.name}">${p.name}</div>
-        <button class="card-code-btn" onclick="openCodeModal('${p.id}'); event.stopPropagation();" title="Inspect JavaScript Code" style="padding: 2px 5px; font-size: 0.68rem; white-space: nowrap; flex-shrink: 0;">💻 JS</button>
-      </div>
+      <div class="preset-name" style="color: ${p.color}; font-size: 0.78rem; margin-bottom: 2px;" title="${p.name}">${p.name}</div>
       <div class="preset-meta">
-        <div><span class="param-pill">T: ${p.temp.toFixed(2)}</span> <span class="param-pill">topK: ${p.topK}</span></div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div><span class="param-pill">T: ${p.temp.toFixed(2)}</span> <span class="param-pill">topK: ${p.topK}</span></div>
+          <button class="card-code-btn" onclick="openCodeModal('${p.id}'); event.stopPropagation();" title="Inspect JavaScript Code" style="padding: 2px 6px; font-size: 0.68rem; line-height: 1;">💻 JS</button>
+        </div>
         <div class="temp-bar-bg">
           <div class="temp-bar-fill" style="width: ${(p.temp / 1.2) * 100}%; background: ${p.color};"></div>
         </div>

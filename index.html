@@ -2786,7 +2786,7 @@ async function runVarianceTest() {
 
   for (let r = 0; r < numRuns; r++) {
     const res = await streamPreset(presetId, userPrompt, systemPrompt, runCards[r], r, isStreaming, isPlainTextOnly);
-    completedOutputs.push(res.text.trim());
+    completedOutputs.push(res.text ? res.text.trim() : "");
 
     // Also push into cumulative benchmark history for statistical rigor
     if (!cumulativeBenchmarkHistory[presetId]) {
@@ -2797,12 +2797,18 @@ async function runVarianceTest() {
       tokens: res.tokens,
       throughput: res.latency > 0 ? (res.tokens / res.latency) : 0
     });
+  }
+
+  // Normalization helper for robust cross-run matching
+  const normText = (s) => (s || "").trim().replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ');
+
   // Group identical runs into distinct variation clusters
   const variationGroups = [];
   const runVariationMap = [];
 
   completedOutputs.forEach((output, idx) => {
-    const matchGroupIndex = variationGroups.findIndex(g => g.text === output);
+    const nOut = normText(output);
+    const matchGroupIndex = variationGroups.findIndex(g => normText(g.text) === nOut);
     if (matchGroupIndex === -1) {
       // New unique variation found
       const newGroupId = variationGroups.length + 1;
@@ -2817,8 +2823,13 @@ async function runVarianceTest() {
 
   completedOutputs.forEach((output, idx) => {
     const info = runVariationMap[idx];
-    const badge = document.createElement("span");
+    const header = runCards[idx].card.querySelector(".result-card-header");
+    if (!header) return;
 
+    // Clear any prior badge
+    header.querySelectorAll(".match-badge").forEach(b => b.remove());
+
+    const badge = document.createElement("span");
     if (idx === 0) {
       badge.className = "match-badge match-badge-identical";
       badge.textContent = "Baseline (Var #1)";
@@ -2829,7 +2840,7 @@ async function runVarianceTest() {
       badge.className = "match-badge match-badge-divergent";
       badge.textContent = `✦ Variation #${info.groupId}`;
     }
-    runCards[idx].card.querySelector(".result-card-header").appendChild(badge);
+    header.appendChild(badge);
   });
 
   const totalUnique = variationGroups.length;

@@ -1030,6 +1030,128 @@
       color: var(--text-main);
     }
 
+    /* Monte Carlo Simulation & Convergence Suite */
+    .sim-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sim-toggle-group {
+      display: flex;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 4px;
+      width: fit-content;
+    }
+
+    .sim-toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sim-toggle-btn.active {
+      background: var(--bg-card);
+      color: var(--accent-blue);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .sim-category-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .sim-cat-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .sim-cat-tag input {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .sim-progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-primary);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .sim-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+      transition: width 0.15s ease;
+    }
+
+    .sim-dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 16px;
+    }
+
+    .sim-chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sim-heatmap-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    .sim-heatmap-table th, .sim-heatmap-table td {
+      padding: 6px 8px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .sim-heatmap-table th {
+      background: var(--bg-primary);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.74rem;
+    }
+
+    .sim-heatmap-cell {
+      font-weight: 700;
+      font-family: var(--font-mono);
+      border-radius: 3px;
+    }
+
     /* Interactive Code Inspector Modal */
     .modal-backdrop {
       position: fixed;
@@ -1381,6 +1503,7 @@
       <div class="tabs">
         <div class="tab active" data-tab="stream">Live Multi-Output Grid</div>
         <div class="tab" data-tab="variance">Multi-Run Repeatability &amp; Variance</div>
+        <div class="tab" data-tab="simulation">🔬 Monte Carlo Simulation</div>
         <div class="tab" data-tab="metrics">Mode-Level Latency &amp; Token Distributions</div>
         <div class="tab" data-tab="code">JavaScript API Code</div>
         <div class="tab" data-tab="spec">Parameters Reference</div>
@@ -1461,7 +1584,150 @@
         </div>
       </div>
 
-      <!-- Tab 3: Mode-Level Latency & Token Distributions -->
+      <!-- Tab 3: Monte Carlo Simulation Suite -->
+      <div id="tab-content-simulation" style="display: none;">
+        <div class="sim-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <strong style="color: var(--text-main); font-size: 0.95rem;">🔬 Monte Carlo Multi-Prompt Simulation Suite</strong>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">
+                Run large-scale multi-domain simulations to verify empirical entropy convergence and determinism across all 7 sampling presets.
+              </div>
+            </div>
+            <div class="sim-toggle-group" id="sim-source-toggle">
+              <button class="sim-toggle-btn active" data-source="curated" id="sim-btn-curated">🤖 20 Curated Prompts</button>
+              <button class="sim-toggle-btn" data-source="custom" id="sim-btn-custom">✍️ Custom Prompt Batch</button>
+            </div>
+          </div>
+
+          <!-- Curated Domain Selector -->
+          <div id="sim-curated-config">
+            <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">Domain Categories to Include:</div>
+            <div class="sim-category-tags">
+              <label class="sim-cat-tag"><input type="checkbox" value="deterministic" checked class="sim-cat-chk"> 📊 Deterministic Schema &amp; Code (4)</label>
+              <label class="sim-cat-tag"><input type="checkbox" value="reasoning" checked class="sim-cat-chk"> 🧠 Logic &amp; Factual Reasoning (4)</label>
+              <label class="sim-cat-tag"><input type="checkbox" value="professional" checked class="sim-cat-chk"> ✉️ Professional Tone &amp; Localization (4)</label>
+              <label class="sim-cat-tag"><input type="checkbox" value="creative" checked class="sim-cat-chk"> 🎭 Narrative &amp; Creative Metaphor (4)</label>
+              <label class="sim-cat-tag"><input type="checkbox" value="ideation" checked class="sim-cat-chk"> 💡 Unconventional Brainstorming (4)</label>
+            </div>
+          </div>
+
+          <!-- Custom Prompts Textarea (Hidden by default) -->
+          <div id="sim-custom-config" style="display: none;">
+            <label style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Custom Prompts (One prompt per line):</label>
+            <textarea id="sim-custom-prompts-input" rows="5" style="width: 100%; margin-top: 6px; font-family: var(--font-mono); font-size: 0.82rem; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; padding: 8px;" placeholder="Enter custom prompts, one per line...&#10;1. Write a punchy slogan for a solar cargo airship&#10;2. Extract JSON flight data from: 'Flight AC840 departing YVR at 14:30'&#10;3. Explain quantum tunneling in 2 sentences"></textarea>
+          </div>
+
+          <!-- Simulation Execution Controls -->
+          <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; background: var(--bg-primary); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+            <div class="field-group" style="margin-bottom: 0; min-width: 140px;">
+              <label style="font-size: 0.75rem;">Scale / Prompts</label>
+              <select id="sim-scale-select" style="padding: 6px 8px; font-size: 0.82rem;">
+                <option value="quick">⚡ Smoke Test (5 prompts × 2 runs)</option>
+                <option value="standard">📊 Standard (10 prompts × 3 runs)</option>
+                <option value="full" selected>🔬 Full Monte Carlo (20 prompts × 5 runs)</option>
+              </select>
+            </div>
+
+            <div class="field-group" style="margin-bottom: 0; min-width: 140px;">
+              <label style="font-size: 0.75rem;">Runs Per Prompt (N)</label>
+              <select id="sim-runs-per-prompt" style="padding: 6px 8px; font-size: 0.82rem;">
+                <option value="1">1 Sample</option>
+                <option value="2">2 Samples</option>
+                <option value="3">3 Samples</option>
+                <option value="5" selected>5 Samples</option>
+              </select>
+            </div>
+
+            <div class="field-group" style="margin-bottom: 0; min-width: 140px;">
+              <label style="font-size: 0.75rem;">Execution Speed</label>
+              <select id="sim-speed-select" style="padding: 6px 8px; font-size: 0.82rem;">
+                <option value="fast" selected>⚡ Fast Batch (~2-3s)</option>
+                <option value="stream">🌊 Real-time Stream</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 8px; align-items: center; margin-left: auto;">
+              <button id="sim-start-btn" style="padding: 8px 18px; font-weight: 700; background: var(--accent-blue); color: #fff; border: none; border-radius: 6px; cursor: pointer;">
+                ▶️ Start Simulation
+              </button>
+              <button id="sim-pause-btn" class="btn-secondary" style="padding: 8px 12px; display: none;">⏸️ Pause</button>
+              <button id="sim-stop-btn" class="btn-secondary" style="padding: 8px 12px; display: none;">⏹️ Stop</button>
+              <button id="sim-export-btn" class="btn-secondary" style="padding: 8px 12px;">📥 Export JSON/CSV</button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div id="sim-progress-container" style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted);">
+              <span id="sim-progress-label">Ready. Click "Start Simulation" to begin.</span>
+              <span id="sim-progress-percent" style="font-weight: 700; font-family: var(--font-mono);">0%</span>
+            </div>
+            <div class="sim-progress-track">
+              <div class="sim-progress-fill" id="sim-progress-bar"></div>
+            </div>
+          </div>
+
+          <!-- Simulation Visual Dashboards -->
+          <div class="sim-dashboard-grid">
+            <!-- Dashboard Chart 1: Entropy Convergence Curve -->
+            <div class="sim-chart-card">
+              <div class="chart-card-title">
+                <span>📈 Empirical Entropy Convergence Curve (H vs Samples N)</span>
+                <span style="font-size: 0.72rem; color: var(--text-muted);">Asymptotic Equipartition Property (1 &rarr; N)</span>
+              </div>
+              <div id="sim-convergence-chart-wrapper" style="min-height: 240px; display: flex; align-items: center; justify-content: center;">
+                <div style="color: var(--text-muted); font-size: 0.82rem; text-align: center;">
+                  Run a simulation to generate the live empirical entropy convergence curve.
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard Chart 2: Determinism Matrix Heatmap -->
+            <div class="sim-chart-card">
+              <div class="chart-card-title">
+                <span>🎯 Determinism vs Divergence Matrix Across Prompts</span>
+                <span style="font-size: 0.72rem; color: var(--text-muted);">Green = 100% Deterministic &bull; Purple = Divergent</span>
+              </div>
+              <div id="sim-heatmap-wrapper" style="overflow-x: auto; max-height: 240px;">
+                <div style="color: var(--text-muted); font-size: 0.82rem; text-align: center; padding: 40px 0;">
+                  Run a simulation to populate the prompt determinism matrix.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulation Aggregated Table -->
+          <div>
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+              📊 Statistical Convergence Summary Table
+            </div>
+            <table class="metrics-table">
+              <thead>
+                <tr>
+                  <th>Sampling Preset</th>
+                  <th>Temp / Top-K</th>
+                  <th>Total Runs ($N$)</th>
+                  <th>Median Latency</th>
+                  <th>Median Tokens</th>
+                  <th>Throughput</th>
+                  <th>Empirical Entropy ($H$)</th>
+                  <th>Determinism %</th>
+                </tr>
+              </thead>
+              <tbody id="sim-metrics-table-body">
+                <tr>
+                  <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                    Run a simulation to view the aggregated statistical convergence summary.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Mode-Level Latency & Token Distributions -->
       <div id="tab-content-metrics" style="display: none;">
         <div class="metrics-container">
           <div class="metrics-header-bar">
@@ -1810,10 +2076,172 @@ const SAMPLE_PROMPTS = {
   }
 };
 
+// 20 Domain-Stratified Benchmark Corpus for Monte Carlo Simulations
+const SIMULATION_CORPUS = [
+  // 1. Deterministic Schema & Code (4 Prompts)
+  {
+    id: "schema_flight",
+    category: "deterministic",
+    title: "Flight Schema Extraction",
+    system: "You are an automated extraction pipeline. Output ONLY valid JSON with no markdown fences.",
+    user: "Extract data as JSON: 'Flight AC840 departing Vancouver (YVR) at 14:30 arriving London Heathrow (LHR) at 07:45+1.'"
+  },
+  {
+    id: "code_regex",
+    category: "deterministic",
+    title: "24-Hour Time Regex",
+    system: "You are a developer. Output ONLY the clean JavaScript regex literal with no commentary.",
+    user: "Write a regular expression to validate a standard 24-hour time string (00:00 to 23:59)."
+  },
+  {
+    id: "code_sql",
+    category: "deterministic",
+    title: "SQL Aggregate Revenue",
+    system: "You are a database engineer. Output ONLY the clean ANSI SQL query with no explanation.",
+    user: "Write a SQL query to get total revenue and customer count by country for Q3 2025 where sales exceed 500."
+  },
+  {
+    id: "schema_invoice",
+    category: "deterministic",
+    title: "Invoice Key-Value Parser",
+    system: "You are an automated invoice parser. Output ONLY valid JSON with keys: invoice_id, vendor, total_usd, due_date.",
+    user: "Extract invoice details as JSON: 'INV-9021 issued by Apex Logistics LLC for $14,250.00 USD due on October 31, 2025.'"
+  },
+
+  // 2. Logic & Factual Reasoning (4 Prompts)
+  {
+    id: "logic_widgets",
+    category: "reasoning",
+    title: "Parallel Rate Logic",
+    system: "You are a math logic tutor. Show a 2-step calculation followed by the final answer. No intro.",
+    user: "If 5 machines make 5 widgets in 5 minutes, how many minutes do 100 machines take to make 100 widgets?"
+  },
+  {
+    id: "logic_knights",
+    category: "reasoning",
+    title: "Knights & Knaves Deduction",
+    system: "You are a formal logic analyzer. State the identity of person A and person B in 1 concise sentence.",
+    user: "A says 'At least one of us is a knave'. Knaves always lie, knights always tell the truth. What are A and B?"
+  },
+  {
+    id: "reasoning_thermo",
+    category: "reasoning",
+    title: "First Law of Thermodynamics",
+    system: "You are a physics educator. State the formula and explain its physical meaning in exactly 2 sentences.",
+    user: "Explain the First Law of Thermodynamics and write its governing mathematical equation."
+  },
+  {
+    id: "reasoning_geometry",
+    category: "reasoning",
+    title: "Annulus Area Calculation",
+    system: "You are a geometry tutor. Provide the formula and the final exact value in terms of π.",
+    user: "What is the area of an annulus formed by concentric circles with radius 8cm and 5cm?"
+  },
+
+  // 3. Professional Tone & Localization (4 Prompts)
+  {
+    id: "prof_crisis_email",
+    category: "professional",
+    title: "Blueprint Rejection Rewrite",
+    system: "You are an executive advisor. Provide a professional Subject line and a diplomatic 2-sentence email body.",
+    user: "Rewrite this blunt message professionally: 'The client rejected the architectural blueprint and demands an emergency review in 30 minutes.'"
+  },
+  {
+    id: "prof_sentiment",
+    category: "professional",
+    title: "Espresso Set Sentiment",
+    system: "You are a customer insights analyst. Output Primary Sentiment and Friction Level in 2 clean bullets.",
+    user: "Analyze sentiment: 'The handmade ceramic espresso set arrived cracked, but customer service overnighted a replacement with a handwritten apology note and a bag of artisan coffee beans.'"
+  },
+  {
+    id: "prof_translation",
+    category: "professional",
+    title: "Spanish Goalkeeper Localization",
+    system: "You are a sports localization specialist. Output the Spanish translation followed by a 1-line nuance note.",
+    user: "Translate into natural Spanish with a nuance note: 'The goalkeeper pulled off a miracle save in the dying seconds of stoppage time.'"
+  },
+  {
+    id: "prof_apology",
+    category: "professional",
+    title: "Cloud Outage Executive Statement",
+    system: "You are a corporate communications VP. Write a concise 2-sentence public apology statement.",
+    user: "Draft a sincere executive apology for an unexpected 45-minute cloud payment gateway outage during peak hours."
+  },
+
+  // 4. Narrative & Creative Metaphor (4 Prompts)
+  {
+    id: "creative_airship",
+    category: "creative",
+    title: "Solar Cargo Airship Pitch",
+    system: "You are a clean-tech product strategist. Provide a punchy tagline and 3 short bullets. No intro.",
+    user: "Write a punchy tagline and 3 feature bullets for a silent, solar-powered cargo airship designed for remote island freight."
+  },
+  {
+    id: "creative_poem",
+    category: "creative",
+    title: "Radio Frequency Tactile Poem",
+    system: "You are a poet. Write exactly 3 lines using tactile acoustic metaphors. Output ONLY the 3 lines.",
+    user: "Describe the concept of an old forgotten radio frequency using an unusual physical or tactile metaphor in exactly 3 lines."
+  },
+  {
+    id: "creative_butcher",
+    category: "creative",
+    title: "Seville Butcher Micro-Thriller",
+    system: "You are a noir thriller author. Write exactly 2 sentences of suspense. Output ONLY the 2 sentences.",
+    user: "Write a 2-sentence suspense hook about a celebrated jamón butcher in Seville who secretly cultivates an illegal heirloom tomato greenhouse behind his walk-in meat locker."
+  },
+  {
+    id: "creative_deepsea",
+    category: "creative",
+    title: "Deep-Sea Sensor Blackout",
+    system: "You are a sci-fi novelist. Write a 2-sentence atmospheric scene. Output ONLY the 2 sentences.",
+    user: "Describe a research submersible losing external telemetry at 8,000 meters in the Mariana Trench as a biological luminescence activates."
+  },
+
+  // 5. Unconventional Brainstorming & Ideation (4 Prompts)
+  {
+    id: "ideation_underwater",
+    category: "ideation",
+    title: "Submarine Colony Inventions",
+    system: "You are a speculative futurist. List exactly 3 unconventional low-energy inventions with 1-line descriptions.",
+    user: "Propose 3 paradoxical, bio-mimetic inventions for a permanent submarine settlement powered entirely by geothermal vents."
+  },
+  {
+    id: "ideation_alien",
+    category: "ideation",
+    title: "Silicon Predator Taxonomy",
+    system: "You are an astrobiologist. Provide the Binomial Name, Habitat, and Primary Hunting Mechanism in 3 bullets.",
+    user: "Invent a plausible nocturnal predator species that evolved on a high-gravity hydrocarbon world."
+  },
+  {
+    id: "ideation_theseus",
+    category: "ideation",
+    title: "Ship of Theseus for Neural Weights",
+    system: "You are a philosopher of mind. State the paradox applied to LLM weight updates in 2 sentences.",
+    user: "Formulate the classical Ship of Theseus paradox applied to an on-device neural network whose weights are continuously updated via LoRA adapters."
+  },
+  {
+    id: "ideation_offline",
+    category: "ideation",
+    title: "Tactile Low-Tech Tools",
+    system: "You are an industrial designer. List 3 high-friction physical tools designed to replace smartphone apps.",
+    user: "Propose 3 tactile, mechanical desktop tools designed to replace calendar, timer, and note-taking apps without electricity."
+  }
+];
+
 // Global State with Cumulative Multi-Run Samples
 let selectedPresets = ["most-predictable", "predictable", "slightly-predictable", "balanced", "slightly-creative", "creative", "most-creative"];
-let cumulativeBenchmarkHistory = {}; // Key: presetId -> Array of samples: [{ latency, tokens, throughput }]
+let cumulativeBenchmarkHistory = {}; // Key: presetId -> Array of samples: [{ latency, tokens, throughput, entropy, text }]
 let activeBarChartMetric = "latency"; // "latency", "tokens", "throughput", "entropy"
+
+// Monte Carlo Simulation Engine State
+let simulationState = {
+  isRunning: false,
+  isPaused: false,
+  isStopped: false,
+  results: [], // Array of run objects: { promptId, promptTitle, category, presetId, runIdx, latency, tokens, throughput, entropy, text }
+  convergenceHistory: {} // presetId -> Array of running mean entropies [H_1, H_2, ... H_n]
+};
 
 // Helper to strictly sort presets according to canonical temperature spectrum
 function getSortedActivePresets(presetIds) {
@@ -3033,11 +3461,413 @@ async function runVarianceTest() {
   runBtn.disabled = false;
 }
 
+// ==========================================
+// Monte Carlo Simulation Engine & Dashboard
+// ==========================================
+
+function initSimulationUI() {
+  const btnCurated = document.getElementById("sim-btn-curated");
+  const btnCustom = document.getElementById("sim-btn-custom");
+  const curatedConfig = document.getElementById("sim-curated-config");
+  const customConfig = document.getElementById("sim-custom-config");
+
+  if (btnCurated && btnCustom) {
+    btnCurated.addEventListener("click", () => {
+      btnCurated.classList.add("active");
+      btnCustom.classList.remove("active");
+      if (curatedConfig) curatedConfig.style.display = "block";
+      if (customConfig) customConfig.style.display = "none";
+    });
+
+    btnCustom.addEventListener("click", () => {
+      btnCustom.classList.add("active");
+      btnCurated.classList.remove("active");
+      if (curatedConfig) curatedConfig.style.display = "none";
+      if (customConfig) customConfig.style.display = "block";
+    });
+  }
+
+  const startBtn = document.getElementById("sim-start-btn");
+  const pauseBtn = document.getElementById("sim-pause-btn");
+  const stopBtn = document.getElementById("sim-stop-btn");
+  const exportBtn = document.getElementById("sim-export-btn");
+
+  if (startBtn) startBtn.addEventListener("click", startMonteCarloSimulation);
+  if (pauseBtn) pauseBtn.addEventListener("click", togglePauseSimulation);
+  if (stopBtn) stopBtn.addEventListener("click", stopSimulation);
+  if (exportBtn) exportBtn.addEventListener("click", exportSimulationData);
+}
+
+function getSelectedSimulationPrompts() {
+  const isCurated = document.getElementById("sim-btn-curated")?.classList.contains("active") ?? true;
+  if (!isCurated) {
+    const rawCustom = document.getElementById("sim-custom-prompts-input")?.value || "";
+    const lines = rawCustom.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+    if (lines.length === 0) {
+      alert("Please enter at least 1 prompt in the custom textarea!");
+      return [];
+    }
+    return lines.map((line, idx) => ({
+      id: `custom_${idx + 1}`,
+      category: "custom",
+      title: line.length > 30 ? line.slice(0, 27) + "..." : line,
+      system: "Keep outputs direct, structured, and concise.",
+      user: line
+    }));
+  }
+
+  const checkedCategories = Array.from(document.querySelectorAll(".sim-cat-chk:checked")).map(c => c.value);
+  let prompts = SIMULATION_CORPUS.filter(p => checkedCategories.includes(p.category));
+
+  const scale = document.getElementById("sim-scale-select")?.value || "full";
+  if (scale === "quick") {
+    prompts = prompts.slice(0, Math.min(5, prompts.length));
+  } else if (scale === "standard") {
+    prompts = prompts.slice(0, Math.min(10, prompts.length));
+  }
+
+  return prompts;
+}
+
+function togglePauseSimulation() {
+  const pauseBtn = document.getElementById("sim-pause-btn");
+  if (!simulationState.isRunning) return;
+  simulationState.isPaused = !simulationState.isPaused;
+  if (pauseBtn) {
+    pauseBtn.textContent = simulationState.isPaused ? "▶️ Resume" : "⏸️ Pause";
+  }
+}
+
+function stopSimulation() {
+  if (simulationState.isRunning) {
+    simulationState.isStopped = true;
+    simulationState.isRunning = false;
+    simulationState.isPaused = false;
+  }
+}
+
+async function startMonteCarloSimulation() {
+  const prompts = getSelectedSimulationPrompts();
+  if (prompts.length === 0) return;
+
+  const runsPerPrompt = parseInt(document.getElementById("sim-runs-per-prompt")?.value || "5", 10);
+  const isFast = (document.getElementById("sim-speed-select")?.value || "fast") === "fast";
+  const activePresets = getSortedActivePresets(selectedPresets.length > 0 ? selectedPresets : PRESETS.map(p => p.id));
+
+  const startBtn = document.getElementById("sim-start-btn");
+  const pauseBtn = document.getElementById("sim-pause-btn");
+  const stopBtn = document.getElementById("sim-stop-btn");
+  const pBar = document.getElementById("sim-progress-bar");
+  const pLabel = document.getElementById("sim-progress-label");
+  const pPercent = document.getElementById("sim-progress-percent");
+
+  simulationState.isRunning = true;
+  simulationState.isPaused = false;
+  simulationState.isStopped = false;
+  simulationState.results = [];
+  simulationState.convergenceHistory = {};
+  activePresets.forEach(presetId => {
+    simulationState.convergenceHistory[presetId] = [];
+  });
+
+  if (startBtn) startBtn.style.display = "none";
+  if (pauseBtn) { pauseBtn.style.display = "inline-block"; pauseBtn.textContent = "⏸️ Pause"; }
+  if (stopBtn) stopBtn.style.display = "inline-block";
+
+  const totalRuns = prompts.length * runsPerPrompt * activePresets.length;
+  let completedRuns = 0;
+
+  // Running sum and count per preset for live convergence tracking
+  const entropySums = {};
+  const entropyCounts = {};
+  activePresets.forEach(presetId => {
+    entropySums[presetId] = 0;
+    entropyCounts[presetId] = 0;
+  });
+
+  for (let pIdx = 0; pIdx < prompts.length; pIdx++) {
+    if (simulationState.isStopped) break;
+    const promptItem = prompts[pIdx];
+
+    for (let r = 0; r < runsPerPrompt; r++) {
+      if (simulationState.isStopped) break;
+
+      while (simulationState.isPaused && !simulationState.isStopped) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+
+      // Execute all active presets for this prompt & run
+      const promises = activePresets.map(async (presetId) => {
+        const dummyCard = { body: document.createElement("div"), stats: document.createElement("div") };
+        const res = await streamPreset(presetId, promptItem.user, promptItem.system, dummyCard, r, !isFast, true);
+        const ent = calculateShannonEntropy(res.text);
+
+        return {
+          promptId: promptItem.id,
+          promptTitle: promptItem.title,
+          category: promptItem.category,
+          presetId: presetId,
+          runIdx: r,
+          latency: res.latency,
+          tokens: res.tokens,
+          throughput: res.latency > 0 ? (res.tokens / res.latency) : 0,
+          entropy: ent,
+          text: res.text
+        };
+      });
+
+      const stepResults = await Promise.all(promises);
+
+      stepResults.forEach(item => {
+        simulationState.results.push(item);
+        entropySums[item.presetId] += item.entropy;
+        entropyCounts[item.presetId] += 1;
+        const currentRunningMean = parseFloat((entropySums[item.presetId] / entropyCounts[item.presetId]).toFixed(2));
+        simulationState.convergenceHistory[item.presetId].push(currentRunningMean);
+
+        // Also push into cumulative studio benchmark history
+        if (!cumulativeBenchmarkHistory[item.presetId]) {
+          cumulativeBenchmarkHistory[item.presetId] = [];
+        }
+        cumulativeBenchmarkHistory[item.presetId].push({
+          latency: item.latency,
+          tokens: item.tokens,
+          throughput: item.throughput,
+          entropy: item.entropy,
+          text: item.text
+        });
+      });
+
+      completedRuns += activePresets.length;
+      const pct = Math.min(100, Math.round((completedRuns / totalRuns) * 100));
+
+      if (pBar) pBar.style.width = `${pct}%`;
+      if (pPercent) pPercent.textContent = `${pct}%`;
+      if (pLabel) pLabel.textContent = `Running: Prompt ${pIdx + 1}/${prompts.length} ("${promptItem.title}") • Run #${r + 1}/${runsPerPrompt} (${completedRuns}/${totalRuns})`;
+
+      // Periodic live dashboard refresh
+      if (completedRuns % (activePresets.length * 2) === 0 || completedRuns === totalRuns) {
+        renderConvergenceChart();
+        renderDeterminismHeatmap(prompts, runsPerPrompt);
+        updateSimulationMetricsTable();
+      }
+
+      if (!isFast) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+    }
+  }
+
+  simulationState.isRunning = false;
+  if (startBtn) startBtn.style.display = "inline-block";
+  if (pauseBtn) pauseBtn.style.display = "none";
+  if (stopBtn) stopBtn.style.display = "none";
+
+  if (pBar) pBar.style.width = "100%";
+  if (pPercent) pPercent.textContent = "100%";
+  if (pLabel) pLabel.textContent = `Simulation Completed! ${simulationState.results.length} total runs evaluated across ${prompts.length} prompts.`;
+
+  renderConvergenceChart();
+  renderDeterminismHeatmap(prompts, runsPerPrompt);
+  updateSimulationMetricsTable();
+  updateMetricsTab();
+}
+
+// Render SVG Empirical Entropy Convergence Line Chart (H vs N)
+function renderConvergenceChart() {
+  const container = document.getElementById("sim-convergence-chart-wrapper");
+  if (!container) return;
+
+  const presets = getSortedActivePresets(Object.keys(simulationState.convergenceHistory));
+  if (presets.length === 0 || !simulationState.convergenceHistory[presets[0]] || simulationState.convergenceHistory[presets[0]].length === 0) {
+    container.innerHTML = `<div style="color: var(--text-muted); font-size: 0.82rem; text-align: center;">Run a simulation to generate the live empirical entropy convergence curve.</div>`;
+    return;
+  }
+
+  const svgW = 560;
+  const svgH = 220;
+  const padL = 40;
+  const padR = 100;
+  const padT = 20;
+  const padB = 30;
+
+  const chartW = svgW - padL - padR;
+  const chartH = svgH - padT - padB;
+
+  const maxN = Math.max(...presets.map(p => (simulationState.convergenceHistory[p] || []).length), 1);
+  const minH = 3.5;
+  const maxH = 6.0;
+
+  const getY = (val) => padT + chartH - ((val - minH) / (maxH - minH)) * chartH;
+  const getX = (idx) => padL + (idx / Math.max(1, maxN - 1)) * chartW;
+
+  let gridSvg = "";
+  for (let h = minH; h <= maxH; h += 0.5) {
+    const y = getY(h);
+    gridSvg += `
+      <line x1="${padL}" y1="${y}" x2="${padL + chartW}" y2="${y}" stroke="var(--border-color)" stroke-dasharray="2,2" />
+      <text x="${padL - 6}" y="${y + 4}" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="var(--font-mono)">${h.toFixed(1)}</text>
+    `;
+  }
+
+  let linesSvg = "";
+  presets.forEach(presetId => {
+    const history = simulationState.convergenceHistory[presetId] || [];
+    if (history.length === 0) return;
+    const p = PRESETS.find(x => x.id === presetId) || { color: "#58a6ff", name: presetId };
+
+    let pathD = "";
+    history.forEach((val, idx) => {
+      const x = getX(idx);
+      const y = getY(val);
+      pathD += (idx === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+    });
+
+    const lastVal = history[history.length - 1];
+    const lastY = getY(lastVal);
+    const lastX = getX(history.length - 1);
+
+    linesSvg += `
+      <path d="${pathD}" fill="none" stroke="${p.color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="${lastX}" cy="${lastY}" r="3.5" fill="${p.color}" />
+      <text x="${lastX + 6}" y="${lastY + 3.5}" fill="${p.color}" font-size="9.5" font-weight="700" font-family="var(--font-mono)">${p.name.replace("slightly-", "s-")}: ${lastVal.toFixed(2)}b</text>
+    `;
+  });
+
+  container.innerHTML = `
+    <svg viewBox="0 0 ${svgW} ${svgH}" style="width: 100%; height: auto; display: block;">
+      ${gridSvg}
+      <line x1="${padL}" y1="${padT + chartH}" x2="${padL + chartW}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+      <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+      ${linesSvg}
+      <text x="${padL + chartW / 2}" y="${svgH - 6}" fill="var(--text-muted)" font-size="9.5" text-anchor="middle" font-family="var(--font-mono)">Sample Executions (N = 1 &rarr; ${maxN})</text>
+    </svg>
+  `;
+}
+
+// Render Determinism vs Divergence Heatmap Grid
+function renderDeterminismHeatmap(prompts, runsPerPrompt) {
+  const container = document.getElementById("sim-heatmap-wrapper");
+  if (!container || !prompts || prompts.length === 0) return;
+
+  const activePresets = getSortedActivePresets(selectedPresets.length > 0 ? selectedPresets : PRESETS.map(p => p.id));
+  const norm = (s) => (s || "").trim().replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ');
+
+  let thHeaders = `<th>Prompt Title</th>`;
+  activePresets.forEach(presetId => {
+    const p = PRESETS.find(x => x.id === presetId) || { name: presetId, color: "#58a6ff" };
+    thHeaders += `<th style="color: ${p.color};">${p.name.replace("slightly-", "s-")}</th>`;
+  });
+
+  let rowsHtml = "";
+  prompts.forEach(pr => {
+    let cellsHtml = `<td style="text-align: left; font-weight: 600; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${pr.title}">${pr.title}</td>`;
+
+    activePresets.forEach(presetId => {
+      const runs = simulationState.results.filter(r => r.promptId === pr.id && r.presetId === presetId);
+      if (runs.length === 0) {
+        cellsHtml += `<td>--</td>`;
+        return;
+      }
+
+      const uniqueOutputs = new Set(runs.map(r => norm(r.text))).size;
+      const determinismPct = (uniqueOutputs === 1) ? 100 : Math.max(0, Math.round(((runs.length - uniqueOutputs) / (runs.length - 1)) * 100));
+
+      let bgStyle = "rgba(46, 160, 67, 0.25)";
+      let textColor = "var(--accent-green)";
+      if (determinismPct < 50) {
+        bgStyle = "rgba(188, 140, 255, 0.25)";
+        textColor = "var(--accent-purple)";
+      } else if (determinismPct < 90) {
+        bgStyle = "rgba(210, 153, 34, 0.25)";
+        textColor = "var(--accent-amber)";
+      }
+
+      cellsHtml += `
+        <td style="background: ${bgStyle}; color: ${textColor};" class="sim-heatmap-cell" title="${uniqueOutputs} unique outputs across ${runs.length} runs">
+          ${determinismPct}%
+        </td>
+      `;
+    });
+
+    rowsHtml += `<tr>${cellsHtml}</tr>`;
+  });
+
+  container.innerHTML = `
+    <table class="sim-heatmap-table">
+      <thead><tr>${thHeaders}</tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>
+  `;
+}
+
+// Update Simulation Statistical Table
+function updateSimulationMetricsTable() {
+  const tbody = document.getElementById("sim-metrics-table-body");
+  if (!tbody || simulationState.results.length === 0) return;
+
+  const activePresets = getSortedActivePresets(Object.keys(simulationState.convergenceHistory));
+  const norm = (s) => (s || "").trim().replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ');
+
+  tbody.innerHTML = "";
+  activePresets.forEach(presetId => {
+    const runs = simulationState.results.filter(r => r.presetId === presetId);
+    if (runs.length === 0) return;
+
+    const p = PRESETS.find(x => x.id === presetId) || { name: presetId, color: "#58a6ff", temp: 1.0, topK: 64 };
+    const latStats = calculateStats(runs.map(r => r.latency));
+    const tokStats = calculateStats(runs.map(r => r.tokens));
+    const thrStats = calculateStats(runs.map(r => r.throughput));
+    const entStats = calculateStats(runs.map(r => r.entropy));
+
+    // Calculate prompt-level determinism average
+    const promptIds = Array.from(new Set(runs.map(r => r.promptId)));
+    let detSum = 0;
+    promptIds.forEach(pId => {
+      const pRuns = runs.filter(r => r.promptId === pId);
+      const unique = new Set(pRuns.map(r => norm(r.text))).size;
+      const det = (unique === 1) ? 100 : Math.max(0, Math.round(((pRuns.length - unique) / (pRuns.length - 1)) * 100));
+      detSum += det;
+    });
+    const avgDeterminism = Math.round(detSum / promptIds.length);
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td style="color: ${p.color}; font-weight: 600;">"${presetId}"</td>
+      <td>T:${p.temp} | K:${p.topK}</td>
+      <td><span class="sample-badge">N = ${runs.length}</span></td>
+      <td><strong>${latStats.median.toFixed(2)}s</strong> <span style="font-size:0.72rem; color:var(--text-muted);">[${latStats.min.toFixed(2)}&ndash;${latStats.max.toFixed(2)}]</span></td>
+      <td><strong>${Math.round(tokStats.median)}</strong> <span style="font-size:0.72rem; color:var(--text-muted);">[${tokStats.min}&ndash;${tokStats.max}]</span></td>
+      <td>${thrStats.median.toFixed(1)} tok/s</td>
+      <td><strong>${entStats.median.toFixed(2)} bits</strong></td>
+      <td style="font-weight: 700; color: ${avgDeterminism >= 90 ? 'var(--accent-green)' : avgDeterminism >= 50 ? 'var(--accent-amber)' : 'var(--accent-purple)'};">${avgDeterminism}%</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+// Export Simulation Data (JSON & CSV)
+function exportSimulationData() {
+  if (simulationState.results.length === 0) {
+    alert("Please run a simulation before exporting data!");
+    return;
+  }
+
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(simulationState.results, null, 2));
+  const dlAnchor = document.createElement("a");
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", `prompt_api_sampling_simulation_${Date.now()}.json`);
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  dlAnchor.remove();
+}
+
 // Master Initialization Function
 function initApp() {
   initTheme();
   checkApiAvailability();
   renderSpectrum();
+  initSimulationUI();
 
   const themeBtn = document.getElementById("theme-toggle-btn");
   if (themeBtn) {
@@ -3115,6 +3945,7 @@ function initApp() {
       const tabId = tab.getAttribute("data-tab");
       document.getElementById("tab-content-stream").style.display = tabId === "stream" ? "block" : "none";
       document.getElementById("tab-content-variance").style.display = tabId === "variance" ? "block" : "none";
+      document.getElementById("tab-content-simulation").style.display = tabId === "simulation" ? "block" : "none";
       document.getElementById("tab-content-metrics").style.display = tabId === "metrics" ? "block" : "none";
       document.getElementById("tab-content-code").style.display = tabId === "code" ? "block" : "none";
       document.getElementById("tab-content-spec").style.display = tabId === "spec" ? "block" : "none";

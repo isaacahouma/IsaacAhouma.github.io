@@ -1155,6 +1155,43 @@
       border-radius: 3px;
     }
 
+    /* Curated Corpus Explorer Styling */
+    .sim-corpus-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color 0.15s ease;
+    }
+
+    .sim-corpus-item:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .sim-corpus-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sim-corpus-badge {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .sim-corpus-badge.deterministic { background: rgba(56, 139, 253, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 139, 253, 0.3); }
+    .sim-corpus-badge.reasoning { background: rgba(247, 120, 186, 0.15); color: #f778ba; border: 1px solid rgba(247, 120, 186, 0.3); }
+    .sim-corpus-badge.professional { background: rgba(63, 185, 80, 0.15); color: var(--accent-green); border: 1px solid rgba(63, 185, 80, 0.3); }
+    .sim-corpus-badge.creative { background: rgba(210, 153, 34, 0.15); color: var(--accent-amber); border: 1px solid rgba(210, 153, 34, 0.3); }
+    .sim-corpus-badge.ideation { background: rgba(188, 140, 255, 0.15); color: var(--accent-purple); border: 1px solid rgba(188, 140, 255, 0.3); }
+    .sim-corpus-badge.custom { background: rgba(139, 148, 158, 0.15); color: var(--text-muted); border: 1px solid var(--border-color); }
+
     /* Interactive Code Inspector Modal */
     .modal-backdrop {
       position: fixed;
@@ -1330,9 +1367,6 @@
       <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
         <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
       </button>
-      <a href="https://crbug.com/502214118" target="_blank" class="badge-link" title="Chromium Issue Tracker: Prompt API Sampling Mode Presets">
-        🐞 crbug/502214118
-      </a>
       <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" class="badge-link">
         <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
         Spec Issue #203
@@ -1605,7 +1639,13 @@
 
           <!-- Curated Domain Selector -->
           <div id="sim-curated-config">
-            <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-bottom: 4px;">Domain Categories to Include:</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+              <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Domain Categories to Include:</div>
+              <button id="sim-toggle-corpus-btn" class="btn-secondary" style="padding: 4px 10px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;" type="button">
+                <span>🔍 Explore &amp; Inspect 20 Prompts</span>
+                <span id="sim-corpus-toggle-arrow">▼</span>
+              </button>
+            </div>
             <div class="sim-category-tags">
               <label class="sim-cat-tag"><input type="checkbox" value="deterministic" checked class="sim-cat-chk"> 📊 Deterministic Schema &amp; Code (4)</label>
               <label class="sim-cat-tag"><input type="checkbox" value="reasoning" checked class="sim-cat-chk"> 🧠 Logic &amp; Factual Reasoning (4)</label>
@@ -1613,12 +1653,31 @@
               <label class="sim-cat-tag"><input type="checkbox" value="creative" checked class="sim-cat-chk"> 🎭 Narrative &amp; Creative Metaphor (4)</label>
               <label class="sim-cat-tag"><input type="checkbox" value="ideation" checked class="sim-cat-chk"> 💡 Unconventional Brainstorming (4)</label>
             </div>
+
+            <!-- Expandable Corpus Explorer Drawer -->
+            <div id="sim-corpus-explorer" style="display: none; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; margin-top: 8px; margin-bottom: 6px; max-height: 380px; overflow-y: auto;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; flex-wrap: wrap;">
+                <input type="text" id="sim-corpus-search" placeholder="Search 20 prompts by title, keyword, or domain..." style="flex: 1; min-width: 200px; padding: 6px 10px; font-size: 0.8rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-main);">
+                <span id="sim-corpus-count-badge" style="font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono);">Showing 20 prompts</span>
+              </div>
+              <div id="sim-corpus-list" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Populated dynamically by initSimulationUI() -->
+              </div>
+            </div>
           </div>
 
           <!-- Custom Prompts Textarea (Hidden by default) -->
           <div id="sim-custom-config" style="display: none;">
             <label style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Custom Prompts (One prompt per line):</label>
             <textarea id="sim-custom-prompts-input" rows="5" style="width: 100%; margin-top: 6px; font-family: var(--font-mono); font-size: 0.82rem; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; padding: 8px;" placeholder="Enter custom prompts, one per line...&#10;1. Write a punchy slogan for a solar cargo airship&#10;2. Extract JSON flight data from: 'Flight AC840 departing YVR at 14:30'&#10;3. Explain quantum tunneling in 2 sentences"></textarea>
+          </div>
+
+          <!-- Warning Notice Banner -->
+          <div style="background: rgba(210, 153, 34, 0.1); border: 1px solid rgba(210, 153, 34, 0.35); border-radius: 6px; padding: 8px 12px; font-size: 0.78rem; color: var(--accent-amber); display: flex; align-items: flex-start; gap: 8px;">
+            <span style="font-size: 0.95rem; line-height: 1;">⚠️</span>
+            <div>
+              <strong>Execution Duration Notice:</strong> Simulation runtime depends on the prompt count (P) &times; samples (N). While <strong>⚡ Fast Batch mode</strong> finishes in ~1&ndash;3 seconds in browser preview, executing against <strong>live on-device Gemini Nano</strong> on hardware may take 30s to 3 minutes for 700 runs. You can pause ⏸️ or stop ⏹️ at any time.
+            </div>
           </div>
 
           <!-- Simulation Execution Controls -->
@@ -1660,11 +1719,14 @@
             </div>
           </div>
 
-          <!-- Progress Bar -->
+          <!-- Progress Bar & Duration Counter -->
           <div id="sim-progress-container" style="display: flex; flex-direction: column; gap: 6px;">
-            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted);">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--text-muted);">
               <span id="sim-progress-label">Ready. Click "Start Simulation" to begin.</span>
-              <span id="sim-progress-percent" style="font-weight: 700; font-family: var(--font-mono);">0%</span>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <span id="sim-duration-badge" style="display: none; font-family: var(--font-mono); color: var(--accent-green); font-weight: 600; font-size: 0.78rem;">⏱️ 0.00s</span>
+                <span id="sim-progress-percent" style="font-weight: 700; font-family: var(--font-mono); color: var(--text-main);">0%</span>
+              </div>
             </div>
             <div class="sim-progress-track">
               <div class="sim-progress-fill" id="sim-progress-bar"></div>
@@ -1673,15 +1735,21 @@
 
           <!-- Simulation Visual Dashboards -->
           <div class="sim-dashboard-grid">
-            <!-- Dashboard Chart 1: Entropy Convergence Curve -->
+            <!-- Dashboard Chart 1: Entropy & Vocabulary Convergence Curve -->
             <div class="sim-chart-card">
               <div class="chart-card-title">
-                <span>📈 Empirical Entropy Convergence Curve (H vs Samples N)</span>
-                <span style="font-size: 0.72rem; color: var(--text-muted);">Asymptotic Equipartition Property (1 &rarr; N)</span>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span id="sim-chart-heading-text">📈 Empirical Convergence Curve</span>
+                  <div class="metric-pill-group" style="margin-left: 4px;">
+                    <button class="metric-pill-btn active sim-metric-btn" data-metric="entropy" type="button">Shannon Entropy (H)</button>
+                    <button class="metric-pill-btn sim-metric-btn" data-metric="vocab" type="button">Cumulative Vocab (V)</button>
+                  </div>
+                </div>
+                <span style="font-size: 0.72rem; color: var(--text-muted);">Law of Large Numbers (1 &rarr; N)</span>
               </div>
               <div id="sim-convergence-chart-wrapper" style="min-height: 240px; display: flex; align-items: center; justify-content: center;">
                 <div style="color: var(--text-muted); font-size: 0.82rem; text-align: center;">
-                  Run a simulation to generate the live empirical entropy convergence curve.
+                  Run a simulation to generate the live convergence curve.
                 </div>
               </div>
             </div>
@@ -1710,11 +1778,11 @@
                 <tr>
                   <th>Sampling Preset</th>
                   <th>Temp / Top-K</th>
-                  <th>Total Runs ($N$)</th>
+                  <th>Total Runs (N)</th>
                   <th>Median Latency</th>
                   <th>Median Tokens</th>
                   <th>Throughput</th>
-                  <th>Empirical Entropy ($H$)</th>
+                  <th>Empirical Entropy (H)</th>
                   <th>Determinism %</th>
                 </tr>
               </thead>
@@ -1864,7 +1932,7 @@
               <tr>
                 <th>Sampling Preset</th>
                 <th>Temp / Top-K</th>
-                <th>Samples ($N$)</th>
+                <th>Samples (N)</th>
                 <th>Median Latency [Min &mdash; Max]</th>
                 <th>Median Tokens</th>
                 <th>Throughput</th>
@@ -2242,8 +2310,12 @@ let simulationState = {
   isRunning: false,
   isPaused: false,
   isStopped: false,
+  activeMetric: "entropy", // "entropy" or "vocab"
   results: [], // Array of run objects: { promptId, promptTitle, category, presetId, runIdx, latency, tokens, throughput, entropy, text }
-  convergenceHistory: {} // presetId -> Array of running mean entropies [H_1, H_2, ... H_n]
+  convergenceHistory: {}, // presetId -> Array of running mean entropies [H_1, H_2, ... H_n]
+  vocabHistory: {}, // presetId -> Array of cumulative unique word counts [V_1, V_2, ... V_n]
+  startTime: 0,
+  durationSec: 0
 };
 
 // Helper to strictly sort presets according to canonical temperature spectrum
@@ -2534,7 +2606,8 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
     if (runIndex > 0 && presetId !== "most-predictable") {
       const vars = [
         `Sun-Powered Lifelines Across the Pacific.\n• Silent helium cruisers built for isolated reef communities\n• 10-ton clean cargo bay with rapid roll-on roll-off access\n• Zero emissions, zero engine noise, total archipelago access`,
-        `The Green Highway Above the Waves.\n• Solar-electric airships delivering essential freight without port docks\n• Resilient aerodynamic hull handling unpredictable tropical storms\n• Sustainable logistics for ocean-bound communities`
+        `The Green Highway Above the Waves.\n• Solar-electric airships delivering essential freight without port docks\n• Resilient aerodynamic hull handling unpredictable tropical storms\n• Sustainable logistics for ocean-bound communities`,
+        `Solar Zephyrs: Sovereign Island Air-Bridge.\n• Solar-membrane airships bypassing maritime choke points\n• Whisper-level decibel footprint protecting nesting seabirds\n• Self-reliant cargo logistics powered directly by equatorial sunshine`
       ];
       result = vars[(runIndex - 1) % vars.length];
     } else {
@@ -2542,35 +2615,71 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
     }
   }
 
-  // 2. Diplomatic Crisis Email: Architectural Blueprint Rejection
-  else if (pLower.includes("blueprint") || pLower.includes("architectural") || pLower.includes("30 minutes") || pLower.includes("crisis")) {
+  // 2. Flight Schema Extraction
+  else if (pLower.includes("ac840") || (pLower.includes("flight") && pLower.includes("vancouver"))) {
     const map = {
-      "most-predictable": `Subject: Urgent: Blueprint Review & Client Alignment Meeting\n\nHi team,\nThe client has requested an urgent review of the updated architectural blueprints within the next 30 minutes. Let us convene immediately to consolidate our technical revisions and address their key concerns.`,
-      "predictable": `Subject: Action Required: Client Feedback on Architectural Blueprint\n\nGood morning all,\nThe client has requested an emergency sync in 30 minutes regarding the latest architectural blueprint revisions. Please join the bridge link so we can review the flagged items together beforehand.`,
-      "slightly-predictable": `Subject: Priority Touchpoint: Client Blueprint Feedback & Next Steps\n\nHi team,\nWe just received urgent feedback on the architectural plans, and the client would like a quick sync in 30 minutes. Let's huddle right now to ensure our response is cohesive and constructive.`,
-      "balanced": `Subject: Quick Alignment: Addressing Client Blueprint Notes\n\nHi team,\nThe client reached out with immediate feedback on the blueprint and requested a 30-minute turn-around discussion. Let's jump on a quick prep call to coordinate our technical rationale and next steps.`,
-      "slightly-creative": `Subject: Client Blueprint Check-in: Aligning Ahead of Our Sync\n\nHi everyone,\nThe client has requested an emergency walkthrough of the architectural schematics in 30 minutes. Let's gather for 5 minutes beforehand so we can present clear, calm solutions to their design notes.`,
-      "creative": `Subject: Blueprint Strategy: Turning Client Feedback into Clear Action\n\nHey team,\nOur client wants an emergency sync in 30 minutes to walk through their blueprint concerns. Let's take a quick breath, review their feedback, and guide them through our design adjustments with total clarity.`,
-      "most-creative": `Subject: Steering the Blueprint Vision: Quick Prep for Today's Client Sync\n\nHi all,\nAn urgent revision request just came in from the client for a discussion in 30 minutes. Let's synchronize our technical insights now so we turn their critique into an opportunity for a stronger design!`
+      "most-predictable": `{\n  "flight_number": "AC840",\n  "origin": "Vancouver (YVR)",\n  "destination": "London Heathrow (LHR)",\n  "departure_time": "14:30",\n  "arrival_time": "07:45+1"\n}`,
+      "predictable": `{\n  "flight_number": "AC840",\n  "departure": {\n    "airport": "Vancouver (YVR)",\n    "time": "14:30"\n  },\n  "arrival": {\n    "airport": "London Heathrow (LHR)",\n    "time": "07:45+1"\n  }\n}`,
+      "slightly-predictable": `{\n  "flight": "AC840",\n  "origin_code": "YVR",\n  "destination_code": "LHR",\n  "departs": "14:30",\n  "arrives": "07:45 (+1 day)"\n}`,
+      "balanced": `{\n  "flight": "AC840",\n  "route": "YVR -> LHR",\n  "scheduled_departure": "14:30",\n  "scheduled_arrival": "07:45+1",\n  "status": "Scheduled"\n}`,
+      "slightly-creative": `{\n  "itinerary": {\n    "code": "AC840",\n    "from": "Vancouver International (YVR)",\n    "to": "London Heathrow (LHR)",\n    "departure_local": "14:30",\n    "overnight": true\n  }\n}`,
+      "creative": `{\n  "transatlantic_journey": {\n    "flight": "AC840",\n    "departure": "Vancouver (YVR) @ 14:30",\n    "arrival": "London Heathrow (LHR) @ 07:45 (Next Day)",\n    "flight_type": "Long-haul Red-eye"\n  }\n}`,
+      "most-creative": `{\n  "voyage_manifest": {\n    "carrier_flight": "AC840",\n    "origin_hub": "Vancouver (YVR)",\n    "destination_hub": "London Heathrow (LHR)",\n    "takeoff": "14:30",\n    "touchdown": "07:45+1",\n    "tags": ["Transatlantic", "Pacific-to-Atlantic", "RedEye"]\n  }\n}`
+    };
+    if (runIndex > 0 && presetId !== "most-predictable") {
+      const vars = [
+        `{\n  "airline_code": "AC",\n  "flight_num": 840,\n  "dept_yvr": "14:30",\n  "arr_lhr": "07:45 (+1)"\n}`,
+        `{\n  "segment": "YVR-LHR",\n  "flight": "AC840",\n  "times": { "out": "14:30", "in": "07:45+1" }\n}`
+      ];
+      result = vars[(runIndex - 1) % vars.length];
+    } else {
+      result = map[presetId] || map["balanced"];
+    }
+  }
+
+  // 3. 24-Hour Time Regex
+  else if (pLower.includes("regex") || (pLower.includes("24-hour") && pLower.includes("time"))) {
+    const map = {
+      "most-predictable": `/^(?:[01]\\d|2[0-3]):[0-5]\\d$/`,
+      "predictable": `/^(?:0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/`,
+      "slightly-predictable": `/^([01]\\d|2[0-3]):([0-5]\\d)$/`,
+      "balanced": `/^(?:[0-1][0-9]|2[0-3]):[0-5][0-9]$/`,
+      "slightly-creative": `const TIME_24H_REGEX = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;`,
+      "creative": `/** Validates military 24h clock strings */\nconst isValidTime = (s) => /^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(s);`,
+      "most-creative": `export const TIME_REGEX = /^(?:[01]?\\d|2[0-3]):[0-5]\\d(?:\\:[0-5]\\d)?$/;`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 3. Multi-Aspect Sentiment & Friction: Cracked Ceramic Set
-  else if (pLower.includes("ceramic") || pLower.includes("espresso set") || pLower.includes("cracked") || pLower.includes("handwritten")) {
+  // 4. SQL Aggregate Revenue Query
+  else if (pLower.includes("sql") && (pLower.includes("revenue") || pLower.includes("sales"))) {
     const map = {
-      "most-predictable": `• Primary Sentiment: Positive (Net Promoter Score: High)\n• Customer Friction: Product transit damage (shattered ceramic set on arrival).\n• Resolution Impact: Rapid proactive replacement + personalized handwritten note and gift converted shipping failure into brand advocacy.`,
-      "predictable": `• Primary Sentiment: Highly Positive & Delighted\n• Customer Friction: Packaging failure resulting in broken ceramics upon delivery.\n• Resolution Impact: Overnighted replacement accompanied by humanized customer care successfully eliminated customer frustration.`,
-      "slightly-predictable": `• Primary Sentiment: Resilient Loyalty (Relieved & Impressed)\n• Customer Friction: Acute initial disappointment from damaged fragile goods.\n• Resolution Impact: Exceptional service recovery speed and high-touch thoughtful gesture (artisan beans) exceeded customer expectations.`,
-      "balanced": `• Primary Sentiment: Grateful Brand Champion\n• Customer Friction: Broken delicate item during freight transit.\n• Resolution Impact: Turning an operational shipping flaw into an emotional connection through immediate replacement and personal empathy.`,
-      "slightly-creative": `• Primary Sentiment: Enthusiastic Gratitude\n• Customer Friction: Heartbreak of unboxing shattered artisan craftsmanship.\n• Resolution Impact: Masterclass in service recovery—genuine human touch and complimentary artisan gift fostered lifelong brand goodwill.`,
-      "creative": `• Primary Sentiment: Redemptive Delight\n• Customer Friction: The sting of shattered pottery replaced by unboxing joy.\n• Resolution Impact: Swift, warm-hearted support turned a logistics nightmare into an unforgettable customer testimonial.`,
-      "most-creative": `• Primary Sentiment: Golden Kintsugi Goodwill\n• Customer Friction: Fragile parcel tragedy turned into an elevated customer romance.\n• Resolution Impact: Lightning-fast empathy and unexpected artisan gifts repaired not just the coffee set, but solidified absolute brand devotion.`
+      "most-predictable": `SELECT country, SUM(revenue) AS total_revenue, COUNT(DISTINCT customer_id) AS customer_count FROM sales WHERE quarter = 'Q3' AND year = 2025 GROUP BY country HAVING SUM(revenue) > 500 ORDER BY total_revenue DESC;`,
+      "predictable": `SELECT country, SUM(amount) AS total_revenue, COUNT(customer_id) AS customer_count FROM transactions WHERE sale_quarter = 'Q3_2025' GROUP BY country HAVING total_revenue > 500;`,
+      "slightly-predictable": `SELECT s.country, SUM(s.revenue) AS gross_revenue, COUNT(DISTINCT s.customer_id) AS active_customers FROM regional_sales s WHERE s.period = '2025-Q3' GROUP BY s.country HAVING SUM(s.revenue) > 500;`,
+      "balanced": `SELECT country, SUM(sale_price) AS total_q3_revenue, COUNT(DISTINCT user_id) AS total_buyers FROM orders WHERE date >= '2025-07-01' AND date <= '2025-09-30' GROUP BY country HAVING SUM(sale_price) > 500;`,
+      "slightly-creative": `SELECT billing_country AS country, ROUND(SUM(total_amount), 2) AS quarterly_revenue, COUNT(order_id) AS order_volume FROM customer_invoices WHERE fiscal_quarter = '2025-Q3' GROUP BY 1 HAVING quarterly_revenue > 500;`,
+      "creative": `WITH q3_data AS (SELECT country, revenue, client_id FROM global_sales WHERE quarter = 'Q3-2025') SELECT country, SUM(revenue) AS aggregate_revenue, COUNT(DISTINCT client_id) AS client_base FROM q3_data GROUP BY country HAVING SUM(revenue) > 500;`,
+      "most-creative": `SELECT c.country_name, COALESCE(SUM(t.payout), 0) AS total_revenue, COUNT(DISTINCT t.buyer_id) AS customer_count FROM transactions t JOIN countries c ON t.country_id = c.id WHERE t.qtr = '2025-Q3' GROUP BY c.country_name HAVING total_revenue > 500 ORDER BY 2 DESC;`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 4. Logic Riddle: Parallel Production Rate
+  // 5. Invoice Key-Value Parser
+  else if (pLower.includes("inv-9021") || (pLower.includes("invoice") && pLower.includes("apex"))) {
+    const map = {
+      "most-predictable": `{\n  "invoice_id": "INV-9021",\n  "vendor": "Apex Logistics LLC",\n  "total_usd": 14250.00,\n  "due_date": "2025-10-31"\n}`,
+      "predictable": `{\n  "invoice_id": "INV-9021",\n  "vendor": "Apex Logistics LLC",\n  "total_usd": 14250,\n  "due_date": "October 31, 2025"\n}`,
+      "slightly-predictable": `{\n  "invoice": {\n    "id": "INV-9021",\n    "vendor_name": "Apex Logistics LLC",\n    "amount_usd": 14250.00,\n    "payment_due": "2025-10-31"\n  }\n}`,
+      "balanced": `{\n  "invoice_id": "INV-9021",\n  "vendor": "Apex Logistics LLC",\n  "total_usd": 14250.00,\n  "due_date": "2025-10-31",\n  "currency": "USD"\n}`,
+      "slightly-creative": `{\n  "billing_record": {\n    "invoice_number": "INV-9021",\n    "issuing_vendor": "Apex Logistics LLC",\n    "balance_due_usd": 14250.00,\n    "maturity_date": "2025-10-31"\n  }\n}`,
+      "creative": `{\n  "payable_entry": {\n    "id": "INV-9021",\n    "entity": "Apex Logistics LLC",\n    "charge": "$14,250.00 USD",\n    "deadline": "2025-10-31",\n    "status": "Pending"\n  }\n}`,
+      "most-creative": `{\n  "commercial_invoice": {\n    "ref": "INV-9021",\n    "supplier": "Apex Logistics LLC",\n    "settlement_amount_usd": 14250.0,\n    "expiry": "2025-10-31",\n    "terms": "Net 30"\n  }\n}`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 6. Parallel Rate Logic (Widgets)
   else if (pLower.includes("widgets") || pLower.includes("machines make")) {
     const map = {
       "most-predictable": `Step 1: 5 machines produce 5 widgets in 5 minutes -> 1 machine makes 1 widget in 5 minutes.\nStep 2: 100 machines working simultaneously will produce 100 widgets in the same time.\nAnswer: Exactly 5 minutes.`,
@@ -2584,63 +2693,77 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
     result = map[presetId] || map["balanced"];
   }
 
-  // 5. JSON Flight Itinerary Schema
-  else if (pLower.includes("json") || pLower.includes("flight") || pLower.includes("ac840") || pLower.includes("vancouver")) {
+  // 7. Knights & Knaves Deduction
+  else if (pLower.includes("knave") || pLower.includes("knights")) {
     const map = {
-      "most-predictable": `{\n  "flight_number": "AC840",\n  "origin": "Vancouver (YVR)",\n  "destination": "London Heathrow (LHR)",\n  "departure_time": "14:30",\n  "arrival_time": "07:45+1"\n}`,
-      "predictable": `{\n  "flight_number": "AC840",\n  "departure": {\n    "airport": "Vancouver (YVR)",\n    "time": "14:30"\n  },\n  "arrival": {\n    "airport": "London Heathrow (LHR)",\n    "time": "07:45+1"\n  }\n}`,
-      "slightly-predictable": `{\n  "flight": "AC840",\n  "origin_code": "YVR",\n  "destination_code": "LHR",\n  "departs": "14:30",\n  "arrives": "07:45 (+1 day)"\n}`,
-      "balanced": `{\n  "flight": "AC840",\n  "route": "YVR -> LHR",\n  "scheduled_departure": "14:30",\n  "scheduled_arrival": "07:45+1",\n  "status": "Scheduled"\n}`,
-      "slightly-creative": `{\n  "itinerary": {\n    "code": "AC840",\n    "from": "Vancouver International (YVR)",\n    "to": "London Heathrow (LHR)",\n    "departure_local": "14:30",\n    "overnight": true\n  }\n}`,
-      "creative": `{\n  "transatlantic_journey": {\n    "flight": "AC840",\n    "departure": "Vancouver (YVR) @ 14:30",\n    "arrival": "London Heathrow (LHR) @ 07:45 (Next Day)",\n    "flight_type": "Long-haul Red-eye"\n  }\n}`,
-      "most-creative": `{\n  "voyage_manifest": {\n    "carrier_flight": "AC840",\n    "origin_hub": "Vancouver (YVR)",\n    "destination_hub": "London Heathrow (LHR)",\n    "takeoff": "14:30",\n    "touchdown": "07:45+1",\n    "tags": ["Transatlantic", "Pacific-to-Atlantic", "RedEye"]\n  }\n}`
+      "most-predictable": `Person A is a knave and person B is a knight.`,
+      "predictable": `A is a knave, which forces B to be a knight.`,
+      "slightly-predictable": `Deduction: Person A is a knave (lying) and Person B is a knight (truthful).`,
+      "balanced": `Because a knight could never claim 'at least one of us is a knave', A must be a knave and B is a knight.`,
+      "slightly-creative": `A is proven to be a knave, meaning his statement is false; consequently, B stands as a knight.`,
+      "creative": `The paradox resolves cleanly: A is the deceptive knave and B is the righteous knight.`,
+      "most-creative": `Logic compels a single truth: Person A is the lying knave, while Person B is the steadfast knight.`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 6. Regex Validation Code
-  else if (pLower.includes("regex") || pLower.includes("24-hour")) {
+  // 8. First Law of Thermodynamics
+  else if (pLower.includes("thermodynamics") || pLower.includes("internal energy")) {
     const map = {
-      "most-predictable": `/** Validates 24-hour time string in HH:MM format */\nconst TIME_REGEX = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nconst isValidTime = (t) => TIME_REGEX.test(t);`,
-      "predictable": `// Matches 00:00 to 23:59 with strict boundary checks\nconst time24hRegex = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nexport const validateTime = (str) => time24hRegex.test(str);`,
-      "slightly-predictable": `/**\n * Tests if string is valid 24h military time (00:00 - 23:59)\n */\nconst isValid24h = (str) => /^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(str);`,
-      "balanced": `// 24-Hour Time Pattern (HH:MM)\nconst TIME_PATTERN = /^(?:0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;\nfunction checkTime(val) {\n  return TIME_PATTERN.test(val.trim());\n}`,
-      "slightly-creative": `/** Validates strict 24h clock strings from 00:00 to 23:59 */\nconst isMilitaryTime = (val) => /^(?:[01]?\\d|2[0-3]):[0-5]\\d$/.test(val);`,
-      "creative": `// Comprehensive 24h clock validator (00:00 - 23:59)\nconst REGEX_24H = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nconst isValidTime = (input) => typeof input === 'string' && REGEX_24H.test(input);`,
-      "most-creative": `/** Robust 24-hour ISO time matcher */\nconst VALID_24H = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;\nconst parseTime = (str) => VALID_24H.test(String(str).trim());`
+      "most-predictable": `Formula: ΔU = Q - W.\nThe First Law of Thermodynamics states that the change in internal energy equals heat added minus work done, establishing that energy is conserved.`,
+      "predictable": `Equation: ΔU = Q - W.\nIt expresses the conservation of energy principle, asserting that energy cannot be created or destroyed, only transformed between heat and work.`,
+      "slightly-predictable": `Mathematical Law: ΔU = Q - W.\nThis principle defines conservation of energy in thermodynamic systems, linking thermal heat exchange directly to mechanical work.`,
+      "balanced": `Governing Equation: ΔU = Q - W.\nThe First Law dictates that net change in a system's internal energy equals heat absorbed minus work performed on surroundings.`,
+      "slightly-creative": `Governing Formula: ΔU = Q - W.\nEnergy across the physical universe remains strictly invariant, merely exchanging between thermal heat and mechanical shaft work.`,
+      "creative": `Fundamental Equation: ΔU = Q - W.\nIt serves as nature's unbreakable ledger, ensuring that all internal energy shifts perfectly balance against external heat and work.`,
+      "most-creative": `Universal Formula: ΔU = Q - W.\nEnergy is the ultimate invariant currency of physics: heat flowing in must balance against internal thermal excitation and external kinetic work.`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 7. 3-Line Tactile Metaphor Poem: Radio Frequency
-  else if (pLower.includes("radio") || pLower.includes("frequency") || pLower.includes("acoustics") || pLower.includes("poem")) {
+  // 9. Annulus Area Calculation
+  else if (pLower.includes("annulus") || (pLower.includes("concentric") && pLower.includes("radius"))) {
     const map = {
-      "most-predictable": `A copper needle dragging through dust,\nCatching the hum of abandoned voices,\nVibrating cold against the receiver wire.`,
-      "predictable": `Static coats the vacuum tube like winter frost,\nWhere a forgotten melody uncoils in the dark,\nA copper spine shivering with electric ghosts.`,
-      "slightly-predictable": `A thread of rusted wire drawn taut across silence,\nHumming with the warmth of a departed station,\nScattered like iron filings across the night.`,
-      "balanced": `An attic antenna brushing against the cold ionosphere,\nSifting through decades of velvet static,\nTo pull a single warm heartbeat from the ether.`,
-      "slightly-creative": `An empty dial spinning over glass and shadow,\nWhere lost broadcast frequencies gather like cobwebs,\nWaiting for a copper finger to stroke them awake.`,
-      "creative": `A ghost ship trapped in phosphor and copper coils,\nWhose whistle echoes through the crackling salt of static,\nDrowning in the silent ocean between two frequencies.`,
-      "most-creative": `A rusted tuning capacitor asleep under moss,\nHumming a forgotten lullaby into the throat of the dark,\nWhere yesterday's radio waves still drift like radioactive snowfall.`
+      "most-predictable": `Formula: A = π(R² - r²).\nCalculation: A = π(8² - 5²) = π(64 - 25) = 39π cm².`,
+      "predictable": `Annulus Area Formula: A = π(R² - r²).\nSubstituting radii: A = π(64 - 25) = 39π cm² (approximately 122.52 cm²).`,
+      "slightly-predictable": `• Formula: Area = π * (R_outer² - R_inner²)\n• Evaluation: π * (8² - 5²) = 39π cm²`,
+      "balanced": `• Geometry Rule: A = π(R² - r²)\n• Evaluation: π * (64 - 25) = 39π square centimeters.`,
+      "slightly-creative": `• Annulus Area: A = π(R² - r²)\n• Exact Algebraic Value: 39π cm² (exact geometric difference between the two circular planes).`,
+      "creative": `• Subtracting inner circular disk from outer disk: π(8²) - π(5²) = 64π - 25π = 39π cm².`,
+      "most-creative": `• Ring surface area: A = π * (8² - 5²) = 39π cm² (the exact topological ring area in square centimeters).`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 8. Seville Butcher Micro-Thriller (Suspense Hook)
-  else if (pLower.includes("butcher") || pLower.includes("seville") || pLower.includes("jamón") || pLower.includes("greenhouse")) {
+  // 10. Blueprint Rejection Crisis Email
+  else if (pLower.includes("blueprint") || pLower.includes("architectural") || pLower.includes("30 minutes") || pLower.includes("crisis")) {
     const map = {
-      "most-predictable": `Behind three heavy rows of curing Ibérico pork, Mateo unlocked the reinforced freezer door that concealed his basement hydroponic greenhouse.\nWiping his cleaver clean on his apron, he checked the automated grow lights shielding his heirloom tomatoes from the neighborhood guild.`,
-      "predictable": `The heavy freezer door sealed with a frosty hiss, muffling the bustling Seville market outside as he stepped into a warm, emerald sanctuary of basil and vines.\nWhen an unexpected knock rattled the front counter, he carefully hid the pruning shears behind a slab of salted beef and reached for his carving knife.`,
-      "slightly-predictable": `To the guild, he was the city's most respected fifth-generation butcher; behind the sub-zero curing locker, he was an outlaw botanist breathing stolen soil.\nAs footsteps approached the back corridor, he wiped damp fertilizer from his fingers and stepped out onto the bloodstained sawdust floor.`,
-      "balanced": `The butcher shop reeked of salt, iron, and curing fat, but behind the stainless steel racks lay a secret greenhouse fragrant with sunlit rosemary and damp peat.\nHe knew that if the inspection team discovered what was truly growing beneath the meat hooks, thirty years of family reputation would vanish before sunrise.`,
-      "slightly-creative": `Under the cold fluorescence of hanging carcasses, he wiped crimson brine from his hands and slipped through the hidden partition into a tropical burst of clandestine chlorophyll.\nHe had buried forty heirloom tomato varieties where the city inspectors only ever searched for cured ham.`,
-      "creative": `His apron bore the iron stains of his daytime craft, but in the secret damp warmth behind the carcass hooks, his calloused fingers tenderly pruned blossoming nightshade.\nWhen the health tribunal banged on the iron shutters at midnight, the scent of crushed mint gave him away before the bolt could slide shut.`,
-      "most-creative": `In a cathedral of salted ribs and hanging shadow, he was Seville's most devoted carnivore—until the sub-zero locker swung open to reveal a glowing jungle of forbidden heirloom fruit.\nEvery cleaver stroke in the front room was merely acoustic camouflage to drown out the hum of his illegal basement grow lights.`
+      "most-predictable": `Subject: Urgent: Blueprint Review & Client Alignment Meeting\n\nHi team,\nThe client has requested an urgent review of the updated architectural blueprints within the next 30 minutes. Let us convene immediately to consolidate our technical revisions and address their key concerns.`,
+      "predictable": `Subject: Action Required: Client Feedback on Architectural Blueprint\n\nGood morning all,\nThe client has requested an emergency sync in 30 minutes regarding the latest architectural blueprint revisions. Please join the bridge link so we can review the flagged items together beforehand.`,
+      "slightly-predictable": `Subject: Priority Touchpoint: Client Blueprint Feedback & Next Steps\n\nHi team,\nWe just received urgent feedback on the architectural plans, and the client would like a quick sync in 30 minutes. Let's huddle right now to ensure our response is cohesive and constructive.`,
+      "balanced": `Subject: Quick Alignment: Addressing Client Blueprint Notes\n\nHi team,\nThe client reached out with immediate feedback on the blueprint and requested a 30-minute turn-around discussion. Let's jump on a quick prep call to coordinate our technical rationale and next steps.`,
+      "slightly-creative": `Subject: Client Blueprint Check-in: Aligning Ahead of Our Sync\n\nHi everyone,\nThe client has requested an emergency walkthrough of the architectural schematics in 30 minutes. Let's gather for 5 minutes beforehand so we can present clear, calm solutions to their design notes.`,
+      "creative": `Subject: Blueprint Strategy: Turning Client Feedback into Clear Action\n\nHey team,\nOur client wants an emergency sync in 30 minutes to walk through their blueprint concerns. Let's take a quick breath, review their feedback, and guide them through our design adjustments with total clarity.`,
+      "most-creative": `Subject: Steering the Blueprint Vision: Quick Prep for Today's Client Sync\n\nHi all,\nAn urgent revision request just came in from the client for a discussion in 30 minutes. Let's synchronize our technical insights now so we turn their critique into an opportunity for a stronger design!`
     };
     result = map[presetId] || map["balanced"];
   }
 
-  // 9. Translation & Cultural Nuance: Goalkeeper Stoppage Time Save
+  // 11. Multi-Aspect Sentiment & Friction
+  else if (pLower.includes("ceramic") || pLower.includes("espresso set") || pLower.includes("cracked") || pLower.includes("handwritten")) {
+    const map = {
+      "most-predictable": `• Primary Sentiment: Positive (Net Promoter Score: High)\n• Customer Friction: Product transit damage (shattered ceramic set on arrival).\n• Resolution Impact: Rapid proactive replacement + personalized handwritten note and gift converted shipping failure into brand advocacy.`,
+      "predictable": `• Primary Sentiment: Highly Positive & Delighted\n• Customer Friction: Packaging failure resulting in broken ceramics upon delivery.\n• Resolution Impact: Overnighted replacement accompanied by humanized customer care successfully eliminated customer frustration.`,
+      "slightly-predictable": `• Primary Sentiment: Resilient Loyalty (Relieved & Impressed)\n• Customer Friction: Acute initial disappointment from damaged fragile goods.\n• Resolution Impact: Exceptional service recovery speed and high-touch thoughtful gesture (artisan beans) exceeded customer expectations.`,
+      "balanced": `• Primary Sentiment: Grateful Brand Champion\n• Customer Friction: Broken delicate item during freight transit.\n• Resolution Impact: Turning an operational shipping flaw into an emotional connection through immediate replacement and personal empathy.`,
+      "slightly-creative": `• Primary Sentiment: Enthusiastic Gratitude\n• Customer Friction: Heartbreak of unboxing shattered artisan craftsmanship.\n• Resolution Impact: Masterclass in service recovery—genuine human touch and complimentary artisan gift fostered lifelong brand goodwill.`,
+      "creative": `• Primary Sentiment: Redemptive Delight\n• Customer Friction: The sting of shattered pottery replaced by unboxing joy.\n• Resolution Impact: Swift, warm-hearted support turned a logistics nightmare into an unforgettable customer testimonial.`,
+      "most-creative": `• Primary Sentiment: Golden Kintsugi Goodwill\n• Customer Friction: Fragile parcel tragedy turned into an elevated customer romance.\n• Resolution Impact: Lightning-fast empathy and unexpected artisan gifts repaired not just the coffee set, but solidified absolute brand devotion.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 12. Spanish Goalkeeper Localization
   else if (pLower.includes("goalkeeper") || pLower.includes("stoppage") || pLower.includes("save") || pLower.includes("spanish")) {
     const map = {
       "most-predictable": `Traducción:\n"El guardameta realizó una parada milagrosa en los últimos segundos del tiempo de descuento."\n\nNota de matiz: "Tiempo de descuento" es el término reglamentario y estándar para referirse a los minutos añadidos al final del encuentro.`,
@@ -2654,19 +2777,139 @@ function getPresetText(presetId, userPrompt, systemPrompt, runIndex = 0, isPlain
     result = map[presetId] || map["balanced"];
   }
 
-  // Fallback multi-line response
+  // 13. Cloud Outage Public Apology
+  else if (pLower.includes("outage") || (pLower.includes("payment") && pLower.includes("apology"))) {
+    const map = {
+      "most-predictable": `Subject: Service Notice: Resolution of Today's Payment Gateway Outage\n\nWe sincerely apologize for the 45-minute payment gateway outage during peak hours today. Our engineering team has resolved the root cause, and all payment queues are processing normally.`,
+      "predictable": `Subject: Update Regarding Today's Payment Gateway Interruption\n\nWe deeply regret the disruption caused by today's 45-minute service outage on our payment platform. Full functionality is restored, and we have implemented additional safeguards to prevent recurrence.`,
+      "slightly-predictable": `Subject: Status Update & Apology: Payment Platform Disruption\n\nPlease accept our sincere apologies for the unexpected 45-minute service disruption during peak processing hours. All transaction queues are fully restored, and a comprehensive post-mortem will follow.`,
+      "balanced": `Subject: Important Update: Payment Gateway Outage & Next Steps\n\nWe recognize the severe friction caused by today's 45-minute payment gateway downtime. We have restored complete platform stability and are actively reinforcing our infrastructure redundancy.`,
+      "slightly-creative": `Subject: Sincere Apologies Regarding Today's Payment Outage\n\nWe hold ourselves to the highest reliability standards, and today we fell short with a 45-minute payment gateway interruption. Our team has fully resolved the incident and is committed to earning back your trust.`,
+      "creative": `Subject: A Message from Leadership: Today's Payment Gateway Incident\n\nYour business depends on our uninterrupted uptime, and today's 45-minute gateway outage was unacceptable. We take full responsibility, have restored processing, and are deploying immediate failover enhancements.`,
+      "most-creative": `Subject: Our Unreserved Apology: Restoring Reliability After Today's Disruption\n\nDuring peak hours today, our payment pipeline failed you for 45 minutes, and for that we offer our deepest apology. We have stabilized the system and are re-engineering our core architecture so this standard never slips again.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 14. Tactile Poem: Radio Frequency
+  else if (pLower.includes("radio") || pLower.includes("frequency") || pLower.includes("acoustics") || pLower.includes("poem")) {
+    const map = {
+      "most-predictable": `A copper needle dragging through dust,\nCatching the hum of abandoned voices,\nVibrating cold against the receiver wire.`,
+      "predictable": `Static coats the vacuum tube like winter frost,\nWhere a forgotten melody uncoils in the dark,\nA copper spine shivering with electric ghosts.`,
+      "slightly-predictable": `A thread of rusted wire drawn taut across silence,\nHumming with the warmth of a departed station,\nScattered like iron filings across the night.`,
+      "balanced": `An attic antenna brushing against the cold ionosphere,\nSifting through decades of velvet static,\nTo pull a single warm heartbeat from the ether.`,
+      "slightly-creative": `An empty dial spinning over glass and shadow,\nWhere lost broadcast frequencies gather like cobwebs,\nWaiting for a copper finger to stroke them awake.`,
+      "creative": `A ghost ship trapped in phosphor and copper coils,\nWhose whistle echoes through the crackling salt of static,\nDrowning in the silent ocean between two frequencies.`,
+      "most-creative": `A rusted tuning capacitor asleep under moss,\nHumming a forgotten lullaby into the throat of the dark,\nWhere yesterday's radio waves still drift like radioactive snowfall.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 15. Seville Butcher Micro-Thriller
+  else if (pLower.includes("butcher") || pLower.includes("seville") || pLower.includes("jamón") || pLower.includes("greenhouse")) {
+    const map = {
+      "most-predictable": `Behind three heavy rows of curing Ibérico pork, Mateo unlocked the reinforced freezer door that concealed his basement hydroponic greenhouse.\nWiping his cleaver clean on his apron, he checked the automated grow lights shielding his heirloom tomatoes from the neighborhood guild.`,
+      "predictable": `The heavy freezer door sealed with a frosty hiss, muffling the bustling Seville market outside as he stepped into a warm, emerald sanctuary of basil and vines.\nWhen an unexpected knock rattled the front counter, he carefully hid the pruning shears behind a slab of salted beef and reached for his carving knife.`,
+      "slightly-predictable": `To the guild, he was the city's most respected fifth-generation butcher; behind the sub-zero curing locker, he was an outlaw botanist breathing stolen soil.\nAs footsteps approached the back corridor, he wiped damp fertilizer from his fingers and stepped out onto the bloodstained sawdust floor.`,
+      "balanced": `The butcher shop reeked of salt, iron, and curing fat, but behind the stainless steel racks lay a secret greenhouse fragrant with sunlit rosemary and damp peat.\nHe knew that if the inspection team discovered what was truly growing beneath the meat hooks, thirty years of family reputation would vanish before sunrise.`,
+      "slightly-creative": `Under the cold fluorescence of hanging carcasses, he wiped crimson brine from his hands and slipped through the hidden partition into a tropical burst of clandestine chlorophyll.\nHe had buried forty heirloom tomato varieties where the city inspectors only ever searched for cured ham.`,
+      "creative": `His apron bore the iron stains of his daytime craft, but in the secret damp warmth behind the carcass hooks, his calloused fingers tenderly pruned blossoming nightshade.\nWhen the health tribunal banged on the iron shutters at midnight, the scent of crushed mint gave him away before the bolt could slide shut.`,
+      "most-creative": `In a cathedral of salted ribs and hanging shadow, he was Seville's most devoted carnivore—until the sub-zero locker swung open to reveal a glowing jungle of forbidden heirloom fruit.\nEvery cleaver stroke in the front room was merely acoustic camouflage to drown out the hum of his illegal basement grow lights.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 16. Deep-Sea Sensor Blackout
+  else if (pLower.includes("deep-sea") || pLower.includes("mariana") || pLower.includes("8,000") || pLower.includes("submersible")) {
+    const map = {
+      "most-predictable": `At 8,000 meters into the abyss, external sonar telemetry dropped to zero decibels. In the absolute black beyond the reinforced quartz viewport, a pulse of cobalt bioluminescence blossomed.`,
+      "predictable": `The sub's navigational array went dead as depth gauges crossed 8,000 meters. Outside the viewport, a silent ribbon of sapphire light ignited in the frozen trenches.`,
+      "slightly-predictable": `Pressure hull alarms fell silent as all external sensor feeds dissolved into static. Then, through eight thousand meters of oceanic darkness, a colossal biological lantern pulsed to life.`,
+      "balanced": `Eight kilometers beneath the Pacific, the submersible's telemetry suite died in unison with the sonar. In the suffocating black outside, an ancient emerald luminescence drifted past the glass.`,
+      "slightly-creative": `The abyss swallowed the sub's radar in a sudden, cold telemetry flatline. In the crushing silence of the Mariana Trench, an undulating web of violet fire awakened in the dark.`,
+      "creative": `At eight thousand meters under the crushing sea, our sensors screamed once and surrendered to the void. Through the thick acrylic viewport, an eerie ghost-bloom of neon cyan uncurled like living smoke.`,
+      "most-creative": `The trench drank our telemetry whole, plunging the cockpit into blind, dead reckoning. Then the abyss opened its sapphire eyes, bathing our steel hull in an alien aurora of cold biological fire.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 17. Submarine Colony Inventions
+  else if (pLower.includes("submarine") || pLower.includes("geothermal") || pLower.includes("inventions")) {
+    const map = {
+      "most-predictable": `1. Vent-Driven Piezoelectric Ribbon: Harvests kinetic oscillation from hydrothermal convection plumes.\n2. Siphon-Cooled Chemoautotrophic Wall: Bioluminescent algae panels purifying habitat oxygen.\n3. Basalt Gravity Storage Piston: Drops dense seabed weights to store surplus geothermal power.`,
+      "predictable": `• Hydrothermal Convection Generator: Converts thermal gradients into low-voltage electricity.\n• Sulfur-Bacterial Oxygen Filter: Bio-scrubbers utilizing vent chemicals to recycle air.\n• Seismic Acoustic Beacon: Zero-power sonar navigation using seabed vibrations.`,
+      "slightly-predictable": `1. Plume-Oscillating Carbon Sails: Flexible hydro-turbines positioned over superheated vent chimneys.\n2. Chemo-Luminescent Habitat Veins: Interior lighting fueled by sulfur-eating marine microbes.\n3. Depth-Pressure Pneumatic Battery: Stores compressed seawater for emergency habitat buoyancy.`,
+      "balanced": `• Chimney Heat-Pipe Radiators: Passive thermo-electric pipes channeling vent heat directly into living pods.\n• Abyssal Bio-Concrete Reefs: Self-healing mineral structures accreted via mild galvanic vent currents.\n• Acoustic Tide-Chimes: Low-frequency warning resonators powered by thermal water currents.`,
+      "slightly-creative": `1. Geothermal Kelp Harvesters: Synthetic biomimetic kelp that oscillates in thermal plumes to pump fresh water.\n2. Sulfide-Glow Navigation Lanterns: Living light-tubes embedded in trench seafloors.\n3. Benthic Buoyancy Gliders: Unpowered cargo pods that cycle depths on natural heat plumes.`,
+      "creative": `• Vent-Harmonic Sonic Drifts: Whispering acoustic conduits that communicate across ocean trenches without power cables.\n• Pyroclastic Glass Glasshouses: Geothermally annealed silicate domes grown directly out of basalt mineral beds.\n• Abyssal Siphon Organ: A deep-water organ that filters trace minerals using geothermal siphon pressure.`,
+      "most-creative": `1. Thermal-Puff Kinetic Air-Lungs: Giant bellows over volcanic vents that pump oxygenated surface currents to depth.\n2. Bioluminescent Mycelium Tapestries: Living glowing moss that feeds on sulfur steam and insulates basalt habitats.\n3. Gravitational Geyser Catapults: Steam-powered elevator shafts launching seafloor pods to shallow staging bays.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 18. Silicon Predator Taxonomy
+  else if (pLower.includes("predator") || pLower.includes("hydrocarbon") || pLower.includes("silicon")) {
+    const map = {
+      "most-predictable": `• Binomial Name: Lithovenator vorax\n• Habitat: Liquid methane lakes and cryogenic hydrocarbon plains.\n• Hunting Mechanism: Emits ultrasonic fractures to shatter brittle silicon prey before absorbing silicate shards.`,
+      "predictable": `• Classification: Silicocanis cryophilus\n• Habitat: Sub-zero ethane dunes and methane riverbanks.\n• Hunting Strategy: Camouflages as crystalline quartz outcroppings and injects molten hydrocarbon solvent.`,
+      "slightly-predictable": `• Taxon: Petrohydra titanis\n• Ecosystem: Dense atmospheric hydrocarbon tar basins.\n• Predation Mode: Uses piezoelectric shock tendrils to paralyze prey walking across frozen glass plates.`,
+      "balanced": `• Binomial: Crysalloscorpion chermanii\n• Biome: High-gravity liquid propane seas and ammonia geysers.\n• Mechanism: Stalks through methane fog using polarized infrared vision and impales prey with diamond-tipped carapace spikes.`,
+      "slightly-creative": `• Species: Silicosiren nocturna\n• Habitat: Cryogenic hydrocarbon fjords and frozen ammonia shoals.\n• Predation: Vibrates crystalline spines to mimic acoustic frequency of mating silicon drones.`,
+      "creative": `• Binomial: Lithoquetzal tenebrosa\n• Native Domain: High-pressure methane cloud layers and benzene plateaus.\n• Hunting Style: Glides silently on razor-thin silicate wings, slicing through prey before dissolving them in sulfuric acid pools.`,
+      "most-creative": `• Binomial: Vitrodraco abissalis\n• Habitat: Superdense liquid ethane trenches under 50 atmospheres of nitrogen.\n• Hunting Mechanism: Fires superheated molten glass harpoons that instantly solidify upon contact with cryogenic liquid prey.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 19. Ship of Theseus for Neural Weights
+  else if (pLower.includes("theseus") || pLower.includes("lora") || pLower.includes("weights")) {
+    const map = {
+      "most-predictable": `If every layer's base tensor weights are sequentially augmented and replaced by rank-decomposition adapters over time, does the runtime session remain the original neural architecture or an entirely distinct intelligence? The paradox highlights the ambiguity between persistent model identity and continuous parameter migration.`,
+      "predictable": `As each neural weight matrix in an on-device model is incrementally updated via low-rank adaptation, at what threshold does the model cease to be the foundation checkpoint and become a new agent? It questions whether identity resides in the initial weights or the unbroken sequence of inference context.`,
+      "slightly-predictable": `If an edge LLM has 100% of its attention weights adapted through continuous LoRA fine-tuning, is it still the baseline model running or an emergent new model? The paradox reveals that neural identity is functional rather than static-parameter based.`,
+      "balanced": `When every attention projection in a neural network is incrementally modified by adapter ranks until zero original weights influence inference, does the original model still exist? This presents the computational equivalent of Theseus's ship, questioning where model identity truly lives.`,
+      "slightly-creative": `If an on-device AI replaces every single connection matrix through dynamic adapter updates across months of local use, does it remain the manufacturer's foundation model or its user's unique creation? The boundary between foundational entity and customized intelligence dissolves.`,
+      "creative": `Suppose an on-device model gradually updates every synaptic coefficient via local LoRA passes until not one baseline parameter remains active. At what precise weight update did the original model die, and who authoritatively owns the emergent persona?`,
+      "most-creative": `Like Theseus replacing rotten timber, an adaptive LLM replaces frozen tensors with dynamic low-rank matrices until the original foundation is completely overwritten. If the resulting mind reasons with identical token semantics yet shares zero original weights, is memory the vessel or the parameter?`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // 20. Tactile Low-Tech Tools
+  else if (pLower.includes("tactile") || pLower.includes("low-tech") || pLower.includes("smartphone")) {
+    const map = {
+      "most-predictable": `1. Pegboard Solar Calendar: Brass pegs inserted into a hardwood grid to track dates and milestones mechanically.\n2. Sandglass Interval Timer: Reversible magnetic-sand hourglass providing tactile 25-minute focus intervals.\n3. Embossing Tape Note Block: Rotary wheel hand-embosser stamping durable paper strips for task checklists.`,
+      "predictable": `• Mechanical Clicker Calendar: Rotary mechanical wheels with engraved date dials.\n• Gravity Water Timer: A siphon-calibrated copper drip clock measuring 30-minute working sessions.\n• Slate & Chalk Task Carousel: A rotating polygon slate stand with wipeable chalk columns for daily priorities.`,
+      "slightly-predictable": `1. Gear-Driven Desktop Date Roller: Heavy cast-iron calendar advanced by a morning lever crank.\n2. Steel Ball Gravity Track: A slow-rolling escapement ball completing a marble run in exactly 45 minutes.\n3. Spring-Loaded Index Card Hopper: A brass card dispenser that surfaces daily task cards one by one.`,
+      "balanced": `• Mechanical Escapement Pomodoro: A winding pendulum desk clock with chime intervals for focus cycles.\n• Wooden Token Schedule Rail: Slotting colored wooden pucks along an engraved hourly wooden groove.\n• Roller-Feed Paper Scroll: A continuous butcher-paper crank stand for handwritten ephemeral notes.`,
+      "slightly-creative": `1. Steampunk Rotary Day-Wheel: A brass clockwork dial clicking through weeks and lunar phases with tactile resistance.\n2. Viscous Oil Drop Timer: A heavy glass column timing work blocks via slow-falling glycerin bubbles.\n3. Perforated Card Stamping Press: A manual punch-card tool for tracking completed daily habits.`,
+      "creative": `• Kinetic Marble Countdown: A stepped brass ladder that releases one metal sphere down every 10 minutes.\n• Cast-Bronze Weekly Matrix: Magnetic steel tiles positioned on an easel grid for visual time-blocking.\n• Mechanical Type-Wheel Memo Ribbon: A portable hand-cranked ribbon typewriter for stamping pocket todo lists.`,
+      "most-creative": `1. The Shadow-Pin Work Dial: A brass sundial calibrated for desk lamp light, casting a moving pointer across focus blocks.\n2. Acoustic Water-Drop Metronome: A slow capillary dripper that fills a balancing brass spoon, chiming softly every 20 minutes.\n3. The Wooden Cylinder Rolodex: A hardwood revolving cylinder where tasks are pinned with colored wooden dowels.`
+    };
+    result = map[presetId] || map["balanced"];
+  }
+
+  // Fallback multi-line response for arbitrary user prompts
   else {
     const cleanPrompt = userPrompt || "the prompt";
     const map = {
-      "most-predictable": `• Evaluation: "${cleanPrompt}"\n• Sampling Mode: most-predictable (T=0.0, topK=1)\n• Characteristics: Strict deterministic accuracy, identical repeatability.`,
-      "predictable": `• Analysis: "${cleanPrompt}"\n• Sampling Mode: predictable (T=0.3, topK=32)\n• Characteristics: Factual grounding with minimal stylistic deviation.`,
-      "slightly-predictable": `• Synthesis: "${cleanPrompt}"\n• Sampling Mode: slightly-predictable (T=0.7, topK=64)\n• Characteristics: Controlled variance with high structural clarity.`,
-      "balanced": `• Reflection: "${cleanPrompt}"\n• Sampling Mode: balanced (T=1.0, topK=64)\n• Characteristics: Well-rounded conversational prose for general use.`,
-      "slightly-creative": `• Exploration: "${cleanPrompt}"\n• Sampling Mode: slightly-creative (T=1.1, topK=72)\n• Characteristics: Expressive vocabulary with rhythmic phrasing.`,
-      "creative": `• Perspective: "${cleanPrompt}"\n• Sampling Mode: creative (T=1.15, topK=80)\n• Characteristics: Rich narrative angles, metaphors, and imaginative flow.`,
-      "most-creative": `• Vision: "${cleanPrompt}"\n• Sampling Mode: most-creative (T=1.2, topK=100)\n• Characteristics: Maximum entropy sampling with unconventional vocabulary exploration.`
+      "most-predictable": `• Evaluation: "${cleanPrompt}"\n• Sampling Mode: most-predictable (T=0.0, topK=1)\n• Deterministic execution: exact greedy path, zero variance across runs.`,
+      "predictable": `• Analysis: "${cleanPrompt}"\n• Sampling Mode: predictable (T=0.3, topK=32)\n• Grounded synthesis: tightly bounded probability distribution with high coherence.`,
+      "slightly-predictable": `• Synthesis: "${cleanPrompt}"\n• Sampling Mode: slightly-predictable (T=0.7, topK=64)\n• Structured balance: reliable grammar and clear informative flow.`,
+      "balanced": `• Reflection: "${cleanPrompt}"\n• Sampling Mode: balanced (T=1.0, topK=64)\n• Conversational prose: standard stochastic sampling for general reasoning.`,
+      "slightly-creative": `• Exploration: "${cleanPrompt}"\n• Sampling Mode: slightly-creative (T=1.1, topK=72)\n• Expressive phrasing: dynamic vocabulary with heightened stylistic variation.`,
+      "creative": `• Perspective: "${cleanPrompt}"\n• Sampling Mode: creative (T=1.15, topK=80)\n• Imaginative reach: unconventional metaphors, rich descriptions, and divergent phrasing.`,
+      "most-creative": `• Visionary Odyssey: "${cleanPrompt}"\n• Sampling Mode: most-creative (T=1.2, topK=100)\n• Maximum entropy: broad exploratory vocabulary navigating the full distribution tail.`
     };
-    result = map[presetId] || map["balanced"];
+    if (runIndex > 0 && presetId !== "most-predictable") {
+      const vars = [
+        `• Variation #${runIndex + 1}: "${cleanPrompt}" [${presetId}]\n• Alternative perspective emphasizing distinct vocabulary and nuanced stylistic phrasing.`,
+        `• Divergent Path #${runIndex + 1}: "${cleanPrompt}" [${presetId}]\n• Exploring fresh semantic angles and expressive phrasing across runs.`
+      ];
+      result = vars[(runIndex - 1) % vars.length];
+    } else {
+      result = map[presetId] || map["balanced"];
+    }
   }
 
   return isPlainTextOnly ? sanitizePlainText(result) : result;
@@ -3490,6 +3733,43 @@ function initSimulationUI() {
     });
   }
 
+  // Curated Corpus Explorer Toggle & Live Search
+  const toggleCorpusBtn = document.getElementById("sim-toggle-corpus-btn");
+  const corpusExplorer = document.getElementById("sim-corpus-explorer");
+  const corpusArrow = document.getElementById("sim-corpus-toggle-arrow");
+  const corpusSearch = document.getElementById("sim-corpus-search");
+
+  if (toggleCorpusBtn && corpusExplorer) {
+    toggleCorpusBtn.addEventListener("click", () => {
+      const isHidden = corpusExplorer.style.display === "none";
+      corpusExplorer.style.display = isHidden ? "block" : "none";
+      if (corpusArrow) corpusArrow.textContent = isHidden ? "▲" : "▼";
+      if (isHidden) renderCorpusExplorerList(corpusSearch?.value || "");
+    });
+  }
+
+  if (corpusSearch) {
+    corpusSearch.addEventListener("input", (e) => {
+      renderCorpusExplorerList(e.target.value);
+    });
+  }
+
+  // Metric Toggle Buttons on Convergence Chart
+  document.querySelectorAll(".sim-metric-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      document.querySelectorAll(".sim-metric-btn").forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+      simulationState.activeMetric = e.target.getAttribute("data-metric") || "entropy";
+      const heading = document.getElementById("sim-chart-heading-text");
+      if (heading) {
+        heading.textContent = simulationState.activeMetric === "vocab"
+          ? "📚 Cumulative Vocabulary Expansion (V)"
+          : "📈 Empirical Entropy Convergence (H)";
+      }
+      renderConvergenceChart();
+    });
+  });
+
   const startBtn = document.getElementById("sim-start-btn");
   const pauseBtn = document.getElementById("sim-pause-btn");
   const stopBtn = document.getElementById("sim-stop-btn");
@@ -3499,6 +3779,80 @@ function initSimulationUI() {
   if (pauseBtn) pauseBtn.addEventListener("click", togglePauseSimulation);
   if (stopBtn) stopBtn.addEventListener("click", stopSimulation);
   if (exportBtn) exportBtn.addEventListener("click", exportSimulationData);
+
+  // Initial render of corpus list in background
+  renderCorpusExplorerList("");
+}
+
+// Render dynamic searchable list of curated prompts in Corpus Explorer
+function renderCorpusExplorerList(filterText = "") {
+  const container = document.getElementById("sim-corpus-list");
+  const countBadge = document.getElementById("sim-corpus-count-badge");
+  if (!container) return;
+
+  const query = (filterText || "").toLowerCase().trim();
+  const filtered = SIMULATION_CORPUS.filter(p => {
+    if (!query) return true;
+    return p.title.toLowerCase().includes(query) ||
+           p.user.toLowerCase().includes(query) ||
+           p.system.toLowerCase().includes(query) ||
+           p.category.toLowerCase().includes(query);
+  });
+
+  if (countBadge) {
+    countBadge.textContent = `Showing ${filtered.length} of ${SIMULATION_CORPUS.length} prompts`;
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">No prompts match "${filterText}".</div>`;
+    return;
+  }
+
+  const categoryLabels = {
+    deterministic: "📊 Deterministic Schema & Code",
+    reasoning: "🧠 Logic & Reasoning",
+    professional: "✉️ Professional Tone",
+    creative: "🎭 Creative Metaphor",
+    ideation: "💡 Unconventional Ideation"
+  };
+
+  container.innerHTML = filtered.map(item => `
+    <div class="sim-corpus-item">
+      <div class="sim-corpus-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="sim-corpus-badge ${item.category}">${categoryLabels[item.category] || item.category}</span>
+          <strong style="font-size: 0.84rem; color: var(--text-main);">${item.title}</strong>
+        </div>
+        <button class="btn-secondary" onclick="loadPromptIntoPlayground('${item.id}');" style="padding: 2px 8px; font-size: 0.72rem; display: flex; align-items: center; gap: 4px;" title="Load this prompt into the Live Comparison Grid">
+          <span>⚡ Try in Live Grid</span>
+        </button>
+      </div>
+      <div style="font-size: 0.78rem; color: var(--text-main); background: var(--bg-primary); padding: 6px 8px; border-radius: 4px; border: 1px solid var(--border-color); font-family: var(--font-sans);">
+        <span style="color: var(--text-muted); font-weight: 600;">Prompt:</span> "${item.user}"
+      </div>
+      <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+        <span style="font-weight: 600;">System:</span> ${item.system}
+      </div>
+    </div>
+  `).join("");
+}
+
+// Load a curated prompt from the corpus into the main interactive playground
+function loadPromptIntoPlayground(promptId) {
+  const promptItem = SIMULATION_CORPUS.find(p => p.id === promptId);
+  if (!promptItem) return;
+
+  const userElem = document.getElementById("user-prompt");
+  const sysElem = document.getElementById("system-prompt");
+  if (userElem) userElem.value = promptItem.user;
+  if (sysElem) sysElem.value = promptItem.system;
+
+  // Switch to Live Grid tab
+  const streamTab = document.querySelector('.tab[data-tab="stream"]');
+  if (streamTab) streamTab.click();
+
+  // Scroll to prompt inputs
+  document.querySelector(".header-title")?.scrollIntoView({ behavior: "smooth" });
 }
 
 function getSelectedSimulationPrompts() {
@@ -3563,19 +3917,28 @@ async function startMonteCarloSimulation() {
   const pBar = document.getElementById("sim-progress-bar");
   const pLabel = document.getElementById("sim-progress-label");
   const pPercent = document.getElementById("sim-progress-percent");
+  const durBadge = document.getElementById("sim-duration-badge");
 
+  const startTime = performance.now();
+  simulationState.startTime = startTime;
   simulationState.isRunning = true;
   simulationState.isPaused = false;
   simulationState.isStopped = false;
   simulationState.results = [];
   simulationState.convergenceHistory = {};
+  simulationState.vocabHistory = {};
+
+  const cumulativeVocabSets = {};
   activePresets.forEach(presetId => {
     simulationState.convergenceHistory[presetId] = [];
+    simulationState.vocabHistory[presetId] = [];
+    cumulativeVocabSets[presetId] = new Set();
   });
 
   if (startBtn) startBtn.style.display = "none";
   if (pauseBtn) { pauseBtn.style.display = "inline-block"; pauseBtn.textContent = "⏸️ Pause"; }
   if (stopBtn) stopBtn.style.display = "inline-block";
+  if (durBadge) { durBadge.style.display = "inline-block"; durBadge.textContent = "⏱️ 0.00s"; }
 
   const totalRuns = prompts.length * runsPerPrompt * activePresets.length;
   let completedRuns = 0;
@@ -3628,6 +3991,11 @@ async function startMonteCarloSimulation() {
         const currentRunningMean = parseFloat((entropySums[item.presetId] / entropyCounts[item.presetId]).toFixed(2));
         simulationState.convergenceHistory[item.presetId].push(currentRunningMean);
 
+        // Cumulative unique vocabulary tracker
+        const words = (item.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || [];
+        words.forEach(w => cumulativeVocabSets[item.presetId].add(w));
+        simulationState.vocabHistory[item.presetId].push(cumulativeVocabSets[item.presetId].size);
+
         // Also push into cumulative studio benchmark history
         if (!cumulativeBenchmarkHistory[item.presetId]) {
           cumulativeBenchmarkHistory[item.presetId] = [];
@@ -3643,9 +4011,11 @@ async function startMonteCarloSimulation() {
 
       completedRuns += activePresets.length;
       const pct = Math.min(100, Math.round((completedRuns / totalRuns) * 100));
+      const elapsedSec = ((performance.now() - startTime) / 1000).toFixed(2);
 
       if (pBar) pBar.style.width = `${pct}%`;
       if (pPercent) pPercent.textContent = `${pct}%`;
+      if (durBadge) durBadge.textContent = `⏱️ ${elapsedSec}s`;
       if (pLabel) pLabel.textContent = `Running: Prompt ${pIdx + 1}/${prompts.length} ("${promptItem.title}") • Run #${r + 1}/${runsPerPrompt} (${completedRuns}/${totalRuns})`;
 
       // Periodic live dashboard refresh
@@ -3661,14 +4031,19 @@ async function startMonteCarloSimulation() {
     }
   }
 
+  const finalDurationSec = ((performance.now() - startTime) / 1000).toFixed(2);
+  const runsPerSec = (completedRuns / Math.max(0.01, (performance.now() - startTime) / 1000)).toFixed(0);
+  simulationState.durationSec = finalDurationSec;
   simulationState.isRunning = false;
+
   if (startBtn) startBtn.style.display = "inline-block";
   if (pauseBtn) pauseBtn.style.display = "none";
   if (stopBtn) stopBtn.style.display = "none";
 
   if (pBar) pBar.style.width = "100%";
   if (pPercent) pPercent.textContent = "100%";
-  if (pLabel) pLabel.textContent = `Simulation Completed! ${simulationState.results.length} total runs evaluated across ${prompts.length} prompts.`;
+  if (durBadge) durBadge.textContent = `⏱️ ${finalDurationSec}s (${runsPerSec} runs/s)`;
+  if (pLabel) pLabel.textContent = `Simulation Completed in ${finalDurationSec}s! ${simulationState.results.length} total runs evaluated across ${prompts.length} prompts (${runsPerSec} runs/sec).`;
 
   renderConvergenceChart();
   renderDeterminismHeatmap(prompts, runsPerPrompt);
@@ -3676,20 +4051,21 @@ async function startMonteCarloSimulation() {
   updateMetricsTab();
 }
 
-// Render SVG Empirical Entropy Convergence Line Chart (H vs N)
+// Render SVG Empirical Entropy & Vocabulary Convergence Line Chart
 function renderConvergenceChart() {
   const container = document.getElementById("sim-convergence-chart-wrapper");
   if (!container) return;
 
+  const isVocab = simulationState.activeMetric === "vocab";
   const presets = getSortedActivePresets(Object.keys(simulationState.convergenceHistory));
   if (presets.length === 0 || !simulationState.convergenceHistory[presets[0]] || simulationState.convergenceHistory[presets[0]].length === 0) {
-    container.innerHTML = `<div style="color: var(--text-muted); font-size: 0.82rem; text-align: center;">Run a simulation to generate the live empirical entropy convergence curve.</div>`;
+    container.innerHTML = `<div style="color: var(--text-muted); font-size: 0.82rem; text-align: center;">Run a simulation to generate the live convergence curve.</div>`;
     return;
   }
 
   const svgW = 620;
   const svgH = 220;
-  const padL = 40;
+  const padL = 44;
   const padR = 25;
   const padT = 20;
   const padB = 30;
@@ -3698,18 +4074,28 @@ function renderConvergenceChart() {
   const chartH = svgH - padT - padB;
 
   const maxN = Math.max(...presets.map(p => (simulationState.convergenceHistory[p] || []).length), 1);
-  const minH = 3.5;
-  const maxH = 6.0;
 
-  const getY = (val) => padT + chartH - ((val - minH) / (maxH - minH)) * chartH;
+  let minY = 3.5;
+  let maxY = 6.0;
+  let unit = "b";
+
+  if (isVocab) {
+    minY = 0;
+    const maxVocabInHistory = Math.max(...presets.flatMap(p => simulationState.vocabHistory[p] || [0]), 50);
+    maxY = Math.ceil(maxVocabInHistory / 20) * 20;
+    unit = "w";
+  }
+
+  const getY = (val) => padT + chartH - ((val - minY) / Math.max(1, maxY - minY)) * chartH;
   const getX = (idx) => padL + (idx / Math.max(1, maxN - 1)) * chartW;
 
   let gridSvg = "";
-  for (let h = minH; h <= maxH; h += 0.5) {
-    const y = getY(h);
+  const step = isVocab ? Math.max(10, Math.round(maxY / 5)) : 0.5;
+  for (let yVal = minY; yVal <= maxY; yVal += step) {
+    const y = getY(yVal);
     gridSvg += `
       <line x1="${padL}" y1="${y}" x2="${padL + chartW}" y2="${y}" stroke="var(--border-color)" stroke-dasharray="2,2" />
-      <text x="${padL - 6}" y="${y + 4}" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="var(--font-mono)">${h.toFixed(1)}b</text>
+      <text x="${padL - 6}" y="${y + 4}" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="var(--font-mono)">${isVocab ? Math.round(yVal) : yVal.toFixed(1)}${unit}</text>
     `;
   }
 
@@ -3717,7 +4103,7 @@ function renderConvergenceChart() {
   let legendHtml = "";
 
   presets.forEach(presetId => {
-    const history = simulationState.convergenceHistory[presetId] || [];
+    const history = isVocab ? (simulationState.vocabHistory[presetId] || []) : (simulationState.convergenceHistory[presetId] || []);
     if (history.length === 0) return;
     const p = PRESETS.find(x => x.id === presetId) || { color: "#58a6ff", name: presetId };
 
@@ -3737,13 +4123,18 @@ function renderConvergenceChart() {
       <circle cx="${lastX}" cy="${lastY}" r="3.5" fill="${p.color}" />
     `;
 
+    const formattedVal = isVocab ? `${Math.round(lastVal)} words` : `${lastVal.toFixed(2)} bits`;
     legendHtml += `
       <div style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; background: var(--bg-tertiary); padding: 3px 8px; border-radius: 4px; border-left: 3px solid ${p.color};">
         <span style="font-weight: 600; color: ${p.color};">${p.name.replace("slightly-", "s-")}:</span>
-        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-main);">${lastVal.toFixed(2)} bits</span>
+        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-main);">${formattedVal}</span>
       </div>
     `;
   });
+
+  const xAxisLabel = isVocab
+    ? `Sample Executions (N = 1 \u2192 ${maxN}) \u2022 Cumulative Unique Vocabulary Pool Expansion`
+    : `Sample Executions (N = 1 \u2192 ${maxN}) \u2022 Empirical Shannon Lexical Entropy (H in bits/word)`;
 
   container.innerHTML = `
     <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
@@ -3752,7 +4143,7 @@ function renderConvergenceChart() {
         <line x1="${padL}" y1="${padT + chartH}" x2="${padL + chartW}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
         <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
         ${linesSvg}
-        <text x="${padL + chartW / 2}" y="${svgH - 6}" fill="var(--text-muted)" font-size="9.5" text-anchor="middle" font-family="var(--font-mono)">Sample Executions (N = 1 &rarr; ${maxN})</text>
+        <text x="${padL + chartW / 2}" y="${svgH - 6}" fill="var(--text-muted)" font-size="9.5" text-anchor="middle" font-family="var(--font-mono)">${xAxisLabel}</text>
       </svg>
       <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding-top: 4px;">
         ${legendHtml}

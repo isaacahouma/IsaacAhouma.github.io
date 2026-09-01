@@ -57,7 +57,7 @@ for await (const chunk of stream) {
 
 ## 🔗 References & Standards
 
-- **Chromium Issue**: [crbug.com/551936461](https://crbug.com/551936461) &mdash; Prompt API Sampling Mode Categorical Presets
+- **Chromium Issue**: [crbug.com/502214118](https://crbug.com/502214118) &mdash; Prompt API Sampling Mode Categorical Presets
 - **W3C WebML Prompt API Spec Discussion**: [Issue #203](https://github.com/webmachinelearning/prompt-api/issues/203)
 - **Prompt API Explainer**: [W3C WebML Prompt API Explainer](https://github.com/webmachinelearning/prompt-api)
 

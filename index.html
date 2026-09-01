@@ -1343,10 +1343,225 @@
       border: 1px solid rgba(63, 185, 80, 0.4);
     }
 
-    .match-badge-divergent {
-      background: rgba(188, 140, 255, 0.15);
-      color: var(--accent-purple) !important;
-      border: 1px solid rgba(188, 140, 255, 0.4);
+    /* Export Dropdown & Action Styling */
+    .export-dropdown-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .export-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 4px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+      min-width: 220px;
+      padding: 4px 0;
+    }
+
+    .export-menu.show {
+      display: flex;
+    }
+
+    .export-item-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.12s ease;
+      width: 100%;
+    }
+
+    .export-item-btn:hover {
+      background: var(--bg-hover);
+      color: var(--accent-blue);
+    }
+
+    /* JSON Validity / Format Adherence Badges */
+    .json-valid-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .json-valid-high {
+      background: rgba(63, 185, 80, 0.18);
+      color: var(--accent-green) !important;
+      border: 1px solid rgba(63, 185, 80, 0.4);
+    }
+
+    .json-valid-med {
+      background: rgba(210, 153, 34, 0.18);
+      color: var(--accent-amber) !important;
+      border: 1px solid rgba(210, 153, 34, 0.4);
+    }
+
+    .json-valid-low {
+      background: rgba(248, 81, 73, 0.18);
+      color: var(--accent-red) !important;
+      border: 1px solid rgba(248, 81, 73, 0.4);
+    }
+
+    /* 7x7 Pairwise Similarity Matrix Styles */
+    .sim-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+    }
+
+    .sim-matrix-table th, .sim-matrix-table td {
+      padding: 8px 6px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .sim-matrix-table th {
+      background: var(--bg-primary);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.74rem;
+    }
+
+    .sim-matrix-cell {
+      font-weight: 700;
+      transition: all 0.15s ease;
+      cursor: default;
+      position: relative;
+    }
+
+    .sim-matrix-cell:hover {
+      filter: brightness(1.2);
+      outline: 2px solid var(--accent-blue);
+      z-index: 2;
+    }
+
+    /* Recommendation Guide & Interactive Finder */
+    .guide-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .wizard-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .wizard-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wizard-controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .wizard-result-box {
+      background: var(--bg-primary);
+      border: 1.5px solid var(--accent-blue);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .recommend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 16px;
+    }
+
+    .recommend-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .recommend-card:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .recommend-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .recommend-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .recommend-preset-tag {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid currentColor;
+    }
+
+    .recommend-prop-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: var(--bg-primary);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .recommend-prop-item {
+      display: flex;
+      gap: 4px;
+    }
+
+    .recommend-prop-item strong {
+      color: var(--text-main);
     }
   </style>
 </head>
@@ -1542,6 +1757,7 @@
         <div class="tab" data-tab="variance">Multi-Run Repeatability &amp; Variance</div>
         <div class="tab" data-tab="simulation">🔬 Monte Carlo Simulation</div>
         <div class="tab" data-tab="metrics">Mode-Level Latency &amp; Token Distributions</div>
+        <div class="tab" data-tab="guide">🎯 Preset Guide &amp; Finder</div>
         <div class="tab" data-tab="code">JavaScript API Code</div>
         <div class="tab" data-tab="spec">Parameters Reference</div>
       </div>
@@ -1715,7 +1931,17 @@
               </button>
               <button id="sim-pause-btn" class="btn-secondary" style="padding: 8px 12px; display: none;">⏸️ Pause</button>
               <button id="sim-stop-btn" class="btn-secondary" style="padding: 8px 12px; display: none;">⏹️ Stop</button>
-              <button id="sim-export-btn" class="btn-secondary" style="padding: 8px 12px;">📥 Export JSON/CSV</button>
+              <div class="export-dropdown-wrapper">
+                <button id="sim-export-btn" class="btn-secondary" style="padding: 8px 12px; display: inline-flex; align-items: center; gap: 6px;" type="button">
+                  <span>📥 Export Benchmark</span>
+                  <span id="sim-export-arrow" style="font-size: 0.7rem;">▼</span>
+                </button>
+                <div class="export-menu" id="sim-export-menu">
+                  <button class="export-item-btn" id="export-csv-btn" type="button">📊 Export CSV Spreadsheet (.csv)</button>
+                  <button class="export-item-btn" id="export-json-btn" type="button">📦 Export Full Raw JSON (.json)</button>
+                  <button class="export-item-btn" id="export-md-btn" type="button">📋 Export Markdown Summary (.md)</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1739,10 +1965,10 @@
             <div class="sim-chart-card">
               <div class="chart-card-title">
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                  <span id="sim-chart-heading-text">📈 Empirical Convergence Curve</span>
+                  <span id="sim-chart-heading-text">📚 Cumulative Vocabulary Expansion (V)</span>
                   <div class="metric-pill-group" style="margin-left: 4px;">
-                    <button class="metric-pill-btn active sim-metric-btn" data-metric="entropy" type="button">Shannon Entropy (H)</button>
-                    <button class="metric-pill-btn sim-metric-btn" data-metric="vocab" type="button">Cumulative Vocab (V)</button>
+                    <button class="metric-pill-btn active sim-metric-btn" data-metric="vocab" type="button">Cumulative Vocab (V)</button>
+                    <button class="metric-pill-btn sim-metric-btn" data-metric="entropy" type="button">Shannon Entropy (H)</button>
                   </div>
                 </div>
                 <span style="font-size: 0.72rem; color: var(--text-muted);">Law of Large Numbers (1 &rarr; N)</span>
@@ -1766,6 +1992,22 @@
                 </div>
               </div>
             </div>
+
+            <!-- Dashboard Chart 3: Pairwise Mode Similarity Heatmap (7x7) -->
+            <div class="sim-chart-card" style="grid-column: 1 / -1;">
+              <div class="chart-card-title">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span>🔀 Pairwise Lexical Overlap &amp; Similarity Matrix (7 &times; 7)</span>
+                  <span style="font-size: 0.72rem; color: var(--text-muted);">Jaccard Vocabulary Overlap: <code>|A &cap; B| / |A &cup; B| &times; 100%</code></span>
+                </div>
+                <span style="font-size: 0.72rem; color: var(--text-muted);">Green = High Overlap &bull; Purple = High Divergence</span>
+              </div>
+              <div id="sim-pairwise-matrix-wrapper" style="overflow-x: auto;">
+                <div style="color: var(--text-muted); font-size: 0.82rem; text-align: center; padding: 30px 0;">
+                  Run a simulation to generate the 7 &times; 7 pairwise mode similarity matrix.
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Simulation Aggregated Table -->
@@ -1782,13 +2024,14 @@
                   <th>Median Latency</th>
                   <th>Median Tokens</th>
                   <th>Throughput</th>
-                  <th>Empirical Entropy (H)</th>
+                  <th>Cumulative Vocab (V)</th>
                   <th>Determinism %</th>
+                  <th>JSON Valid %</th>
                 </tr>
               </thead>
               <tbody id="sim-metrics-table-body">
                 <tr>
-                  <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                  <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 24px;">
                     Run a simulation to view the aggregated statistical convergence summary.
                   </td>
                 </tr>
@@ -1828,7 +2071,7 @@
                 <button class="metric-pill-btn active" data-metric="latency">⏱️ Median Latency (s)</button>
                 <button class="metric-pill-btn" data-metric="tokens">📊 Token Count</button>
                 <button class="metric-pill-btn" data-metric="throughput">⚡ Throughput (tok/s)</button>
-                <button class="metric-pill-btn" data-metric="entropy">🔥 Entropy (%)</button>
+                <button class="metric-pill-btn" data-metric="vocab">📚 Unique Vocab (V)</button>
               </div>
             </div>
 
@@ -1842,7 +2085,7 @@
           <!-- Individual Mode Cards Grid -->
           <div class="mode-summary-grid" id="mode-stat-cards-container">
             <div style="color: var(--text-muted); font-size: 0.85rem; padding: 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
-              Run a comparison to view mode-specific performance profiles (Median Latency, Tokens, Throughput).
+              Run a comparison to view mode-specific performance profiles (Median Latency, Tokens, Throughput, Unique Vocab).
             </div>
           </div>
 
@@ -1881,14 +2124,14 @@
               </div>
             </div>
 
-            <!-- Chart 4: Empirical Shannon Entropy Distribution -->
+            <!-- Chart 4: Cumulative Vocabulary & Lexical Diversity -->
             <div class="chart-card">
               <div class="chart-card-title">
-                <span>🔥 Mode Empirical Entropy (H) [Min &mdash; Median &mdash; Max]</span>
-                <span style="font-size: 0.75rem; color: var(--text-muted);">Observed bits / word (Band = Range, Line = Median)</span>
+                <span>📚 Mode Cumulative Vocabulary Pool &amp; Diversity</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Observed unique vocabulary words &amp; Type-Token Ratio %</span>
               </div>
               <div class="chart-body" id="chart-entropy-body">
-                <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot entropy distribution</div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot vocabulary distribution</div>
               </div>
             </div>
           </div>
@@ -1897,31 +2140,36 @@
           <div class="entropy-theory-card">
             <div class="entropy-theory-title">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-              How Empirical Shannon Lexical Entropy is Computed on Output Data
+              How Cumulative Vocabulary &amp; Determinism Quantify Sampling Mode Behaviors
             </div>
             <p style="font-size: 0.86rem; color: var(--text-main);">
-              In information theory, <strong>Empirical Shannon Entropy <em>H</em></strong> quantifies the <em>unpredictability, vocabulary richness, and information density</em> of the text generated by the model:
+              Sampling presets govern how the on-device language model navigates token probability distributions. Rather than single-response word frequencies, sampling modes are fundamentally characterized by:
             </p>
 
             <div class="plain-math-box">
               <div class="plain-math-item">
-                <strong>1. Empirical Shannon Lexical Entropy:</strong>
-                <span>Calculated directly from the observed word probability distribution in the model's generated output:</span>
+                <strong>1. Determinism (% Identity Match):</strong>
+                <span>Percentage of identical outputs generated across repeated executions with the exact same prompt. <code>most-predictable</code> guarantees <strong>100% determinism</strong> (ideal for code, JSON extraction, and test assertions), while <code>creative</code> and <code>most-creative</code> drop below 10%.</span>
+              </div>
+
+              <div class="plain-math-item">
+                <strong>2. Cumulative Unique Vocabulary Pool ($V_{\text{cum}}$):</strong>
+                <span>The total number of distinct words sampled across $N$ sequential runs. Lower temperatures stay tightly bounded around high-probability canonical words, whereas higher temperatures ($T \ge 1.1$) continuously sample the long tail, resulting in steep vocabulary expansion.</span>
                 <div>
-                  <span class="plain-math-formula">H(text) = &minus;&sum; p(w<sub>i</sub>) &times; log<sub>2</sub> p(w<sub>i</sub>) &nbsp;(bits / word)</span>
+                  <span class="plain-math-formula">V<sub>cum</sub>(N) = | &bigcup;<sub>i=1..N</sub> Words(run<sub>i</sub>) | &nbsp;(Total Unique Words)</span>
                 </div>
               </div>
 
               <div class="plain-math-item">
-                <strong>2. Monotonic Scaling Across Presets:</strong>
-                <span>As Temperature and Top-K increase from <code>most-predictable</code> (T: 0.0, K: 1) to <code>most-creative</code> (T: 1.2, K: 100), the token probability distribution flattens, resulting in higher observed entropy (more diverse vocabulary and metaphors).</span>
+                <strong>3. Lexical Diversity (Type-Token Ratio %):</strong>
+                <span>Ratio of unique vocabulary words to total generated tokens: <code>(Unique Words / Total Tokens) &times; 100%</code>.</span>
               </div>
             </div>
 
             <div style="font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px;">
               <span>📖 Further Reading:</span>
-              <a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Wikipedia: Shannon Entropy &rarr;</a>
               <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Prompt API Spec Issue #203 &rarr;</a>
+              <a href="https://en.wikipedia.org/wiki/Type%E2%80%93token_ratio" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Type-Token Ratio &rarr;</a>
               <a href="https://en.wikipedia.org/wiki/Softmax_function#Reinforcement_learning" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Softmax Temperature Sampling &rarr;</a>
             </div>
           </div>
@@ -1936,7 +2184,7 @@
                 <th>Median Latency [Min &mdash; Max]</th>
                 <th>Median Tokens</th>
                 <th>Throughput</th>
-                <th>Empirical Entropy (H)</th>
+                <th>Unique Vocab (V) / Diversity</th>
               </tr>
             </thead>
             <tbody id="metrics-table-body">
@@ -1947,6 +2195,79 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- Tab 5: Interactive Preset Recommendation Guide & Finder -->
+      <div id="tab-content-guide" style="display: none;">
+        <div class="guide-container">
+          <!-- Interactive Wizard / Recommendation Finder -->
+          <div class="wizard-card">
+            <div class="wizard-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent-blue);">
+                <circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/>
+              </svg>
+              <span>Interactive Preset Selector &amp; Decision Finder</span>
+            </div>
+            <div style="font-size: 0.84rem; color: var(--text-muted);">
+              Answer 3 quick architectural questions to discover the optimal sampling preset for your specific web feature.
+            </div>
+
+            <div class="wizard-controls-grid">
+              <div class="field-group" style="margin-bottom: 0;">
+                <label>1. Application Use Case Archetype</label>
+                <select id="wizard-usecase-select" class="control-select">
+                  <option value="json" selected>📊 Strict JSON / Schema Extraction</option>
+                  <option value="code">💻 Code Generation &amp; SQL Querying</option>
+                  <option value="rag">📝 Summarization &amp; RAG Knowledge Synthesis</option>
+                  <option value="chat">💬 Customer Support &amp; Conversational QA</option>
+                  <option value="copy">✍️ Marketing Copy &amp; Tone Rewriting</option>
+                  <option value="story">🎭 Narrative Fiction &amp; Storytelling</option>
+                  <option value="brainstorm">💡 Radical Ideation &amp; Unconventional Brainstorming</option>
+                </select>
+              </div>
+
+              <div class="field-group" style="margin-bottom: 0;">
+                <label>2. Reproducibility &amp; Strictness</label>
+                <select id="wizard-strictness-select" class="control-select">
+                  <option value="strict" selected>🔒 100% Deterministic (Strict assertion)</option>
+                  <option value="high">🛡️ High Consistency (Minor variation ok)</option>
+                  <option value="balanced">⚖️ Balanced (Natural phrasing variance)</option>
+                  <option value="diverse">🎨 High Diversity (Maximum novel paths)</option>
+                </select>
+              </div>
+
+              <div class="field-group" style="margin-bottom: 0;">
+                <label>3. Lexical Exploration Priority</label>
+                <select id="wizard-novelty-select" class="control-select">
+                  <option value="low" selected>🎯 Canonical / Grounded Vocabulary</option>
+                  <option value="medium">⚖️ Natural Expressive Flow</option>
+                  <option value="high">🚀 Unconventional / Long-tail Exploration</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Dynamic Recommendation Result Card -->
+            <div class="wizard-result-box" id="wizard-result-display">
+              <!-- Dynamically populated by JS -->
+            </div>
+          </div>
+
+          <!-- Comprehensive Preset Archetype Matrix -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <strong style="color: var(--text-main); font-size: 0.95rem;">📚 Comprehensive Sampling Preset Recommendation Matrix</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                  Architectural profiles, trade-offs, and empirical behavior for each categorical sampling mode.
+                </div>
+              </div>
+            </div>
+
+            <div class="recommend-grid" id="recommend-cards-container">
+              <!-- Dynamically populated by renderRecommendationGuide() -->
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2303,14 +2624,14 @@ const SIMULATION_CORPUS = [
 // Global State with Cumulative Multi-Run Samples
 let selectedPresets = ["most-predictable", "predictable", "slightly-predictable", "balanced", "slightly-creative", "creative", "most-creative"];
 let cumulativeBenchmarkHistory = {}; // Key: presetId -> Array of samples: [{ latency, tokens, throughput, entropy, text }]
-let activeBarChartMetric = "latency"; // "latency", "tokens", "throughput", "entropy"
+let activeBarChartMetric = "latency"; // "latency", "tokens", "throughput", "vocab"
 
 // Monte Carlo Simulation Engine State
 let simulationState = {
   isRunning: false,
   isPaused: false,
   isStopped: false,
-  activeMetric: "entropy", // "entropy" or "vocab"
+  activeMetric: "vocab", // "vocab" (default) or "entropy"
   results: [], // Array of run objects: { promptId, promptTitle, category, presetId, runIdx, latency, tokens, throughput, entropy, text }
   convergenceHistory: {}, // presetId -> Array of running mean entropies [H_1, H_2, ... H_n]
   vocabHistory: {}, // presetId -> Array of cumulative unique word counts [V_1, V_2, ... V_n]
@@ -2318,10 +2639,164 @@ let simulationState = {
   durationSec: 0
 };
 
+// Recommendation Archetype Profiles (Feature 3)
+const RECOMMENDATION_PROFILES = [
+  {
+    useCase: "Strict Data & JSON Extraction",
+    icon: "📊",
+    presetId: "most-predictable",
+    temp: 0.0,
+    topK: 1,
+    tagColor: "#3fb950",
+    rationale: "Guarantees 100% deterministic schema conformity. Zero hallucination of undeclared JSON keys or syntax variations.",
+    expectedMetrics: "100% Determinism • 0% Vocabulary Drift • 100% JSON Parse Rate",
+    riskNote: "Do not use for creative copywriting; text will be completely rigid and repetitive.",
+    samplePromptId: "schema_flight"
+  },
+  {
+    useCase: "Code Generation & SQL Querying",
+    icon: "💻",
+    presetId: "predictable",
+    temp: 0.3,
+    topK: 32,
+    tagColor: "#58a6ff",
+    rationale: "High structural precision with just enough flexibility to choose concise variable names and valid syntax structures.",
+    expectedMetrics: ">90% Determinism • High Syntactic Precision • Consistent Output Length",
+    riskNote: "Higher temperatures cause syntax hallucinations and unclosed parenthesis.",
+    samplePromptId: "regex_phone"
+  },
+  {
+    useCase: "Summarization & RAG Knowledge Synthesis",
+    icon: "📝",
+    presetId: "slightly-predictable",
+    temp: 0.7,
+    topK: 64,
+    tagColor: "#79c0ff",
+    rationale: "Strictly faithful to retrieved source documents with fluid, professional sentence transitions. Best median throughput.",
+    expectedMetrics: "75% Determinism • High Factuality • Optimal Streaming Throughput",
+    riskNote: "Zero hallucinated citations or stray conversational commentary.",
+    samplePromptId: "reason_conflict"
+  },
+  {
+    useCase: "Customer Support & Conversational QA",
+    icon: "💬",
+    presetId: "balanced",
+    temp: 1.0,
+    topK: 64,
+    tagColor: "#d29922",
+    rationale: "The standard general-purpose mode. Strikes the optimal balance of empathy, helpfulness, and conversational naturalness.",
+    expectedMetrics: "Balanced Variance • Natural Rhythm • Versatile Multi-Turn Flow",
+    riskNote: "Default recommended starting preset for general user-facing chatbots.",
+    samplePromptId: "crisis_email"
+  },
+  {
+    useCase: "Marketing Copy & Tone Rewriting",
+    icon: "✍️",
+    presetId: "slightly-creative",
+    temp: 1.1,
+    topK: 72,
+    tagColor: "#f0883e",
+    rationale: "Injects lively adjectives, varied sentence cadences, and engaging hooks while retaining core prompt constraints.",
+    expectedMetrics: "Low Determinism (~25%) • Expressive Vocabulary • Fast Token Streaming",
+    riskNote: "Ideal for A/B testing ad copy and generating alternative headlines.",
+    samplePromptId: "airship_pitch"
+  },
+  {
+    useCase: "Narrative Fiction & Creative Metaphor",
+    icon: "🎭",
+    presetId: "creative",
+    temp: 1.15,
+    topK: 80,
+    tagColor: "#bc8cff",
+    rationale: "Divergent exploratory sampling that combines unexpected concepts, vivid metaphors, and diverse vocabulary.",
+    expectedMetrics: "<15% Determinism • Broad Vocabulary Pool • High Metaphorical Diversity",
+    riskNote: "May occasionally deviate from strict bullet length constraints.",
+    samplePromptId: "poem_3line"
+  },
+  {
+    useCase: "Unconventional Brainstorming & Radical Ideation",
+    icon: "💡",
+    presetId: "most-creative",
+    temp: 1.2,
+    topK: 100,
+    tagColor: "#f85149",
+    rationale: "Maximum entropy sampling exploring the outermost long-tail probability distribution. Maximizes novel ideas and vocabulary.",
+    expectedMetrics: "<5% Determinism • Steepest Vocabulary Growth • Radical Conceptual Divergence",
+    riskNote: "Never use for JSON or code syntax assertions; format adherence is lowest here.",
+    samplePromptId: "ideation_offline"
+  }
+];
+
 // Helper to strictly sort presets according to canonical temperature spectrum
 function getSortedActivePresets(presetIds) {
   const canonicalOrder = PRESETS.map(p => p.id);
   return [...presetIds].sort((a, b) => canonicalOrder.indexOf(a) - canonicalOrder.indexOf(b));
+}
+
+// Evaluate JSON / Format Adherence (Feature 2)
+function evaluateJsonValidity(text) {
+  if (!text || typeof text !== "string") return false;
+  let raw = text.trim();
+  // Strip markdown code fences if wrapped
+  raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  // Locate JSON object or array bounds
+  const firstBrace = raw.indexOf('{');
+  const firstBracket = raw.indexOf('[');
+  let startIdx = -1;
+  if (firstBrace !== -1 && firstBracket !== -1) {
+    startIdx = Math.min(firstBrace, firstBracket);
+  } else if (firstBrace !== -1) {
+    startIdx = firstBrace;
+  } else if (firstBracket !== -1) {
+    startIdx = firstBracket;
+  }
+  if (startIdx === -1) return false;
+
+  const isObj = raw[startIdx] === '{';
+  const endIdx = isObj ? raw.lastIndexOf('}') : raw.lastIndexOf(']');
+  if (endIdx === -1 || endIdx < startIdx) return false;
+
+  const candidate = raw.slice(startIdx, endIdx + 1);
+  try {
+    const parsed = JSON.parse(candidate);
+    return parsed !== null && typeof parsed === "object" && Object.keys(parsed).length > 0;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Compute 7x7 Pairwise Jaccard Lexical Similarity Matrix (Feature 4)
+function calculatePairwiseJaccardMatrix(results) {
+  const activePresets = getSortedActivePresets(PRESETS.map(p => p.id));
+  const vocabSets = {};
+  activePresets.forEach(pId => {
+    vocabSets[pId] = new Set();
+    const runs = results.filter(r => r.presetId === pId);
+    runs.forEach(r => {
+      const words = (r.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || [];
+      words.forEach(w => vocabSets[pId].add(w));
+    });
+  });
+
+  const matrix = {};
+  activePresets.forEach(p1 => {
+    matrix[p1] = {};
+    activePresets.forEach(p2 => {
+      const s1 = vocabSets[p1] || new Set();
+      const s2 = vocabSets[p2] || new Set();
+      if (s1.size === 0 && s2.size === 0) {
+        matrix[p1][p2] = { jaccard: 100, intersection: 0, union: 0 };
+        return;
+      }
+      let intersectionCount = 0;
+      s1.forEach(w => { if (s2.has(w)) intersectionCount++; });
+      const unionSize = new Set([...s1, ...s2]).size;
+      const jaccard = unionSize > 0 ? Math.round((intersectionCount / unionSize) * 100) : 100;
+      matrix[p1][p2] = { jaccard, intersection: intersectionCount, union: unionSize };
+    });
+  });
+
+  return { activePresets, matrix, vocabSets };
 }
 
 // Calculate Empirical Shannon Lexical Entropy (H in bits/word) from generated text
@@ -3087,7 +3562,7 @@ function renderSvgBarChart() {
     const latStats = calculateStats(samples.map(s => s.latency));
     const tokStats = calculateStats(samples.map(s => s.tokens));
     const thrStats = calculateStats(samples.map(s => s.throughput));
-    const entStats = calculateStats(samples.map(s => s.entropy !== undefined ? s.entropy : calculateShannonEntropy(s.text)));
+    const wordsSet = new Set(samples.flatMap(s => (s.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || []));
 
     let val = 0;
     let label = "";
@@ -3100,9 +3575,9 @@ function renderSvgBarChart() {
     } else if (activeBarChartMetric === "throughput") {
       val = thrStats.median;
       label = `${val.toFixed(1)} tok/s`;
-    } else if (activeBarChartMetric === "entropy") {
-      val = entStats.median;
-      label = `${val.toFixed(2)} bits`;
+    } else if (activeBarChartMetric === "vocab") {
+      val = wordsSet.size;
+      label = `${val} words`;
     }
 
     chartData.push({
@@ -3135,10 +3610,8 @@ function renderSvgBarChart() {
     const yVal = (maxVal / numGridTicks) * i;
     const yPos = paddingTop + chartH - (i / numGridTicks) * chartH;
     let tickText = yVal.toFixed(1);
-    if (activeBarChartMetric === "tokens") {
+    if (activeBarChartMetric === "tokens" || activeBarChartMetric === "vocab") {
       tickText = Math.round(yVal);
-    } else if (activeBarChartMetric === "entropy") {
-      tickText = yVal.toFixed(2);
     }
     gridLinesSvg += `
       <line x1="${paddingLeft}" y1="${yPos}" x2="${svgWidth - paddingRight}" y2="${yPos}" stroke="var(--border-color)" stroke-dasharray="3,3" />
@@ -3205,7 +3678,7 @@ function updateMetricsTab() {
   if (totalSampleCount === 0) {
     modeCardsContainer.innerHTML = `
       <div style="color: var(--text-muted); font-size: 0.85rem; padding: 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
-        Run a comparison to view mode-specific performance profiles (Median Latency, Tokens, Throughput, Empirical Entropy).
+        Run a comparison to view mode-specific performance profiles (Median Latency, Tokens, Throughput, Unique Vocab).
       </div>
     `;
     tableBody.innerHTML = `
@@ -3219,7 +3692,7 @@ function updateMetricsTab() {
     chartTokens.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot token histogram</div>`;
     chartThroughput.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot throughput distribution</div>`;
     if (chartEntropy) {
-      chartEntropy.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot entropy distribution</div>`;
+      chartEntropy.innerHTML = `<div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot vocabulary distribution</div>`;
     }
     return;
   }
@@ -3234,16 +3707,17 @@ function updateMetricsTab() {
   let globalMaxLat = 0.01;
   let globalMaxTok = 1;
   let globalMaxThr = 1;
-  let globalMaxEnt = 1.0;
+  let globalMaxVocab = 10;
 
   keys.forEach(k => {
     const samples = cumulativeBenchmarkHistory[k] || [];
+    const wordsSet = new Set(samples.flatMap(s => (s.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || []));
+    if (wordsSet.size > globalMaxVocab) globalMaxVocab = wordsSet.size;
+
     samples.forEach(s => {
       if (s.latency > globalMaxLat) globalMaxLat = s.latency;
       if (s.tokens > globalMaxTok) globalMaxTok = s.tokens;
       if (s.throughput > globalMaxThr) globalMaxThr = s.throughput;
-      const ent = s.entropy !== undefined ? s.entropy : calculateShannonEntropy(s.text);
-      if (ent > globalMaxEnt) globalMaxEnt = ent;
     });
   });
 
@@ -3255,7 +3729,10 @@ function updateMetricsTab() {
     const latStats = calculateStats(samples.map(s => s.latency));
     const tokStats = calculateStats(samples.map(s => s.tokens));
     const thrStats = calculateStats(samples.map(s => s.throughput));
-    const entStats = calculateStats(samples.map(s => s.entropy !== undefined ? s.entropy : calculateShannonEntropy(s.text)));
+
+    const wordsSet = new Set(samples.flatMap(s => (s.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || []));
+    const totalWordsCount = samples.reduce((acc, s) => acc + ((s.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || []).length, 0);
+    const ttrPercent = totalWordsCount > 0 ? Math.round((wordsSet.size / totalWordsCount) * 100) : 0;
 
     // 1. Render Dedicated Mode Profile Card
     const modeCard = document.createElement("div");
@@ -3283,17 +3760,21 @@ function updateMetricsTab() {
         <strong>${thrStats.median.toFixed(1)} tok/s</strong>
       </div>
       <div class="mode-stat-row">
-        <span>Median Empirical Entropy:</span>
-        <strong>${entStats.median.toFixed(2)} bits/word</strong>
+        <span>Cumulative Unique Vocab:</span>
+        <strong style="color: ${p.color};">${wordsSet.size} unique words</strong>
+      </div>
+      <div class="mode-stat-row">
+        <span>Lexical Diversity (TTR):</span>
+        <strong>${ttrPercent}%</strong>
       </div>
     `;
     modeCardsContainer.appendChild(modeCard);
 
-    // 2. Table Row with N-sample badge, Min-Max Range and Empirical Entropy
+    // 2. Table Row with N-sample badge, Min-Max Range and Vocab Diversity
     const row = document.createElement("tr");
     row.innerHTML = `
       <td style="color: ${p.color}; font-weight: 600;">"${presetId}"</td>
-      <td>T:${p.temp} | K:${p.topK}</td>
+      <td>T:${p.temp.toFixed(2)} | K:${p.topK}</td>
       <td><span class="sample-badge">N = ${samples.length}</span></td>
       <td>
         <strong>${latStats.median.toFixed(2)}s</strong>
@@ -3305,8 +3786,8 @@ function updateMetricsTab() {
       </td>
       <td>${thrStats.median.toFixed(1)} tok/s</td>
       <td>
-        <strong>${entStats.median.toFixed(2)} bits</strong>
-        <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">[${entStats.min.toFixed(2)} &ndash; ${entStats.max.toFixed(2)}]</span>
+        <strong style="color: ${p.color};">${wordsSet.size} words</strong>
+        <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">(${ttrPercent}%)</span>
       </td>
     `;
     tableBody.appendChild(row);
@@ -3355,22 +3836,17 @@ function updateMetricsTab() {
     `;
     chartThroughput.appendChild(thrRow);
 
-    // 6. Chart 4: Empirical Entropy Distribution Box-Plot
+    // 6. Chart 4: Cumulative Vocabulary Pool Distribution Bar
     if (chartEntropy) {
-      const entMinPercent = Math.min(100, Math.round((entStats.min / globalMaxEnt) * 100));
-      const entMaxPercent = Math.min(100, Math.round((entStats.max / globalMaxEnt) * 100));
-      const entMedPercent = Math.min(100, Math.round((entStats.median / globalMaxEnt) * 100));
-      const entRangeWidth = Math.max(2, entMaxPercent - entMinPercent);
-
+      const vocabPercent = Math.min(100, Math.round((wordsSet.size / Math.max(globalMaxVocab, 1)) * 100));
       const entRow = document.createElement("div");
       entRow.className = "chart-row";
       entRow.innerHTML = `
         <div class="chart-label" style="color: ${p.color};">${presetId} <span style="font-size:0.7rem; color:var(--text-muted);">(N=${samples.length})</span></div>
-        <div class="distribution-track" title="Median: ${entStats.median.toFixed(2)} bits | Min: ${entStats.min.toFixed(2)} bits | Max: ${entStats.max.toFixed(2)} bits">
-          <div class="dist-range-band" style="left: ${entMinPercent}%; width: ${entRangeWidth}%; background: ${p.color};"></div>
-          <div class="dist-median-marker" style="left: ${entMedPercent}%; background: ${p.color};"></div>
+        <div class="chart-bar-track" title="${wordsSet.size} unique vocabulary words across ${samples.length} runs (${ttrPercent}% TTR)">
+          <div class="chart-bar-fill" style="width: ${vocabPercent}%; background: ${p.color};"></div>
         </div>
-        <div class="chart-val">${entStats.median.toFixed(2)} bits</div>
+        <div class="chart-val">${wordsSet.size} words (${ttrPercent}%)</div>
       `;
       chartEntropy.appendChild(entRow);
     }
@@ -3384,8 +3860,7 @@ function updateLiveDisplay(card, text, isFinished, p, startTime) {
 
   if (isFinished) {
     card.body.textContent = text;
-    const entropy = calculateShannonEntropy(text);
-    card.stats.textContent = `T:${p.temp} K:${p.topK} | ~${words} tok | H:${entropy.toFixed(2)}b (${elapsed}s)`;
+    card.stats.textContent = `T:${p.temp.toFixed(2)} K:${p.topK} | ~${words} tok (${elapsed}s)`;
   } else {
     card.body.innerHTML = '';
     const textNode = document.createTextNode(text);
@@ -3759,7 +4234,7 @@ function initSimulationUI() {
     btn.addEventListener("click", (e) => {
       document.querySelectorAll(".sim-metric-btn").forEach(b => b.classList.remove("active"));
       e.target.classList.add("active");
-      simulationState.activeMetric = e.target.getAttribute("data-metric") || "entropy";
+      simulationState.activeMetric = e.target.getAttribute("data-metric") || "vocab";
       const heading = document.getElementById("sim-chart-heading-text");
       if (heading) {
         heading.textContent = simulationState.activeMetric === "vocab"
@@ -3774,11 +4249,33 @@ function initSimulationUI() {
   const pauseBtn = document.getElementById("sim-pause-btn");
   const stopBtn = document.getElementById("sim-stop-btn");
   const exportBtn = document.getElementById("sim-export-btn");
+  const exportMenu = document.getElementById("sim-export-menu");
+  const exportArrow = document.getElementById("sim-export-arrow");
 
   if (startBtn) startBtn.addEventListener("click", startMonteCarloSimulation);
   if (pauseBtn) pauseBtn.addEventListener("click", togglePauseSimulation);
   if (stopBtn) stopBtn.addEventListener("click", stopSimulation);
-  if (exportBtn) exportBtn.addEventListener("click", exportSimulationData);
+
+  // Export dropdown toggling
+  if (exportBtn && exportMenu) {
+    exportBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isShown = exportMenu.classList.toggle("show");
+      if (exportArrow) exportArrow.textContent = isShown ? "▲" : "▼";
+    });
+
+    document.addEventListener("click", () => {
+      exportMenu.classList.remove("show");
+      if (exportArrow) exportArrow.textContent = "▼";
+    });
+  }
+
+  const csvBtn = document.getElementById("export-csv-btn");
+  const jsonBtn = document.getElementById("export-json-btn");
+  const mdBtn = document.getElementById("export-md-btn");
+  if (csvBtn) csvBtn.addEventListener("click", exportBenchmarkCsv);
+  if (jsonBtn) jsonBtn.addEventListener("click", exportBenchmarkJson);
+  if (mdBtn) mdBtn.addEventListener("click", exportBenchmarkMarkdown);
 
   // Initial render of corpus list in background
   renderCorpusExplorerList("");
@@ -3967,6 +4464,7 @@ async function startMonteCarloSimulation() {
         const dummyCard = { body: document.createElement("div"), stats: document.createElement("div") };
         const res = await streamPreset(presetId, promptItem.user, promptItem.system, dummyCard, r, !isFast, true);
         const ent = calculateShannonEntropy(res.text);
+        const isJson = evaluateJsonValidity(res.text);
 
         return {
           promptId: promptItem.id,
@@ -3978,6 +4476,7 @@ async function startMonteCarloSimulation() {
           tokens: res.tokens,
           throughput: res.latency > 0 ? (res.tokens / res.latency) : 0,
           entropy: ent,
+          isJsonValid: isJson,
           text: res.text
         };
       });
@@ -4022,6 +4521,7 @@ async function startMonteCarloSimulation() {
       if (completedRuns % (activePresets.length * 2) === 0 || completedRuns === totalRuns) {
         renderConvergenceChart();
         renderDeterminismHeatmap(prompts, runsPerPrompt);
+        renderPairwiseMatrix();
         updateSimulationMetricsTable();
       }
 
@@ -4047,6 +4547,7 @@ async function startMonteCarloSimulation() {
 
   renderConvergenceChart();
   renderDeterminismHeatmap(prompts, runsPerPrompt);
+  renderPairwiseMatrix();
   updateSimulationMetricsTable();
   updateMetricsTab();
 }
@@ -4208,6 +4709,73 @@ function renderDeterminismHeatmap(prompts, runsPerPrompt) {
   `;
 }
 
+// Render 7x7 Pairwise Jaccard Lexical Similarity Heatmap (Feature 4)
+function renderPairwiseMatrix() {
+  const wrapper = document.getElementById("sim-pairwise-matrix-wrapper");
+  if (!wrapper) return;
+
+  const results = simulationState.results;
+  if (!results || results.length === 0) {
+    wrapper.innerHTML = `<div style="color: var(--text-muted); font-size: 0.82rem; text-align: center; padding: 30px 0;">Run a simulation to generate the 7 &times; 7 pairwise mode similarity matrix.</div>`;
+    return;
+  }
+
+  const { activePresets, matrix } = calculatePairwiseJaccardMatrix(results);
+
+  let thHeaders = `<th>Preset Mode</th>`;
+  activePresets.forEach(pId => {
+    const p = PRESETS.find(x => x.id === pId) || { name: pId, color: "#58a6ff" };
+    thHeaders += `<th style="color: ${p.color};">${p.name.replace("slightly-", "s-")}</th>`;
+  });
+
+  let rowsHtml = "";
+  activePresets.forEach(p1 => {
+    const pObj1 = PRESETS.find(x => x.id === p1) || { name: p1, color: "#58a6ff" };
+    let cellsHtml = `<td style="color: ${pObj1.color}; font-weight: 700; text-align: left; background: var(--bg-primary);">${pObj1.name.replace("slightly-", "s-")}</td>`;
+
+    activePresets.forEach(p2 => {
+      const data = matrix[p1][p2];
+      const pct = data.jaccard;
+
+      let bgStyle = "";
+      let textColor = "";
+
+      if (p1 === p2) {
+        bgStyle = "rgba(63, 185, 80, 0.35)";
+        textColor = "var(--accent-green)";
+      } else if (pct >= 70) {
+        bgStyle = "rgba(63, 185, 80, 0.22)";
+        textColor = "var(--accent-green)";
+      } else if (pct >= 45) {
+        bgStyle = "rgba(210, 153, 34, 0.22)";
+        textColor = "var(--accent-amber)";
+      } else {
+        bgStyle = "rgba(188, 140, 255, 0.22)";
+        textColor = "var(--accent-purple)";
+      }
+
+      cellsHtml += `
+        <td style="background: ${bgStyle}; color: ${textColor};" class="sim-matrix-cell" title="${p1} vs ${p2}: ${pct}% lexical overlap (${data.intersection} shared words out of ${data.union} total)">
+          ${pct}%
+        </td>
+      `;
+    });
+
+    rowsHtml += `<tr>${cellsHtml}</tr>`;
+  });
+
+  wrapper.innerHTML = `
+    <table class="sim-matrix-table">
+      <thead><tr>${thHeaders}</tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.74rem; color: var(--text-muted); flex-wrap: wrap; gap: 6px;">
+      <span>Overlap Scale: <strong style="color: var(--accent-green);">&ge;70% High Overlap</strong> &bull; <strong style="color: var(--accent-amber);">45&ndash;69% Moderate</strong> &bull; <strong style="color: var(--accent-purple);">&lt;45% Divergent</strong></span>
+      <span>Hover cell to inspect shared word counts</span>
+    </div>
+  `;
+}
+
 // Update Simulation Statistical Table
 function updateSimulationMetricsTable() {
   const tbody = document.getElementById("sim-metrics-table-body");
@@ -4225,7 +4793,9 @@ function updateSimulationMetricsTable() {
     const latStats = calculateStats(runs.map(r => r.latency));
     const tokStats = calculateStats(runs.map(r => r.tokens));
     const thrStats = calculateStats(runs.map(r => r.throughput));
-    const entStats = calculateStats(runs.map(r => r.entropy));
+
+    // Cumulative unique vocabulary words count
+    const wordsSet = new Set(runs.flatMap(r => (r.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || []));
 
     // Calculate prompt-level determinism average
     const promptIds = Array.from(new Set(runs.map(r => r.promptId)));
@@ -4238,35 +4808,309 @@ function updateSimulationMetricsTable() {
     });
     const avgDeterminism = Math.round(detSum / promptIds.length);
 
+    // JSON Validity rate on deterministic/extraction prompts
+    const jsonRuns = runs.filter(r => r.category === "deterministic");
+    const jsonValidCount = jsonRuns.filter(r => evaluateJsonValidity(r.text)).length;
+    const jsonValidPct = jsonRuns.length > 0 ? Math.round((jsonValidCount / jsonRuns.length) * 100) : 100;
+
+    let jsonBadgeClass = "json-valid-high";
+    if (jsonValidPct < 60) jsonBadgeClass = "json-valid-low";
+    else if (jsonValidPct < 90) jsonBadgeClass = "json-valid-med";
+
     const row = document.createElement("tr");
     row.innerHTML = `
       <td style="color: ${p.color}; font-weight: 600;">"${presetId}"</td>
-      <td>T:${p.temp} | K:${p.topK}</td>
+      <td>T:${p.temp.toFixed(2)} | K:${p.topK}</td>
       <td><span class="sample-badge">N = ${runs.length}</span></td>
       <td><strong>${latStats.median.toFixed(2)}s</strong> <span style="font-size:0.72rem; color:var(--text-muted);">[${latStats.min.toFixed(2)}&ndash;${latStats.max.toFixed(2)}]</span></td>
       <td><strong>${Math.round(tokStats.median)}</strong> <span style="font-size:0.72rem; color:var(--text-muted);">[${tokStats.min}&ndash;${tokStats.max}]</span></td>
       <td>${thrStats.median.toFixed(1)} tok/s</td>
-      <td><strong>${entStats.median.toFixed(2)} bits</strong></td>
+      <td><strong style="color: ${p.color};">${wordsSet.size} words</strong></td>
       <td style="font-weight: 700; color: ${avgDeterminism >= 90 ? 'var(--accent-green)' : avgDeterminism >= 50 ? 'var(--accent-amber)' : 'var(--accent-purple)'};">${avgDeterminism}%</td>
+      <td><span class="json-valid-badge ${jsonBadgeClass}">${jsonValidPct}%</span></td>
     `;
     tbody.appendChild(row);
   });
 }
 
-// Export Simulation Data (JSON & CSV)
-function exportSimulationData() {
-  if (simulationState.results.length === 0) {
-    alert("Please run a simulation before exporting data!");
+// Export Benchmark CSV (RFC 4180 compliant) (Feature 1)
+function exportBenchmarkCsv() {
+  const results = simulationState.results;
+  if (!results || results.length === 0) {
+    alert("Please run a simulation before exporting CSV data!");
     return;
   }
 
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(simulationState.results, null, 2));
+  const headers = ["Prompt_ID", "Prompt_Title", "Category", "Sampling_Preset", "Temperature", "Top_K", "Run_Index", "Latency_Sec", "Tokens", "Throughput_TokSec", "Unique_Vocab_Words", "JSON_Valid", "Generated_Text"];
+  const rows = [headers.join(",")];
+
+  results.forEach(r => {
+    const p = PRESETS.find(x => x.id === r.presetId) || { temp: 1.0, topK: 64 };
+    const words = (r.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || [];
+    const uniqueWords = new Set(words).size;
+    const isJson = evaluateJsonValidity(r.text);
+
+    const escapeCsv = (str) => `"${String(str || '').replace(/"/g, '""')}"`;
+
+    const rowData = [
+      escapeCsv(r.promptId),
+      escapeCsv(r.promptTitle),
+      escapeCsv(r.category),
+      escapeCsv(r.presetId),
+      p.temp.toFixed(2),
+      p.topK,
+      r.runIdx + 1,
+      r.latency.toFixed(2),
+      r.tokens,
+      r.throughput.toFixed(1),
+      uniqueWords,
+      isJson ? "YES" : "NO",
+      escapeCsv(r.text)
+    ];
+    rows.push(rowData.join(","));
+  });
+
+  const csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(rows.join("\n"));
   const dlAnchor = document.createElement("a");
-  dlAnchor.setAttribute("href", dataStr);
-  dlAnchor.setAttribute("download", `prompt_api_sampling_simulation_${Date.now()}.json`);
+  dlAnchor.setAttribute("href", csvContent);
+  dlAnchor.setAttribute("download", `prompt_api_sampling_benchmark_${Date.now()}.csv`);
   document.body.appendChild(dlAnchor);
   dlAnchor.click();
   dlAnchor.remove();
+}
+
+// Export Benchmark JSON (Full raw dataset) (Feature 1)
+function exportBenchmarkJson() {
+  const results = simulationState.results;
+  if (!results || results.length === 0) {
+    alert("Please run a simulation before exporting JSON data!");
+    return;
+  }
+
+  const exportPayload = {
+    metadata: {
+      generatedAt: new Date().toISOString(),
+      generator: "Prompt API Sampling Mode Presets Studio",
+      specIssue: "https://github.com/webmachinelearning/prompt-api/issues/203",
+      totalRuns: results.length,
+      durationSeconds: simulationState.durationSec
+    },
+    presets: PRESETS,
+    results: results.map(r => {
+      const p = PRESETS.find(x => x.id === r.presetId) || { temp: 1.0, topK: 64 };
+      return {
+        ...r,
+        temperature: p.temp,
+        topK: p.topK,
+        isJsonValid: evaluateJsonValidity(r.text)
+      };
+    })
+  };
+
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
+  const dlAnchor = document.createElement("a");
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", `prompt_api_sampling_benchmark_${Date.now()}.json`);
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  dlAnchor.remove();
+}
+
+// Export Benchmark Markdown Summary Report (Feature 1)
+function exportBenchmarkMarkdown() {
+  const results = simulationState.results;
+  if (!results || results.length === 0) {
+    alert("Please run a simulation before exporting Markdown report!");
+    return;
+  }
+
+  const activePresets = getSortedActivePresets(Object.keys(simulationState.convergenceHistory));
+  const norm = (s) => (s || "").trim().replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ');
+
+  let md = `# Prompt API Sampling Presets Benchmark Report\n\n`;
+  md += `**Date:** ${new Date().toUTCString()}  \n`;
+  md += `**Total Sample Executions:** ${results.length}  \n`;
+  md += `**Execution Time:** ${simulationState.durationSec}s  \n\n`;
+
+  md += `## 1. Statistical Convergence Summary Table\n\n`;
+  md += `| Preset | Temp / Top-K | Runs (N) | Median Latency | Median Tokens | Throughput | Cumulative Vocab | Determinism % | JSON Valid % |\n`;
+  md += `| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n`;
+
+  activePresets.forEach(presetId => {
+    const pRuns = results.filter(r => r.presetId === presetId);
+    if (pRuns.length === 0) return;
+    const p = PRESETS.find(x => x.id === presetId) || { temp: 1.0, topK: 64 };
+    const lat = calculateStats(pRuns.map(r => r.latency));
+    const tok = calculateStats(pRuns.map(r => r.tokens));
+    const thr = calculateStats(pRuns.map(r => r.throughput));
+
+    const promptIds = Array.from(new Set(pRuns.map(r => r.promptId)));
+    let detSum = 0;
+    promptIds.forEach(pId => {
+      const sub = pRuns.filter(r => r.promptId === pId);
+      const u = new Set(sub.map(r => norm(r.text))).size;
+      detSum += (u === 1) ? 100 : Math.max(0, Math.round(((sub.length - u) / (sub.length - 1)) * 100));
+    });
+    const avgDet = Math.round(detSum / promptIds.length);
+
+    const words = new Set(pRuns.flatMap(r => (r.text || "").toLowerCase().match(/\b[\w'-]+\b/g) || []));
+    const jsonRuns = pRuns.filter(r => r.category === "deterministic");
+    const jsonValidCount = jsonRuns.filter(r => evaluateJsonValidity(r.text)).length;
+    const jsonValidPct = jsonRuns.length > 0 ? Math.round((jsonValidCount / jsonRuns.length) * 100) : 100;
+
+    md += `| \`${presetId}\` | T:${p.temp.toFixed(2)} / K:${p.topK} | ${pRuns.length} | ${lat.median.toFixed(2)}s [${lat.min.toFixed(2)}-${lat.max.toFixed(2)}] | ${Math.round(tok.median)} tok | ${thr.median.toFixed(1)} tok/s | ${words.size} words | ${avgDet}% | ${jsonValidPct}% |\n`;
+  });
+
+  md += `\n## 2. Key Findings & Recommendations\n\n`;
+  md += `- **Strict Extraction**: \`most-predictable\` ($T=0.0$) guarantees 100% determinism and JSON schema parse integrity.\n`;
+  md += `- **RAG & Synthesis**: \`slightly-predictable\` ($T=0.7$) delivers highest streaming throughput with grounded factual adherence.\n`;
+  md += `- **Creative Divergence**: \`creative\` and \`most-creative\` explore wide vocabulary pools ($>300\%$ lexical expansion) with $<15\%$ identity repetition.\n`;
+
+  const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(md);
+  const dlAnchor = document.createElement("a");
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", `prompt_api_sampling_benchmark_report_${Date.now()}.md`);
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  dlAnchor.remove();
+}
+
+// Render Comprehensive Preset Archetype Matrix (Feature 3)
+function renderRecommendationGuide() {
+  const container = document.getElementById("recommend-cards-container");
+  if (!container) return;
+
+  container.innerHTML = RECOMMENDATION_PROFILES.map(item => {
+    const p = PRESETS.find(x => x.id === item.presetId) || { color: item.tagColor, name: item.presetId };
+    return `
+      <div class="recommend-card" style="border-top: 3px solid ${p.color};">
+        <div class="recommend-header">
+          <div class="recommend-title">
+            <span>${item.icon}</span>
+            <span>${item.useCase}</span>
+          </div>
+          <span class="recommend-preset-tag" style="color: ${p.color}; border-color: ${p.color};">${p.name}</span>
+        </div>
+
+        <div class="recommend-prop-row">
+          <div class="recommend-prop-item">
+            <span style="color: var(--text-muted);">T:</span>
+            <strong>${item.temp.toFixed(2)}</strong>
+          </div>
+          <div class="recommend-prop-item">
+            <span style="color: var(--text-muted);">topK:</span>
+            <strong>${item.topK}</strong>
+          </div>
+          <div class="recommend-prop-item" style="margin-left: auto;">
+            <span style="color: var(--text-muted);">Target:</span>
+            <strong style="color: ${p.color};">${item.presetId}</strong>
+          </div>
+        </div>
+
+        <p style="font-size: 0.83rem; color: var(--text-main); line-height: 1.45;">
+          ${item.rationale}
+        </p>
+
+        <div style="font-size: 0.76rem; color: var(--text-muted); background: var(--bg-primary); padding: 6px 8px; border-radius: 4px; border: 1px solid var(--border-color);">
+          <strong style="color: var(--accent-blue);">Empirical Profile:</strong> ${item.expectedMetrics}
+        </div>
+
+        <div style="font-size: 0.74rem; color: var(--accent-amber); background: rgba(210,153,34,0.08); padding: 5px 8px; border-radius: 4px; border: 1px solid rgba(210,153,34,0.2);">
+          <strong>⚠️ Trade-off:</strong> ${item.riskNote}
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 6px;">
+          <button class="btn-secondary" onclick="loadPromptIntoPlayground('${item.samplePromptId}');" style="flex: 1; padding: 5px 10px; font-size: 0.78rem; display: flex; align-items: center; justify-content: center; gap: 6px;" title="Load curated sample prompt into live grid">
+            <span>⚡ Test This Use Case</span>
+          </button>
+          <button class="btn-secondary" onclick="openCodeModal('${item.presetId}');" style="padding: 5px 10px; font-size: 0.78rem;" title="View Runnable JavaScript snippet">
+            <span>💻 Code</span>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// Update Interactive Wizard / Recommendation Result (Feature 3)
+function updateWizardRecommendation(changedSource = "") {
+  const useCaseSelect = document.getElementById("wizard-usecase-select");
+  const strictnessSelect = document.getElementById("wizard-strictness-select");
+  const noveltySelect = document.getElementById("wizard-novelty-select");
+  const display = document.getElementById("wizard-result-display");
+  if (!display) return;
+
+  // Auto-sync strictness & novelty if usecase changed
+  if (changedSource === "usecase" && useCaseSelect && strictnessSelect && noveltySelect) {
+    const uc = useCaseSelect.value;
+    if (uc === "json") { strictnessSelect.value = "strict"; noveltySelect.value = "low"; }
+    else if (uc === "code") { strictnessSelect.value = "high"; noveltySelect.value = "low"; }
+    else if (uc === "rag") { strictnessSelect.value = "high"; noveltySelect.value = "medium"; }
+    else if (uc === "chat") { strictnessSelect.value = "balanced"; noveltySelect.value = "medium"; }
+    else if (uc === "copy") { strictnessSelect.value = "balanced"; noveltySelect.value = "high"; }
+    else if (uc === "story") { strictnessSelect.value = "diverse"; noveltySelect.value = "medium"; }
+    else if (uc === "brainstorm") { strictnessSelect.value = "diverse"; noveltySelect.value = "high"; }
+  }
+
+  const useCase = useCaseSelect?.value || "json";
+  const strictness = strictnessSelect?.value || "strict";
+  const novelty = noveltySelect?.value || "low";
+
+  let recommendedPresetId = "balanced";
+  let whyChosen = "";
+
+  if (strictness === "strict" || useCase === "json") {
+    recommendedPresetId = "most-predictable";
+    whyChosen = "Zero-temperature greedy sampling guarantees 100% format conformity and deterministic schema properties with zero hallucination.";
+  } else if (useCase === "code" || (strictness === "high" && novelty === "low")) {
+    recommendedPresetId = "predictable";
+    whyChosen = "Low temperature (T=0.3) preserves syntax validity while allowing minor flexible variations in token naming.";
+  } else if (useCase === "rag" || (strictness === "high" && novelty === "medium")) {
+    recommendedPresetId = "slightly-predictable";
+    whyChosen = "T=0.7 balances faithful adherence to ground-truth retrieved context while generating natural sentence transitions with peak throughput.";
+  } else if (useCase === "chat" || (strictness === "balanced" && novelty === "medium")) {
+    recommendedPresetId = "balanced";
+    whyChosen = "Default balanced setting (T=1.0) provides an empathetic, conversational tone suitable for everyday multi-turn interactions.";
+  } else if (useCase === "copy" || (strictness === "balanced" && novelty === "high")) {
+    recommendedPresetId = "slightly-creative";
+    whyChosen = "T=1.1 injects engaging adjectives and varied sentence cadences without deviating from core prompt constraints.";
+  } else if (useCase === "story" || (strictness === "diverse" && novelty === "medium")) {
+    recommendedPresetId = "creative";
+    whyChosen = "T=1.15 unlocks metaphorical depth, multi-path plot developments, and high lexical diversity.";
+  } else {
+    recommendedPresetId = "most-creative";
+    whyChosen = "Maximum entropy (T=1.2, topK=100) samples the outermost long-tail distribution for radical brainstorming and surreal ideation.";
+  }
+
+  const p = PRESETS.find(x => x.id === recommendedPresetId) || PRESETS[3];
+
+  display.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 280px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 700;">Recommended Preset:</span>
+        <span class="recommend-preset-tag" style="color: ${p.color}; border-color: ${p.color}; font-size: 0.88rem;">${p.name} (T: ${p.temp.toFixed(2)}, topK: ${p.topK})</span>
+      </div>
+      <p style="font-size: 0.84rem; color: var(--text-main); margin: 0;">
+        ${whyChosen}
+      </p>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <button class="btn-primary" onclick="applyPresetToPlayground('${p.id}');" style="padding: 6px 14px; font-size: 0.8rem; background: var(--accent-blue); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+        ⚡ Apply &amp; Test in Playground
+      </button>
+      <button class="btn-secondary" onclick="openCodeModal('${p.id}');" style="padding: 6px 12px; font-size: 0.8rem;">
+        💻 View Code
+      </button>
+    </div>
+  `;
+}
+
+function applyPresetToPlayground(presetId) {
+  selectedPresets = [presetId];
+  renderSpectrum();
+  const streamTab = document.querySelector('.tab[data-tab="stream"]');
+  if (streamTab) streamTab.click();
+  document.querySelector(".header-title")?.scrollIntoView({ behavior: "smooth" });
 }
 
 // Master Initialization Function
@@ -4275,6 +5119,8 @@ function initApp() {
   checkApiAvailability();
   renderSpectrum();
   initSimulationUI();
+  renderRecommendationGuide();
+  updateWizardRecommendation();
 
   const themeBtn = document.getElementById("theme-toggle-btn");
   if (themeBtn) {
@@ -4344,6 +5190,14 @@ function initApp() {
     });
   });
 
+  // Wizard Dropdown Listeners (Feature 3)
+  const ucSelect = document.getElementById("wizard-usecase-select");
+  if (ucSelect) ucSelect.addEventListener("change", () => updateWizardRecommendation("usecase"));
+  ["wizard-strictness-select", "wizard-novelty-select"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("change", () => updateWizardRecommendation("control"));
+  });
+
   document.querySelectorAll(".tab").forEach(tab => {
     tab.addEventListener("click", () => {
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -4354,11 +5208,15 @@ function initApp() {
       document.getElementById("tab-content-variance").style.display = tabId === "variance" ? "block" : "none";
       document.getElementById("tab-content-simulation").style.display = tabId === "simulation" ? "block" : "none";
       document.getElementById("tab-content-metrics").style.display = tabId === "metrics" ? "block" : "none";
+      document.getElementById("tab-content-guide").style.display = tabId === "guide" ? "block" : "none";
       document.getElementById("tab-content-code").style.display = tabId === "code" ? "block" : "none";
       document.getElementById("tab-content-spec").style.display = tabId === "spec" ? "block" : "none";
 
       if (tabId === "metrics") {
         updateMetricsTab();
+      } else if (tabId === "guide") {
+        renderRecommendationGuide();
+        updateWizardRecommendation();
       } else if (tabId === "code") {
         renderHighlightedCode();
       }

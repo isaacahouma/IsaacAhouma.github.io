@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Prompt API Parameters Origin Trial Token for https://isaacahouma.github.io -->
-  <meta http-equiv="origin-trial" content="ApZlvJnoCjivVB0KWbLrIrXtatCbSCHcVSgUd9Vto4WMKFF+O1gmMywhTa/zIelnmAjZXvkZydb4ugOfplpqRAoAAABzeyJvcmlnaW4iOiJodHRwczovL2lzYWFjYWhvdW1hLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElQYXJhbXMiLCJleHBpcnkiOjE4MDAzMTY4MDAsImlzU3ViZG9tYWluIjp0cnVlfQ==">
-  <title>Prompt API: Sampling Mode Presets Studio</title>
-  <style>
+<meta charset="UTF-8">
+<title>Prompt API: Sampling Mode Presets Studio</title>
+<style>
+
     :root {
       --bg-primary: #0d1117;
       --bg-secondary: #161b22;
@@ -310,7 +308,8 @@
       align-items: center;
       margin-bottom: 12px;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
+      user-select: none;
     }
 
     .spectrum-header h2 {
@@ -319,10 +318,38 @@
       color: var(--text-main) !important;
     }
 
+    .spectrum-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent-blue);
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .spectrum-toggle-btn {
+      background: var(--bg-card);
+      color: var(--text-main) !important;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .spectrum-toggle-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent-blue);
+    }
+
     .preset-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 10px;
+      transition: all 0.2s ease;
     }
 
     @media (max-width: 1100px) {
@@ -500,41 +527,107 @@
       background: var(--bg-hover);
     }
 
+    /* Top-Level Modern Navigation Bar */
+    .main-nav-bar {
+      display: flex;
+      gap: 6px;
+      margin-top: 14px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 6px 8px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      scrollbar-width: thin;
+    }
+
+    .nav-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 7px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted) !important;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      font-family: var(--font-sans);
+    }
+
+    .nav-tab:hover {
+      color: var(--text-main) !important;
+      background: var(--bg-hover);
+    }
+
+    .nav-tab.active {
+      color: #ffffff !important;
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(88, 166, 255, 0.25);
+    }
+
+    .nav-tab-icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .nav-tab-label {
+      font-size: 0.88rem;
+    }
+
+    .sub-nav-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .sub-tab-btn {
+      background: var(--bg-card);
+      color: var(--text-muted) !important;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 7px 15px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sub-tab-btn:hover {
+      color: var(--text-main) !important;
+      border-color: var(--accent-blue);
+    }
+
+    .sub-tab-btn.active {
+      background: var(--accent-blue);
+      color: #ffffff !important;
+      border-color: var(--accent-blue);
+    }
+
+    .tab-pane {
+      width: 100%;
+      animation: fadeIn 0.15s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0.6; transform: translateY(2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Output Results Area */
     .results-area {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      border-bottom: 1px solid var(--border-color);
-      overflow-x: auto;
-    }
-
-    .tab {
-      padding: 8px 14px;
-      font-size: 0.88rem;
-      color: var(--text-muted) !important;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      font-weight: 500;
-      white-space: nowrap;
-      transition: color 0.15s ease;
-    }
-
-    .tab:hover {
-      color: var(--text-main) !important;
-    }
-
-    .tab.active {
-      color: var(--accent-blue) !important;
-      border-bottom-color: var(--accent-blue);
-      font-weight: 700;
+      gap: 12px;
     }
 
     .results-grid {
@@ -1563,9 +1656,144 @@
     .recommend-prop-item strong {
       color: var(--text-main);
     }
-  </style>
+  
+
+    /* Accordion & Prompt Selector Styles */
+    .domain-accordion-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s ease;
+    }
+    .domain-accordion-card:hover {
+      border-color: var(--accent-blue);
+    }
+    .domain-accordion-header {
+      padding: 10px 14px;
+      background: var(--bg-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid transparent;
+    }
+    .domain-accordion-header.expanded {
+      border-bottom-color: var(--border-color);
+    }
+    .domain-prompt-item {
+      padding: 8px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-card);
+      transition: background 0.1s ease;
+    }
+    .domain-prompt-item:last-child {
+      border-bottom: none;
+    }
+    .domain-prompt-item:hover {
+      background: var(--bg-hover);
+    }
+    .domain-prompt-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .domain-prompt-desc {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    /* Comprehensive Chart & Card Layout Overlap Prevention */
+    .bar-chart-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: visible;
+    }
+    .bar-chart-svg-container {
+      width: 100%;
+      min-height: 240px;
+      height: auto !important;
+      position: relative;
+      overflow: visible;
+      margin-bottom: 8px;
+    }
+    .bar-chart-svg {
+      width: 100%;
+      height: auto !important;
+      max-height: 320px;
+      display: block;
+    }
+    .mode-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 16px !important;
+      position: relative;
+      clear: both;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+      gap: 16px;
+      margin-top: 16px !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .sim-chart-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+      position: relative;
+      box-sizing: border-box;
+    }
+    #sim-convergence-chart-wrapper {
+      min-height: 220px;
+      height: auto !important;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    #sim-convergence-chart-wrapper svg {
+      width: 100%;
+      height: auto !important;
+      max-height: 260px;
+      display: block;
+    }
+    .formula-card {
+      transition: border-color 0.15s ease;
+    }
+    .formula-card:hover {
+      border-color: var(--accent-blue);
+    }
+
+</style>
 </head>
 <body>
+
+
 
 <div class="container">
   <header>
@@ -1578,16 +1806,16 @@
       </h1>
       <p>Real-time comparative playground, mode-specific performance metrics &amp; variance benchmark</p>
     </div>
-    <div class="header-actions">
+        <div class="header-actions">
       <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
         <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
       </button>
-      <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" class="badge-link">
+      <a href="https://github.com/webmachinelearning/prompt-api" target="_blank" class="badge-link" title="W3C WebML Prompt API Repository & Spec Explainer">
         <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-        Spec Issue #203
-      </a>
-      <a href="https://github.com/webmachinelearning/prompt-api" target="_blank" class="badge-link">
         Prompt API Explainer
+      </a>
+      <a href="https://developer.chrome.com/docs/ai/built-in" target="_blank" class="badge-link" title="Chrome Built-in AI Developer Guide">
+        Chrome Built-in AI Docs
       </a>
     </div>
   </header>
@@ -1666,12 +1894,21 @@
     </div>
   </div>
 
-  <!-- Spectrum Overview Cards -->
-  <div class="spectrum-card">
-    <div class="spectrum-header">
-      <h2>Categorical Presets Spectrum</h2>
-      <div style="font-size: 0.8rem; color: var(--text-muted);">
-        Canonical Order: <code>most-predictable</code> (T=0.0) &rarr; <code>most-creative</code> (T=1.2)
+  
+<div class="app-container" style="max-width: 1440px; margin: 0 auto; padding: 20px;">
+  
+  <!-- Spectrum Overview Cards (Collapsible) -->
+  <div class="spectrum-card" id="spectrum-card">
+    <div class="spectrum-header" id="spectrum-toggle-header" onclick="toggleSpectrumCollapse(event)" style="cursor: pointer;" title="Toggle presets spectrum display">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span id="spectrum-collapse-icon" style="font-size: 0.95rem; font-weight: 700; transition: transform 0.2s ease;">▾</span>
+        <h2 style="margin: 0; font-size: 1.05rem;">Categorical Presets Spectrum</h2>
+        <span class="spectrum-badge">7 Presets (T: 0.0 &rarr; 1.2)</span>
+      </div>
+      <div id="spectrum-mini-summary" style="display: none; align-items: center; gap: 6px; flex-wrap: wrap;"></div>
+      <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px;">
+        <span class="spectrum-canonical-label">Canonical Order: <code>most-predictable</code> &rarr; <code>most-creative</code></span>
+        <button class="spectrum-toggle-btn" id="spectrum-toggle-btn" onclick="toggleSpectrumCollapse(event)" type="button">Hide</button>
       </div>
     </div>
     <div class="preset-grid" id="preset-summary-grid">
@@ -1679,9 +1916,46 @@
     </div>
   </div>
 
-  <!-- Main Interaction Area -->
-  <div class="studio-grid">
-    <!-- Left Control Panel -->
+  
+  <!-- Top-Level 4 First-Class Workspaces Navigation -->
+  <nav class="main-nav-bar" id="main-nav-bar" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 6px 8px;">
+    <button class="nav-tab active" data-workspace="playground" type="button" style="padding: 10px 14px; display: flex; align-items: center; gap: 10px; text-align: left; border-radius: 8px;">
+      <span style="font-size: 1.3rem;">⚡</span>
+      <div>
+        <div style="font-weight: 700; font-size: 0.92rem; line-height: 1.2;">1. Playground</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">Live stream &amp; repeatability</div>
+      </div>
+    </button>
+    <button class="nav-tab" data-workspace="simulation" type="button" style="padding: 10px 14px; display: flex; align-items: center; gap: 10px; text-align: left; border-radius: 8px;">
+      <span style="font-size: 1.3rem;">🔬</span>
+      <div>
+        <div style="font-weight: 700; font-size: 0.92rem; line-height: 1.2;">2. Simulation Suite</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">20 prompts, matrix &amp; export</div>
+      </div>
+    </button>
+    <button class="nav-tab" data-workspace="analytics" type="button" style="padding: 10px 14px; display: flex; align-items: center; gap: 10px; text-align: left; border-radius: 8px;">
+      <span style="font-size: 1.3rem;">📊</span>
+      <div>
+        <div style="font-weight: 700; font-size: 0.92rem; line-height: 1.2;">3. Analytics</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">Latency, throughput &amp; box plots</div>
+      </div>
+    </button>
+    <button class="nav-tab" data-workspace="guide_spec" type="button" style="padding: 10px 14px; display: flex; align-items: center; gap: 10px; text-align: left; border-radius: 8px;">
+      <span style="font-size: 1.3rem;">📚</span>
+      <div>
+        <div style="font-weight: 700; font-size: 0.92rem; line-height: 1.2;">4. Guide &amp; Spec</div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">Decision wizard &amp; archetype cards</div>
+      </div>
+    </button>
+  </nav>
+
+
+  
+  <div id="workspace-playground" class="tab-pane">
+    <div class="studio-grid" id="playground-studio-grid">
+      <!-- Left Control Panel -->
+      <div class="control-panel" id="playground-control-panel">
+        
     <div class="control-panel">
       <div class="section-title">
         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -1750,29 +2024,39 @@
       </div>
     </div>
 
-    <!-- Right Results Area -->
-    <div class="results-area">
-      <div class="tabs">
-        <div class="tab active" data-tab="stream">Live Multi-Output Grid</div>
-        <div class="tab" data-tab="variance">Multi-Run Repeatability &amp; Variance</div>
-        <div class="tab" data-tab="simulation">🔬 Monte Carlo Simulation</div>
-        <div class="tab" data-tab="metrics">Mode-Level Latency &amp; Token Distributions</div>
-        <div class="tab" data-tab="guide">🎯 Preset Guide &amp; Finder</div>
-        <div class="tab" data-tab="code">JavaScript API Code</div>
-        <div class="tab" data-tab="spec">Parameters Reference</div>
+    
       </div>
 
-      <!-- Tab 1: Live Grid -->
-      <div id="tab-content-stream">
-        <div class="results-grid" id="results-cards-container">
-          <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
-            Select your desired presets and click <strong>"Run Comparison"</strong> to stream outputs side-by-side in spectrum order.
+      <!-- Right Results Area -->
+      <div class="results-area" id="playground-results-area">
+        <!-- Mode Switcher Pill Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; gap: 6px;">
+            <button class="sub-tab-btn active" id="ws1-mode-stream-btn" onclick="switchWs1Mode('stream')" type="button">
+              ⚡ Compare 7 Presets Side-by-Side
+            </button>
+            <button class="sub-tab-btn" id="ws1-mode-variance-btn" onclick="switchWs1Mode('variance')" type="button">
+              🔁 Multi-Run Repeatability Test
+            </button>
+          </div>
+          <button class="btn-secondary" id="toggle-sidebar-btn" onclick="togglePlaygroundSidebar()" type="button" style="padding: 4px 10px; font-size: 0.78rem;">
+            ◧ Hide Setup (Expand Grid)
+          </button>
+        </div>
+
+        <!-- Sub-View A: Stream Grid -->
+        <div id="ws1-view-stream">
+          <div class="results-grid" id="results-cards-container" style="margin-top: 8px;">
+            <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+              Select your desired presets and click <strong>"Run Comparison"</strong> to stream outputs side-by-side in spectrum order.
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Tab 2: Multi-Run Repeatability & Variance -->
-      <div id="tab-content-variance" style="display: none;">
+        <!-- Sub-View B: Variance -->
+        <div id="ws1-view-variance" style="display: none; margin-top: 8px;">
+          
+      <div id="tab-content-variance">
         <div class="variance-panel">
           <div class="variance-info-banner">
             <strong>🎯 Purpose of Multi-Run Repeatability Testing:</strong>
@@ -1837,8 +2121,16 @@
         </div>
       </div>
 
-      <!-- Tab 3: Monte Carlo Simulation Suite -->
-      <div id="tab-content-simulation" style="display: none;">
+      
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="workspace-simulation" class="tab-pane" style="display: none;">
+    
+      <div id="tab-content-simulation">
         <div class="sim-panel">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
@@ -1853,36 +2145,29 @@
             </div>
           </div>
 
-          <!-- Curated Domain Selector -->
+          
+          <!-- Hierarchical Curated Domain & Prompt Selector -->
           <div id="sim-curated-config">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
-              <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Domain Categories to Include:</div>
-              <button id="sim-toggle-corpus-btn" class="btn-secondary" style="padding: 4px 10px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;" type="button">
-                <span>🔍 Explore &amp; Inspect 20 Prompts</span>
-                <span id="sim-corpus-toggle-arrow">▼</span>
-              </button>
-            </div>
-            <div class="sim-category-tags">
-              <label class="sim-cat-tag"><input type="checkbox" value="deterministic" checked class="sim-cat-chk"> 📊 Deterministic Schema &amp; Code (4)</label>
-              <label class="sim-cat-tag"><input type="checkbox" value="reasoning" checked class="sim-cat-chk"> 🧠 Logic &amp; Factual Reasoning (4)</label>
-              <label class="sim-cat-tag"><input type="checkbox" value="professional" checked class="sim-cat-chk"> ✉️ Professional Tone &amp; Localization (4)</label>
-              <label class="sim-cat-tag"><input type="checkbox" value="creative" checked class="sim-cat-chk"> 🎭 Narrative &amp; Creative Metaphor (4)</label>
-              <label class="sim-cat-tag"><input type="checkbox" value="ideation" checked class="sim-cat-chk"> 💡 Unconventional Brainstorming (4)</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+              <div style="font-size: 0.84rem; font-weight: 700; color: var(--text-main);">
+                Select Benchmark Prompt Domains &amp; Individual Tasks:
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="btn-secondary" onclick="selectAllSimPrompts(true)" style="padding: 3px 8px; font-size: 0.74rem;">✅ Select All</button>
+                <button type="button" class="btn-secondary" onclick="selectAllSimPrompts(false)" style="padding: 3px 8px; font-size: 0.74rem;">⬜ Deselect All</button>
+                <span id="sim-prompt-count-indicator" style="font-size: 0.78rem; font-weight: 700; color: var(--accent-blue); background: rgba(88,166,255,0.15); padding: 3px 8px; border-radius: 12px; font-family: var(--font-mono);">
+                  Selected: 20 / 20 prompts
+                </span>
+              </div>
             </div>
 
-            <!-- Expandable Corpus Explorer Drawer -->
-            <div id="sim-corpus-explorer" style="display: none; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; margin-top: 8px; margin-bottom: 6px; max-height: 380px; overflow-y: auto;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; flex-wrap: wrap;">
-                <input type="text" id="sim-corpus-search" placeholder="Search 20 prompts by title, keyword, or domain..." style="flex: 1; min-width: 200px; padding: 6px 10px; font-size: 0.8rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-main);">
-                <span id="sim-corpus-count-badge" style="font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono);">Showing 20 prompts</span>
-              </div>
-              <div id="sim-corpus-list" style="display: flex; flex-direction: column; gap: 8px;">
-                <!-- Populated dynamically by initSimulationUI() -->
-              </div>
+            <!-- Domain Accordion Container -->
+            <div id="sim-accordion-container" style="display: flex; flex-direction: column; gap: 6px;">
+              <!-- Dynamically populated by renderSimulationAccordion() -->
             </div>
           </div>
 
-          <!-- Custom Prompts Textarea (Hidden by default) -->
+<!-- Custom Prompts Textarea (Hidden by default) -->
           <div id="sim-custom-config" style="display: none;">
             <label style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">Custom Prompts (One prompt per line):</label>
             <textarea id="sim-custom-prompts-input" rows="5" style="width: 100%; margin-top: 6px; font-family: var(--font-mono); font-size: 0.82rem; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; padding: 8px;" placeholder="Enter custom prompts, one per line...&#10;1. Write a punchy slogan for a solar cargo airship&#10;2. Extract JSON flight data from: 'Flight AC840 departing YVR at 14:30'&#10;3. Explain quantum tunneling in 2 sentences"></textarea>
@@ -2041,8 +2326,13 @@
         </div>
       </div>
 
-      <!-- Tab 4: Mode-Level Latency & Token Distributions -->
-      <div id="tab-content-metrics" style="display: none;">
+      
+  </div>
+
+  
+  <div id="workspace-analytics" class="tab-pane" style="display: none;">
+    
+      <div id="tab-content-metrics">
         <div class="metrics-container">
           <div class="metrics-header-bar">
             <div>
@@ -2146,31 +2436,69 @@
               Sampling presets govern how the on-device language model navigates token probability distributions. Rather than single-response word frequencies, sampling modes are fundamentally characterized by:
             </p>
 
-            <div class="plain-math-box">
+                        <div class="plain-math-box">
               <div class="plain-math-item">
-                <strong>1. Determinism (% Identity Match):</strong>
-                <span>Percentage of identical outputs generated across repeated executions with the exact same prompt. <code>most-predictable</code> guarantees <strong>100% determinism</strong> (ideal for code, JSON extraction, and test assertions), while <code>creative</code> and <code>most-creative</code> drop below 10%.</span>
-              </div>
-
-              <div class="plain-math-item">
-                <strong>2. Cumulative Unique Vocabulary Pool ($V_{\text{cum}}$):</strong>
-                <span>The total number of distinct words sampled across $N$ sequential runs. Lower temperatures stay tightly bounded around high-probability canonical words, whereas higher temperatures ($T \ge 1.1$) continuously sample the long tail, resulting in steep vocabulary expansion.</span>
-                <div>
-                  <span class="plain-math-formula">V<sub>cum</sub>(N) = | &bigcup;<sub>i=1..N</sub> Words(run<sub>i</sub>) | &nbsp;(Total Unique Words)</span>
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <span style="font-size: 1rem;">🎯</span>
+                  <strong style="color: var(--text-main); font-size: 0.88rem;">1. Determinism (% Identity Match):</strong>
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin-left: 24px;">
+                  Percentage of identical outputs generated across repeated executions with the exact same prompt. <code>most-predictable</code> guarantees <strong>100% determinism</strong> (ideal for code, JSON extraction, and test assertions), while <code>creative</code> and <code>most-creative</code> drop below 10%.
                 </div>
               </div>
 
               <div class="plain-math-item">
-                <strong>3. Lexical Diversity (Type-Token Ratio %):</strong>
-                <span>Ratio of unique vocabulary words to total generated tokens: <code>(Unique Words / Total Tokens) &times; 100%</code>.</span>
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <span style="font-size: 1rem;">📚</span>
+                  <strong style="color: var(--text-main); font-size: 0.88rem;">2. Cumulative Unique Vocabulary Pool (<i>V</i><sub>cum</sub>):</strong>
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin-left: 24px;">
+                  The total number of distinct words sampled across <i>N</i> sequential runs. Lower temperatures stay tightly bounded around high-probability canonical words, whereas higher temperatures (<i>T</i> &ge; 1.1) continuously sample the long tail, resulting in steep vocabulary expansion.
+                </div>
+                <div style="margin-left: 24px; margin-top: 6px;">
+                  <div class="formula-card" style="display: inline-flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 14px; font-family: var(--font-mono); font-size: 0.85rem;">
+                    <span style="color: var(--accent-blue); font-weight: 700;"><i>V</i><sub>cum</sub>(<i>N</i>)</span>
+                    <span style="color: var(--text-muted);">=</span>
+                    <span style="color: var(--text-main); display: inline-flex; align-items: center; gap: 4px;">
+                      <span>|</span>
+                      <span style="font-size: 1.25rem; line-height: 1; vertical-align: -2px;">&bigcup;</span>
+                      <span style="font-size: 0.72rem; display: inline-flex; flex-direction: column; line-height: 1;">
+                        <span><i>N</i></span>
+                        <span><i>i</i>=1</span>
+                      </span>
+                      <span><b>Words</b>(run<sub><i>i</i></sub>)</span>
+                      <span>|</span>
+                    </span>
+                    <span style="color: var(--text-muted); font-size: 0.74rem; margin-left: 6px;">(Total Unique Word Union)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="plain-math-item">
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <span style="font-size: 1rem;">⚖️</span>
+                  <strong style="color: var(--text-main); font-size: 0.88rem;">3. Lexical Diversity (Type-Token Ratio / TTR %):</strong>
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin-left: 24px;">
+                  Ratio of unique vocabulary words to total generated tokens across all runs:
+                </div>
+                <div style="margin-left: 24px; margin-top: 6px;">
+                  <div class="formula-card" style="display: inline-flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 14px; font-family: var(--font-mono); font-size: 0.85rem;">
+                    <span style="color: var(--accent-purple); font-weight: 700;">TTR</span>
+                    <span style="color: var(--text-muted);">=</span>
+                    <span style="color: var(--text-main);">
+                      ( <i>V</i><sub>unique</sub> / <i>N</i><sub>tokens</sub> ) &times; 100%
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div style="font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px;">
-              <span>📖 Further Reading:</span>
-              <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Prompt API Spec Issue #203 &rarr;</a>
-              <a href="https://en.wikipedia.org/wiki/Type%E2%80%93token_ratio" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Type-Token Ratio &rarr;</a>
-              <a href="https://en.wikipedia.org/wiki/Softmax_function#Reinforcement_learning" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Softmax Temperature Sampling &rarr;</a>
+            <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+              <span style="font-weight: 600; color: var(--text-main);">Verified Technical References:</span>
+              <a href="https://en.wikipedia.org/wiki/Lexical_diversity" target="_blank" class="badge-link" style="font-size: 0.74rem;" title="Linguistics & NLP definitions of lexical diversity and Type-Token Ratio">📚 Lexical Diversity &amp; TTR (Wikipedia) ↗</a>
+              <a href="https://huggingface.co/blog/how-to-generate" target="_blank" class="badge-link" style="font-size: 0.74rem;" title="Canonical guide on Temperature, Top-K, and probability decoding in LLMs">🔥 LLM Temperature &amp; Top-K Decoding (Hugging Face) ↗</a>
+              <a href="https://en.wikipedia.org/wiki/Jaccard_index" target="_blank" class="badge-link" style="font-size: 0.74rem;" title="Mathematical definition of intersection over union for vocabulary similarity">📐 Jaccard Similarity Index (Wikipedia) ↗</a>
             </div>
           </div>
 
@@ -2198,10 +2526,15 @@
         </div>
       </div>
 
-      <!-- Tab 5: Interactive Preset Recommendation Guide & Finder -->
-      <div id="tab-content-guide" style="display: none;">
-        <div class="guide-container">
-          <!-- Interactive Wizard / Recommendation Finder -->
+      
+  </div>
+
+  
+  <div id="workspace-guide_spec" class="tab-pane" style="display: none;">
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 20px;">
+      <!-- Interactive Decision Wizard -->
+      <div class="guide-container" style="display: block;">
+        <!-- Interactive Wizard / Recommendation Finder -->
           <div class="wizard-card">
             <div class="wizard-title">
               <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color: var(--accent-blue);">
@@ -2253,62 +2586,45 @@
             </div>
           </div>
 
-          <!-- Comprehensive Preset Archetype Matrix -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <strong style="color: var(--text-main); font-size: 0.95rem;">📚 Comprehensive Sampling Preset Recommendation Matrix</strong>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">
-                  Architectural profiles, trade-offs, and empirical behavior for each categorical sampling mode.
-                </div>
-              </div>
-            </div>
-
-            <div class="recommend-grid" id="recommend-cards-container">
-              <!-- Dynamically populated by renderRecommendationGuide() -->
-            </div>
-          </div>
-        </div>
+          
       </div>
 
-      <!-- Tab 4: Interactive JavaScript API Snippet Generator -->
-      <div id="tab-content-code" style="display: none;">
-        <div style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <!-- View Switcher between Archetype Cards and Normative Spec Table -->
+      <div style="border-top: 1px solid var(--border-color); padding-top: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
           <div>
-            <strong style="color: var(--text-main); font-size: 0.95rem;">💻 Interactive JavaScript Snippet Generator</strong>
+            <strong style="color: var(--text-main); font-size: 0.95rem;">📖 Presets Documentation &amp; Reference</strong>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Switch between rich architectural profiles and the normative Chromium specification table.</div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="sub-tab-btn active" id="btn-view-archetypes" onclick="switchGuideSpecView('archetypes')" type="button">
+              🗂️ Archetype Profile Cards (Developer View)
+            </button>
+            <button class="sub-tab-btn" id="btn-view-spec" onclick="switchGuideSpecView('spec')" type="button">
+              📋 Normative Spec Table (Chromium Spec View)
+            </button>
+          </div>
+        </div>
+
+        <!-- View 1: Archetypes Grid -->
+        <div id="view-archetype-cards">
+          <div class="recommend-grid" id="recommend-cards-container">
+            <!-- Dynamically populated by renderRecommendationGuide() -->
+          </div>
+        </div>
+
+        <!-- View 2: Normative Spec Table -->
+        <div id="view-normative-spec" style="display: none;">
+          <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
             <div style="font-size: 0.8rem; color: var(--text-muted);">
-              Generates self-contained, copy-pasteable JavaScript code ready to run directly in your <strong>DevTools Console</strong> or web app.
+              Normative definitions for Chromium Blink Prompt API sampling modes and default parameters.
             </div>
+            <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" class="badge-link" style="font-size: 0.74rem;" title="View original W3C WebML GitHub Issue #203 proposal">
+              📋 W3C Proposal: Sampling Mode Presets (#203) ↗
+            </a>
           </div>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <label style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Sampling Mode:</label>
-            <select class="control-select" id="code-tab-preset-select" style="width: auto; padding: 4px 10px; font-size: 0.82rem;">
-              <option value="most-predictable">most-predictable (T: 0.0, K: 1)</option>
-              <option value="predictable">predictable (T: 0.3, K: 32)</option>
-              <option value="slightly-predictable">slightly-predictable (T: 0.7, K: 64)</option>
-              <option value="balanced" selected>balanced (T: 1.0, K: 64)</option>
-              <option value="slightly-creative">slightly-creative (T: 1.1, K: 72)</option>
-              <option value="creative">creative (T: 1.15, K: 80)</option>
-              <option value="most-creative">most-creative (T: 1.2, K: 100)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="code-container">
-          <div class="code-toolbar">
-            <span class="code-lang-tag">JavaScript / Chromium Prompt API</span>
-            <button class="copy-btn" id="copy-code-btn" onclick="copySnippetCode()">📋 Copy Snippet</button>
-          </div>
-          <div class="code-box" id="code-snippet-box"></div>
-        </div>
-
-        <div style="margin-top: 12px; font-size:0.8rem; color:var(--text-muted); line-height: 1.5; background:var(--bg-secondary); padding:10px 14px; border-radius:6px; border:1px solid var(--border-color);">
-          💡 <strong>How to run:</strong> Open DevTools (<kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">F12</kbd> or <kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">Cmd+Option+I</kbd>), paste this code into the <strong>Console</strong>, and press <kbd style="background:var(--bg-card); padding:2px 5px; border-radius:3px;">Enter</kbd>.
-        </div>
-      </div>
-
-      <!-- Tab 5: Spec Reference -->
-      <div id="tab-content-spec" style="display: none;">
+          
+      <div id="tab-content-spec">
         <table style="width: 100%; border-collapse: collapse; background: var(--bg-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-main);">
           <thead>
             <tr style="background: var(--bg-card); text-align: left; border-bottom: 1px solid var(--border-color);">
@@ -2322,11 +2638,13 @@
             <!-- Injected via JS -->
           </tbody>
         </table>
+      
+        </div>
       </div>
     </div>
   </div>
-</div>
 
+</div>
 <!-- Interactive Code Inspector Modal -->
 <div class="modal-backdrop" id="code-modal-backdrop" onclick="if(event.target === this) closeCodeModal()">
   <div class="modal-window">
@@ -2357,7 +2675,268 @@
   </div>
 </div>
 
+
+
 <script>
+
+// -------------------------------------------------------------
+// 1. Hierarchical Accordion & Prompt Selector Engine
+// -------------------------------------------------------------
+let selectedPromptIds = null;
+
+function ensureSelectedPromptIds() {
+  if (!selectedPromptIds && typeof SIMULATION_CORPUS !== "undefined") {
+    selectedPromptIds = new Set(SIMULATION_CORPUS.map(p => p.id));
+  }
+  return selectedPromptIds || new Set();
+}
+
+function renderSimulationAccordion() {
+  ensureSelectedPromptIds();
+  const container = document.getElementById("sim-accordion-container");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const domains = [
+    { id: "deterministic", name: "Deterministic Schema & Code", icon: "📊", desc: "Structured data extraction, SQL generation, JSON schemas" },
+    { id: "reasoning", name: "Logic & Factual Reasoning", icon: "🧠", desc: "Multi-step logic, rate calculations, fact-grounded proofs" },
+    { id: "professional", name: "Professional Tone & Localization", icon: "✉️", desc: "Executive communication, tone modulation, translation nuance" },
+    { id: "creative", name: "Narrative & Creative Metaphor", icon: "🎭", desc: "Metaphors, poetry, sensory descriptions, suspense hooks" },
+    { id: "ideation", name: "Unconventional Brainstorming", icon: "💡", desc: "Radical lateral thinking, biomimicry, novel startup concepts" }
+  ];
+
+  domains.forEach(d => {
+    const domainPrompts = SIMULATION_CORPUS.filter(p => p.category === d.id);
+    const selectedInDomain = domainPrompts.filter(p => selectedPromptIds.has(p.id)).length;
+    const isAllSelected = selectedInDomain === domainPrompts.length;
+    const isSomeSelected = selectedInDomain > 0 && !isAllSelected;
+
+    const card = document.createElement("div");
+    card.className = "domain-accordion-card";
+    card.id = `domain-card-${d.id}`;
+
+    card.innerHTML = `
+      <div class="domain-accordion-header" id="domain-hdr-${d.id}" onclick="toggleDomainAccordion('${d.id}')">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="checkbox" id="domain-chk-${d.id}" ${isAllSelected ? 'checked' : ''} onclick="toggleDomainAll('${d.id}', this.checked, event)" style="cursor: pointer;">
+          <span style="font-size: 1.1rem;">${d.icon}</span>
+          <div>
+            <span style="font-size: 0.86rem; font-weight: 700; color: var(--text-main);">${d.name}</span>
+            <span style="font-size: 0.74rem; color: var(--text-muted); margin-left: 6px;">(${d.desc})</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="sample-badge" id="domain-count-${d.id}" style="font-size: 0.72rem;">${selectedInDomain}/${domainPrompts.length} selected</span>
+          <span id="domain-arrow-${d.id}" style="font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s ease;">▼</span>
+        </div>
+      </div>
+      <div class="domain-accordion-body" id="domain-body-${d.id}" style="display: none;">
+        ${domainPrompts.map(p => `
+          <div class="domain-prompt-item">
+            <input type="checkbox" id="prompt-chk-${p.id}" ${selectedPromptIds.has(p.id) ? 'checked' : ''} onchange="toggleSinglePrompt('${p.id}', this.checked)" style="margin-top: 3px; cursor: pointer;">
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="domain-prompt-title">${p.title}</span>
+                <span style="font-size: 0.68rem; font-family: var(--font-mono); color: var(--text-muted);">${p.id}</span>
+              </div>
+              <div class="domain-prompt-desc">
+                <strong>Prompt:</strong> ${p.user.substring(0, 95)}...
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    container.appendChild(card);
+    if (isSomeSelected) {
+      const chk = document.getElementById(`domain-chk-${d.id}`);
+      if (chk) chk.indeterminate = true;
+    }
+  });
+
+  updateSimPromptCounter();
+}
+
+function toggleDomainAccordion(domainId) {
+  const body = document.getElementById(`domain-body-${domainId}`);
+  const hdr = document.getElementById(`domain-hdr-${domainId}`);
+  const arrow = document.getElementById(`domain-arrow-${domainId}`);
+  if (!body) return;
+  const isHidden = body.style.display === "none";
+  body.style.display = isHidden ? "block" : "none";
+  if (hdr) hdr.classList.toggle("expanded", isHidden);
+  if (arrow) arrow.style.transform = isHidden ? "rotate(180deg)" : "rotate(0deg)";
+}
+
+function toggleDomainAll(domainId, isChecked, event) {
+  if (event) event.stopPropagation();
+  ensureSelectedPromptIds();
+  const domainPrompts = SIMULATION_CORPUS.filter(p => p.category === domainId);
+  domainPrompts.forEach(p => {
+    if (isChecked) selectedPromptIds.add(p.id);
+    else selectedPromptIds.delete(p.id);
+    const chk = document.getElementById(`prompt-chk-${p.id}`);
+    if (chk) chk.checked = isChecked;
+  });
+  updateDomainHeaderState(domainId);
+  updateSimPromptCounter();
+}
+
+function toggleSinglePrompt(promptId, isChecked) {
+  ensureSelectedPromptIds();
+  if (isChecked) selectedPromptIds.add(promptId);
+  else selectedPromptIds.delete(promptId);
+  const promptObj = SIMULATION_CORPUS.find(p => p.id === promptId);
+  if (promptObj) updateDomainHeaderState(promptObj.category);
+  updateSimPromptCounter();
+}
+
+function updateDomainHeaderState(domainId) {
+  ensureSelectedPromptIds();
+  const domainPrompts = SIMULATION_CORPUS.filter(p => p.category === domainId);
+  const selectedInDomain = domainPrompts.filter(p => selectedPromptIds.has(p.id)).length;
+  const chk = document.getElementById(`domain-chk-${domainId}`);
+  const countBadge = document.getElementById(`domain-count-${domainId}`);
+
+  if (countBadge) countBadge.textContent = `${selectedInDomain}/${domainPrompts.length} selected`;
+  if (chk) {
+    chk.checked = selectedInDomain === domainPrompts.length;
+    chk.indeterminate = selectedInDomain > 0 && selectedInDomain < domainPrompts.length;
+  }
+}
+
+function selectAllSimPrompts(select) {
+  ensureSelectedPromptIds();
+  if (select) {
+    SIMULATION_CORPUS.forEach(p => selectedPromptIds.add(p.id));
+  } else {
+    selectedPromptIds.clear();
+  }
+  renderSimulationAccordion();
+}
+
+function updateSimPromptCounter() {
+  ensureSelectedPromptIds();
+  const indicator = document.getElementById("sim-prompt-count-indicator");
+  if (indicator) {
+    indicator.textContent = `Selected: ${selectedPromptIds.size} / ${SIMULATION_CORPUS.length} prompts`;
+  }
+}
+
+// -------------------------------------------------------------
+// 2. Guide & Spec View Switcher
+// -------------------------------------------------------------
+function switchGuideSpecView(view) {
+  const btnArch = document.getElementById("btn-view-archetypes");
+  const btnSpec = document.getElementById("btn-view-spec");
+  const viewArch = document.getElementById("view-archetype-cards");
+  const viewSpec = document.getElementById("view-normative-spec");
+
+  if (view === "archetypes") {
+    if (btnArch) btnArch.classList.add("active");
+    if (btnSpec) btnSpec.classList.remove("active");
+    if (viewArch) viewArch.style.display = "block";
+    if (viewSpec) viewSpec.style.display = "none";
+  } else {
+    if (btnSpec) btnSpec.classList.add("active");
+    if (btnArch) btnArch.classList.remove("active");
+    if (viewSpec) viewSpec.style.display = "block";
+    if (viewArch) viewArch.style.display = "none";
+    if (typeof renderSpecTable === "function") renderSpecTable();
+  }
+}
+
+// -------------------------------------------------------------
+// 3. Workspace Navigation & Helpers
+// -------------------------------------------------------------
+function switchWs1Mode(mode) {
+  const streamBtn = document.getElementById("ws1-mode-stream-btn");
+  const varianceBtn = document.getElementById("ws1-mode-variance-btn");
+  const streamView = document.getElementById("ws1-view-stream");
+  const varianceView = document.getElementById("ws1-view-variance");
+
+  if (mode === "stream") {
+    if (streamBtn) streamBtn.classList.add("active");
+    if (varianceBtn) varianceBtn.classList.remove("active");
+    if (streamView) streamView.style.display = "block";
+    if (varianceView) varianceView.style.display = "none";
+  } else {
+    if (varianceBtn) varianceBtn.classList.add("active");
+    if (streamBtn) streamBtn.classList.remove("active");
+    if (varianceView) varianceView.style.display = "block";
+    if (streamView) streamView.style.display = "none";
+  }
+}
+
+function toggleSpectrumCollapse(e) {
+  if (e) e.stopPropagation();
+  const grid = document.getElementById("preset-summary-grid");
+  const mini = document.getElementById("spectrum-mini-summary");
+  const btn = document.getElementById("spectrum-toggle-btn");
+  const icon = document.getElementById("spectrum-collapse-icon");
+  if (!grid) return;
+  const isHidden = grid.style.display === "none";
+  if (isHidden) {
+    grid.style.display = "grid";
+    if (mini) mini.style.display = "none";
+    if (btn) btn.textContent = "Hide";
+    if (icon) icon.style.transform = "rotate(0deg)";
+  } else {
+    grid.style.display = "none";
+    if (mini) mini.style.display = "flex";
+    if (btn) btn.textContent = "Show (7 Presets)";
+    if (icon) icon.style.transform = "rotate(-90deg)";
+  }
+}
+
+function togglePlaygroundSidebar() {
+  const panel = document.getElementById("playground-control-panel");
+  const grid = document.getElementById("playground-studio-grid");
+  const btn = document.getElementById("toggle-sidebar-btn");
+  if (!panel || !grid) return;
+  const isCollapsed = panel.style.display === "none";
+  if (isCollapsed) {
+    panel.style.display = "flex";
+    grid.style.gridTemplateColumns = "380px 1fr";
+    if (btn) btn.textContent = "◧ Hide Setup (Expand Grid)";
+  } else {
+    panel.style.display = "none";
+    grid.style.gridTemplateColumns = "1fr";
+    if (btn) btn.textContent = "◨ Show Setup Controls";
+  }
+}
+
+function initStudioWorkspaces() {
+  document.querySelectorAll(".nav-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      const wsId = tab.getAttribute("data-workspace");
+
+      const workspaces = ["playground", "simulation", "analytics", "guide_spec"];
+      workspaces.forEach(w => {
+        const el = document.getElementById("workspace-" + w);
+        if (el) el.style.display = (w === wsId) ? "block" : "none";
+      });
+
+      if (wsId === "simulation") {
+        renderSimulationAccordion();
+      } else if (wsId === "analytics") {
+        updateMetricsTab();
+      } else if (wsId === "guide_spec") {
+        renderRecommendationGuide();
+        updateWizardRecommendation();
+        if (typeof renderSpecTable === "function") renderSpecTable();
+      }
+    });
+  });
+
+  renderSimulationAccordion();
+  if (typeof renderSpecTable === "function") renderSpecTable();
+}
+
+
 const PRESETS = [
   {
     id: "most-predictable",
@@ -3445,6 +4024,37 @@ function renderSpectrum() {
   const container = document.getElementById("preset-summary-grid");
   if (!container) return;
   container.innerHTML = "";
+  const miniSummary = document.getElementById("spectrum-mini-summary");
+  if (miniSummary) {
+    miniSummary.innerHTML = PRESETS.map(p => `
+      <span style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:12px; background:var(--bg-card); border:1px solid ${p.color}; color:${p.color}; font-family:var(--font-mono); font-size:0.72rem; font-weight:600; cursor:pointer;" onclick="togglePresetSelection('${p.id}'); event.stopPropagation();" title="${p.desc}">
+        ${p.name} <span style="opacity:0.8; font-size:0.66rem;">T:${p.temp.toFixed(2)}</span>
+      </span>
+    `).join(`<span style="color:var(--text-muted); font-size:0.7rem;">&rarr;</span>`);
+  }
+  
+  const streamBtn = document.getElementById("ws1-mode-stream-btn");
+  if (streamBtn) {
+    const count = selectedPresets.length;
+    if (count === 7 || count === 0) {
+      streamBtn.textContent = "⚡ Compare All 7 Presets Side-by-Side";
+    } else if (count === 2) {
+      streamBtn.textContent = "⚡ Compare 2 Selected Presets (A/B Test)";
+    } else if (count === 1) {
+      streamBtn.textContent = "⚡ Test Single Preset Output";
+    } else {
+      streamBtn.textContent = `⚡ Compare ${count} Selected Presets`;
+    }
+  }
+  const specBadge = document.querySelector(".spectrum-badge");
+  if (specBadge) {
+    const count = selectedPresets.length;
+    if (count === 7 || count === 0) {
+      specBadge.textContent = "7 Presets (T: 0.00 → 1.20)";
+    } else {
+      specBadge.textContent = `${count} of 7 Presets Active`;
+    }
+  }
 
   PRESETS.forEach(p => {
     const isSelected = selectedPresets.includes(p.id);
@@ -3602,7 +4212,7 @@ function renderSvgBarChart() {
   const chartW = svgWidth - paddingLeft - paddingRight;
   const chartH = svgHeight - paddingTop - paddingBottom;
   const barSlotW = chartW / chartData.length;
-  const barWidth = Math.min(68, barSlotW * 0.65);
+  const barWidth = Math.min(84, Math.max(48, barSlotW * (chartData.length <= 2 ? 0.35 : 0.65)));
 
   let gridLinesSvg = "";
   const numGridTicks = 4;
@@ -4007,6 +4617,37 @@ async function runBenchmark() {
   const container = document.getElementById("results-cards-container");
   const runBtn = document.getElementById("run-benchmark-btn");
   container.innerHTML = "";
+  const miniSummary = document.getElementById("spectrum-mini-summary");
+  if (miniSummary) {
+    miniSummary.innerHTML = PRESETS.map(p => `
+      <span style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:12px; background:var(--bg-card); border:1px solid ${p.color}; color:${p.color}; font-family:var(--font-mono); font-size:0.72rem; font-weight:600; cursor:pointer;" onclick="togglePresetSelection('${p.id}'); event.stopPropagation();" title="${p.desc}">
+        ${p.name} <span style="opacity:0.8; font-size:0.66rem;">T:${p.temp.toFixed(2)}</span>
+      </span>
+    `).join(`<span style="color:var(--text-muted); font-size:0.7rem;">&rarr;</span>`);
+  }
+  
+  const streamBtn = document.getElementById("ws1-mode-stream-btn");
+  if (streamBtn) {
+    const count = selectedPresets.length;
+    if (count === 7 || count === 0) {
+      streamBtn.textContent = "⚡ Compare All 7 Presets Side-by-Side";
+    } else if (count === 2) {
+      streamBtn.textContent = "⚡ Compare 2 Selected Presets (A/B Test)";
+    } else if (count === 1) {
+      streamBtn.textContent = "⚡ Test Single Preset Output";
+    } else {
+      streamBtn.textContent = `⚡ Compare ${count} Selected Presets`;
+    }
+  }
+  const specBadge = document.querySelector(".spectrum-badge");
+  if (specBadge) {
+    const count = selectedPresets.length;
+    if (count === 7 || count === 0) {
+      specBadge.textContent = "7 Presets (T: 0.00 → 1.20)";
+    } else {
+      specBadge.textContent = `${count} of 7 Presets Active`;
+    }
+  }
   runBtn.disabled = true;
 
   const activePresets = getSortedActivePresets(selectedPresets.length > 0 ? selectedPresets : ["most-predictable", "balanced", "creative"]);
@@ -4077,6 +4718,37 @@ async function runVarianceTest() {
   const runBtn = document.getElementById("run-variance-btn");
 
   container.innerHTML = "";
+  const miniSummary = document.getElementById("spectrum-mini-summary");
+  if (miniSummary) {
+    miniSummary.innerHTML = PRESETS.map(p => `
+      <span style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:12px; background:var(--bg-card); border:1px solid ${p.color}; color:${p.color}; font-family:var(--font-mono); font-size:0.72rem; font-weight:600; cursor:pointer;" onclick="togglePresetSelection('${p.id}'); event.stopPropagation();" title="${p.desc}">
+        ${p.name} <span style="opacity:0.8; font-size:0.66rem;">T:${p.temp.toFixed(2)}</span>
+      </span>
+    `).join(`<span style="color:var(--text-muted); font-size:0.7rem;">&rarr;</span>`);
+  }
+  
+  const streamBtn = document.getElementById("ws1-mode-stream-btn");
+  if (streamBtn) {
+    const count = selectedPresets.length;
+    if (count === 7 || count === 0) {
+      streamBtn.textContent = "⚡ Compare All 7 Presets Side-by-Side";
+    } else if (count === 2) {
+      streamBtn.textContent = "⚡ Compare 2 Selected Presets (A/B Test)";
+    } else if (count === 1) {
+      streamBtn.textContent = "⚡ Test Single Preset Output";
+    } else {
+      streamBtn.textContent = `⚡ Compare ${count} Selected Presets`;
+    }
+  }
+  const specBadge = document.querySelector(".spectrum-badge");
+  if (specBadge) {
+    const count = selectedPresets.length;
+    if (count === 7 || count === 0) {
+      specBadge.textContent = "7 Presets (T: 0.00 → 1.20)";
+    } else {
+      specBadge.textContent = `${count} of 7 Presets Active`;
+    }
+  }
   statsBoxes.style.display = "grid";
   runBtn.disabled = true;
 
@@ -4345,7 +5017,7 @@ function loadPromptIntoPlayground(promptId) {
   if (sysElem) sysElem.value = promptItem.system;
 
   // Switch to Live Grid tab
-  const streamTab = document.querySelector('.tab[data-tab="stream"]');
+  const streamTab = document.querySelector('.nav-tab[data-workspace="playground"]');
   if (streamTab) streamTab.click();
 
   // Scroll to prompt inputs
@@ -4370,8 +5042,12 @@ function getSelectedSimulationPrompts() {
     }));
   }
 
-  const checkedCategories = Array.from(document.querySelectorAll(".sim-cat-chk:checked")).map(c => c.value);
-  let prompts = SIMULATION_CORPUS.filter(p => checkedCategories.includes(p.category));
+  ensureSelectedPromptIds();
+  if (selectedPromptIds.size === 0) {
+    alert("Please select at least 1 prompt from the categories below!");
+    return [];
+  }
+  let prompts = SIMULATION_CORPUS.filter(p => selectedPromptIds.has(p.id));
 
   const scale = document.getElementById("sim-scale-select")?.value || "full";
   if (scale === "quick") {
@@ -5108,13 +5784,14 @@ function updateWizardRecommendation(changedSource = "") {
 function applyPresetToPlayground(presetId) {
   selectedPresets = [presetId];
   renderSpectrum();
-  const streamTab = document.querySelector('.tab[data-tab="stream"]');
+  const streamTab = document.querySelector('.nav-tab[data-workspace="playground"]');
   if (streamTab) streamTab.click();
   document.querySelector(".header-title")?.scrollIntoView({ behavior: "smooth" });
 }
 
 // Master Initialization Function
 function initApp() {
+  initStudioWorkspaces();
   initTheme();
   checkApiAvailability();
   renderSpectrum();
@@ -5198,30 +5875,7 @@ function initApp() {
     if (el) el.addEventListener("change", () => updateWizardRecommendation("control"));
   });
 
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      tab.classList.add("active");
-
-      const tabId = tab.getAttribute("data-tab");
-      document.getElementById("tab-content-stream").style.display = tabId === "stream" ? "block" : "none";
-      document.getElementById("tab-content-variance").style.display = tabId === "variance" ? "block" : "none";
-      document.getElementById("tab-content-simulation").style.display = tabId === "simulation" ? "block" : "none";
-      document.getElementById("tab-content-metrics").style.display = tabId === "metrics" ? "block" : "none";
-      document.getElementById("tab-content-guide").style.display = tabId === "guide" ? "block" : "none";
-      document.getElementById("tab-content-code").style.display = tabId === "code" ? "block" : "none";
-      document.getElementById("tab-content-spec").style.display = tabId === "spec" ? "block" : "none";
-
-      if (tabId === "metrics") {
-        updateMetricsTab();
-      } else if (tabId === "guide") {
-        renderRecommendationGuide();
-        updateWizardRecommendation();
-      } else if (tabId === "code") {
-        renderHighlightedCode();
-      }
-    });
-  });
+  // Tab listener replaced by studio workspace handler
 
   // Dynamic code update listeners
   const codePresetSelect = document.getElementById("code-tab-preset-select");
@@ -5251,7 +5905,7 @@ if (document.readyState === "loading") {
 } else {
   initApp();
 }
-</script>
 
+</script>
 </body>
 </html>

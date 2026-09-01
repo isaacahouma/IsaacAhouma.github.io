@@ -1125,6 +1125,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      overflow-x: auto;
     }
 
     .sim-heatmap-table {
@@ -3684,10 +3685,10 @@ function renderConvergenceChart() {
     return;
   }
 
-  const svgW = 560;
+  const svgW = 620;
   const svgH = 220;
   const padL = 40;
-  const padR = 100;
+  const padR = 25;
   const padT = 20;
   const padB = 30;
 
@@ -3706,11 +3707,13 @@ function renderConvergenceChart() {
     const y = getY(h);
     gridSvg += `
       <line x1="${padL}" y1="${y}" x2="${padL + chartW}" y2="${y}" stroke="var(--border-color)" stroke-dasharray="2,2" />
-      <text x="${padL - 6}" y="${y + 4}" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="var(--font-mono)">${h.toFixed(1)}</text>
+      <text x="${padL - 6}" y="${y + 4}" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="var(--font-mono)">${h.toFixed(1)}b</text>
     `;
   }
 
   let linesSvg = "";
+  let legendHtml = "";
+
   presets.forEach(presetId => {
     const history = simulationState.convergenceHistory[presetId] || [];
     if (history.length === 0) return;
@@ -3730,18 +3733,29 @@ function renderConvergenceChart() {
     linesSvg += `
       <path d="${pathD}" fill="none" stroke="${p.color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
       <circle cx="${lastX}" cy="${lastY}" r="3.5" fill="${p.color}" />
-      <text x="${lastX + 6}" y="${lastY + 3.5}" fill="${p.color}" font-size="9.5" font-weight="700" font-family="var(--font-mono)">${p.name.replace("slightly-", "s-")}: ${lastVal.toFixed(2)}b</text>
+    `;
+
+    legendHtml += `
+      <div style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; background: var(--bg-tertiary); padding: 3px 8px; border-radius: 4px; border-left: 3px solid ${p.color};">
+        <span style="font-weight: 600; color: ${p.color};">${p.name.replace("slightly-", "s-")}:</span>
+        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-main);">${lastVal.toFixed(2)} bits</span>
+      </div>
     `;
   });
 
   container.innerHTML = `
-    <svg viewBox="0 0 ${svgW} ${svgH}" style="width: 100%; height: auto; display: block;">
-      ${gridSvg}
-      <line x1="${padL}" y1="${padT + chartH}" x2="${padL + chartW}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
-      <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
-      ${linesSvg}
-      <text x="${padL + chartW / 2}" y="${svgH - 6}" fill="var(--text-muted)" font-size="9.5" text-anchor="middle" font-family="var(--font-mono)">Sample Executions (N = 1 &rarr; ${maxN})</text>
-    </svg>
+    <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
+      <svg viewBox="0 0 ${svgW} ${svgH}" style="width: 100%; height: auto; display: block;">
+        ${gridSvg}
+        <line x1="${padL}" y1="${padT + chartH}" x2="${padL + chartW}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+        ${linesSvg}
+        <text x="${padL + chartW / 2}" y="${svgH - 6}" fill="var(--text-muted)" font-size="9.5" text-anchor="middle" font-family="var(--font-mono)">Sample Executions (N = 1 &rarr; ${maxN})</text>
+      </svg>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding-top: 4px;">
+        ${legendHtml}
+      </div>
+    </div>
   `;
 }
 

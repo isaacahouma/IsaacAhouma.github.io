@@ -977,6 +977,59 @@
       font-family: var(--font-mono);
     }
 
+    /* Plain-English Theory & Explainer Callout Card */
+    .entropy-theory-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      line-height: 1.6;
+    }
+
+    .entropy-theory-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--accent-purple) !important;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .plain-math-box {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-size: 0.84rem;
+      color: var(--text-main) !important;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .plain-math-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .plain-math-item strong {
+      color: var(--accent-blue);
+    }
+
+    .plain-math-formula {
+      font-family: var(--font-mono);
+      background: var(--bg-card);
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 2px 0;
+      color: var(--text-main);
+    }
+
     /* Interactive Code Inspector Modal */
     .modal-backdrop {
       position: fixed;
@@ -1438,6 +1491,7 @@
                 <button class="metric-pill-btn active" data-metric="latency">⏱️ Median Latency (s)</button>
                 <button class="metric-pill-btn" data-metric="tokens">📊 Token Count</button>
                 <button class="metric-pill-btn" data-metric="throughput">⚡ Throughput (tok/s)</button>
+                <button class="metric-pill-btn" data-metric="entropy">🔥 Entropy (%)</button>
               </div>
             </div>
 
@@ -1489,6 +1543,57 @@
                 <div style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px;">Run comparison to plot throughput distribution</div>
               </div>
             </div>
+
+            <!-- Chart 4: Entropy & Temperature Spectrum -->
+            <div class="chart-card">
+              <div class="chart-card-title">
+                <span>🔥 Sampling Mode Entropy Spectrum</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Relative Theoretical Randomness (0% &ndash; 100%)</span>
+              </div>
+              <div class="chart-body" id="chart-entropy-body">
+                <!-- Dynamically filled -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Plain-English Theory & Explainer Callout Card -->
+          <div class="entropy-theory-card">
+            <div class="entropy-theory-title">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              What is the "Entropy Spectrum" and How Does it Work?
+            </div>
+            <p style="font-size: 0.86rem; color: var(--text-main);">
+              In plain English, <strong>Entropy</strong> measures how <em>surprising or diverse</em> the model's word choices will be.
+              Low entropy means predictable, consistent responses; high entropy means creative, varied writing.
+              Chrome's sampling presets modulate entropy through two parameters:
+            </p>
+
+            <div class="plain-math-box">
+              <div class="plain-math-item">
+                <strong>1. Softmax Temperature (T):</strong>
+                <span>Scales token probability distributions before selection. Lower temperatures sharpen the probability on the most likely tokens; higher temperatures flatten the curve to allow less common words.</span>
+              </div>
+
+              <div class="plain-math-item">
+                <strong>2. Top-K Truncation (K):</strong>
+                <span>Restricts the candidate pool to only the top K highest-probability tokens. Setting K = 1 eliminates all alternatives.</span>
+              </div>
+
+              <div class="plain-math-item">
+                <strong>3. The Entropy Index (0% &ndash; 100%):</strong>
+                <span>Combines Temperature and Top-K into a single normalized score to show relative randomness:</span>
+                <div>
+                  <span class="plain-math-formula">Entropy Index (%) = (Temperature / 1.2) &times; (ln(Top-K) / ln(100)) &times; 100%</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px;">
+              <span>📖 Further Reading:</span>
+              <a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Wikipedia: Shannon Entropy &rarr;</a>
+              <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Prompt API Spec Issue #203 &rarr;</a>
+              <a href="https://en.wikipedia.org/wiki/Softmax_function#Reinforcement_learning" target="_blank" style="color: var(--accent-blue); text-decoration: none;">Softmax Temperature Sampling &rarr;</a>
+            </div>
           </div>
 
           <!-- Data Breakdown Table with Cumulative Stats & Sample Counts -->
@@ -1501,11 +1606,12 @@
                 <th>Median Latency [Min &mdash; Max]</th>
                 <th>Median Tokens</th>
                 <th>Throughput</th>
+                <th>Entropy Capacity</th>
               </tr>
             </thead>
             <tbody id="metrics-table-body">
               <tr>
-                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">
                   Run a comparison to generate performance metrics across presets.
                 </td>
               </tr>
@@ -1714,12 +1820,45 @@ const SAMPLE_PROMPTS = {
 // Global State with Cumulative Multi-Run Samples
 let selectedPresets = ["most-predictable", "predictable", "slightly-predictable", "balanced", "slightly-creative", "creative", "most-creative"];
 let cumulativeBenchmarkHistory = {}; // Key: presetId -> Array of samples: [{ latency, tokens, throughput }]
-let activeBarChartMetric = "latency"; // "latency", "tokens", "throughput"
+let activeBarChartMetric = "latency"; // "latency", "tokens", "throughput", "entropy"
 
 // Helper to strictly sort presets according to canonical temperature spectrum
 function getSortedActivePresets(presetIds) {
   const canonicalOrder = PRESETS.map(p => p.id);
   return [...presetIds].sort((a, b) => canonicalOrder.indexOf(a) - canonicalOrder.indexOf(b));
+}
+
+// Calculate Theoretical Normalized Shannon Entropy Index
+function computeEntropyIndex(temp, topK) {
+  if (temp <= 0.0 || topK <= 1) return 0;
+  const maxTemp = 1.2;
+  const maxTopK = 100;
+  const tempRatio = temp / maxTemp;
+  const kRatio = Math.log(topK) / Math.log(maxTopK);
+  return Math.min(100, Math.round(tempRatio * kRatio * 100));
+}
+
+// Render Dedicated Entropy & Temperature Spectrum Horizontal Bar Chart
+function renderEntropySpectrumChart() {
+  const container = document.getElementById("chart-entropy-body");
+  if (!container) return;
+  container.innerHTML = "";
+  const activeKeys = getSortedActivePresets(PRESETS.map(p => p.id));
+  activeKeys.forEach(presetId => {
+    const p = PRESETS.find(x => x.id === presetId);
+    if (!p) return;
+    const entropyIndex = computeEntropyIndex(p.temp, p.topK);
+    const row = document.createElement("div");
+    row.className = "chart-row";
+    row.innerHTML = `
+      <div class="chart-label" style="color: ${p.color};">${p.name}</div>
+      <div class="chart-bar-track">
+        <div class="chart-bar-fill" style="width: ${entropyIndex}%; background: ${p.color};"></div>
+      </div>
+      <div class="chart-val">${entropyIndex}%</div>
+    `;
+    container.appendChild(row);
+  });
 }
 
 // Strip markdown bold/headers syntax cleanly while preserving bullet lists and lines
@@ -2236,6 +2375,7 @@ function renderSpectrum() {
   });
 
   renderHighlightedCode();
+  renderEntropySpectrumChart();
 }
 
 function togglePresetSelection(presetId, forceValue) {
@@ -2301,6 +2441,9 @@ function renderSvgBarChart() {
     } else if (activeBarChartMetric === "throughput") {
       val = thrStats.median;
       label = `${val.toFixed(1)} tok/s`;
+    } else if (activeBarChartMetric === "entropy") {
+      val = computeEntropyIndex(p.temp, p.topK);
+      label = `${val}%`;
     }
 
     chartData.push({
@@ -2333,7 +2476,7 @@ function renderSvgBarChart() {
     const yVal = (maxVal / numGridTicks) * i;
     const yPos = paddingTop + chartH - (i / numGridTicks) * chartH;
     let tickText = yVal.toFixed(1);
-    if (activeBarChartMetric === "tokens") {
+    if (activeBarChartMetric === "tokens" || activeBarChartMetric === "entropy") {
       tickText = Math.round(yVal);
     }
     gridLinesSvg += `
@@ -2396,6 +2539,7 @@ function updateMetricsTab() {
   });
 
   renderSvgBarChart();
+  renderEntropySpectrumChart();
 
   if (totalSampleCount === 0) {
     modeCardsContainer.innerHTML = `
@@ -2405,7 +2549,7 @@ function updateMetricsTab() {
     `;
     tableBody.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">
+        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">
           Run a comparison or repeatability test to accumulate performance metrics.
         </td>
       </tr>
@@ -2443,6 +2587,7 @@ function updateMetricsTab() {
     const latStats = calculateStats(samples.map(s => s.latency));
     const tokStats = calculateStats(samples.map(s => s.tokens));
     const thrStats = calculateStats(samples.map(s => s.throughput));
+    const entropyIndex = computeEntropyIndex(p.temp, p.topK);
 
     // 1. Render Dedicated Mode Profile Card
     const modeCard = document.createElement("div");
@@ -2472,7 +2617,7 @@ function updateMetricsTab() {
     `;
     modeCardsContainer.appendChild(modeCard);
 
-    // 2. Table Row with N-sample badge and Min-Max Range
+    // 2. Table Row with N-sample badge, Min-Max Range and Entropy Capacity
     const row = document.createElement("tr");
     row.innerHTML = `
       <td style="color: ${p.color}; font-weight: 600;">"${presetId}"</td>
@@ -2487,6 +2632,14 @@ function updateMetricsTab() {
         <span style="font-size:0.75rem; color:var(--text-muted); margin-left:4px;">[${tokStats.min} &ndash; ${tokStats.max}]</span>
       </td>
       <td>${thrStats.median.toFixed(1)} tok/s</td>
+      <td>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="flex: 1; height: 6px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; min-width: 50px;">
+            <div style="width:${entropyIndex}%; height:100%; background:${p.color};"></div>
+          </div>
+          <span style="font-size:0.75rem; color:var(--text-muted);">${entropyIndex}%</span>
+        </div>
+      </td>
     `;
     tableBody.appendChild(row);
 

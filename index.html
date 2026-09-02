@@ -365,36 +365,6 @@
     gap: 14px;
   }
 
-  .sub-tab-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 6px 12px;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .sub-tab-btn {
-    background: transparent;
-    border: 1px solid transparent;
-    color: var(--text-muted);
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-
-  .sub-tab-btn.active {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-    color: var(--accent-blue);
-  }
-
   /* Result Stream Cards Grid */
   .results-grid {
     display: grid;
@@ -433,11 +403,13 @@
     line-height: 1.5;
     flex: 1;
     overflow-y: auto;
-    max-height: 260px;
+    max-height: 280px;
+    min-height: 120px;
     white-space: pre-wrap;
     word-break: break-word;
     font-family: var(--font-mono);
     color: var(--text-main);
+    background: var(--bg-primary);
   }
 
   /* Real-time Metric Pill Bar inside Card Footer */
@@ -478,15 +450,15 @@
 
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-  /* Visual Metrics & Comparative Charts Panel */
+  /* Tab 2: Dedicated Empirical Metrics & Analytics Panel */
   .metrics-dashboard-panel {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    padding: 16px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
   }
 
   .metrics-dashboard-header {
@@ -523,24 +495,18 @@
     color: #ffffff;
   }
 
-  .charts-duo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    gap: 14px;
-  }
-
   .chart-box {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 14px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   .chart-box-title {
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     font-weight: 700;
     display: flex;
     justify-content: space-between;
@@ -550,7 +516,7 @@
 
   .chart-svg-container {
     width: 100%;
-    min-height: 200px;
+    min-height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -561,18 +527,18 @@
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 14px 16px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   .math-formula-row {
     display: grid;
     grid-template-columns: 240px 1fr;
-    gap: 14px;
+    gap: 16px;
     align-items: center;
-    padding: 8px 0;
+    padding: 10px 0;
     border-bottom: 1px dashed var(--border-color);
   }
 
@@ -595,7 +561,7 @@
   }
 
   .math-desc {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
     line-height: 1.45;
   }
@@ -625,7 +591,7 @@
     letter-spacing: 0.5px;
   }
 
-  /* Workspace 2: Archetypes & Decision Wizard */
+  /* Workspace 3: Archetypes & Decision Wizard */
   .recommend-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -670,7 +636,7 @@
     border: 1px solid var(--border-color);
   }
 
-  /* Workspace 3: Spec & Code */
+  /* Workspace 4: Spec & Code */
   .spec-table {
     width: 100%;
     border-collapse: collapse;
@@ -822,34 +788,41 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- Main 3-Tab Navigation Bar                  -->
+  <!-- Main Clean Navigation Tabs                 -->
   <!-- ========================================== -->
   <nav class="main-nav-bar">
     <button class="nav-tab active" data-workspace="playground" type="button">
-      <span style="font-size: 1.3rem;">⚡</span>
+      <span style="font-size: 1.25rem;">⚡</span>
       <div>
-        <div class="nav-tab-title">1. Live Playground &amp; Metrics</div>
-        <div class="nav-tab-desc">Side-by-side stream, determinism &amp; vocabulary metrics</div>
+        <div class="nav-tab-title">1. Live Playground</div>
+        <div class="nav-tab-desc">Side-by-side stream comparison</div>
+      </div>
+    </button>
+    <button class="nav-tab" data-workspace="analytics" type="button">
+      <span style="font-size: 1.25rem;">📊</span>
+      <div>
+        <div class="nav-tab-title">2. Empirical Analytics</div>
+        <div class="nav-tab-desc">Comparative bar charts &amp; variance suite</div>
       </div>
     </button>
     <button class="nav-tab" data-workspace="guide" type="button">
-      <span style="font-size: 1.3rem;">🎯</span>
+      <span style="font-size: 1.25rem;">🎯</span>
       <div>
-        <div class="nav-tab-title">2. Use-Case Guide</div>
+        <div class="nav-tab-title">3. Use-Case Guide</div>
         <div class="nav-tab-desc">Decision wizard &amp; archetype profiles</div>
       </div>
     </button>
     <button class="nav-tab" data-workspace="spec" type="button">
-      <span style="font-size: 1.3rem;">📋</span>
+      <span style="font-size: 1.25rem;">📋</span>
       <div>
-        <div class="nav-tab-title">3. Spec &amp; Code</div>
+        <div class="nav-tab-title">4. Spec &amp; Code</div>
         <div class="nav-tab-desc">Normative spec &amp; production snippets</div>
       </div>
     </button>
   </nav>
 
   <!-- ========================================== -->
-  <!-- Workspace 1: Live Playground & Metrics    -->
+  <!-- Workspace 1: Live Playground               -->
   <!-- ========================================== -->
   <div id="workspace-playground" class="workspace-view">
     <div class="studio-grid" id="playground-studio-grid">
@@ -891,7 +864,7 @@
 
         <div style="display: flex; gap: 8px; margin-top: 4px;">
           <button class="btn-primary" id="run-benchmark-btn" type="button" style="flex: 1; justify-content: center;">
-            <span>⚡ Run Comparison</span>
+            <span id="stream-btn-text">⚡ Run Comparison</span>
           </button>
           <button class="btn-secondary" id="clear-results-btn" onclick="clearResults()" type="button" title="Clear outputs">
             <span>🗑️ Clear</span>
@@ -906,157 +879,17 @@
 
       <!-- Results Area -->
       <div class="results-area" id="playground-results-area">
-        <div class="sub-tab-bar">
-          <div style="display: flex; gap: 6px;">
-            <button class="sub-tab-btn active" id="ws1-mode-stream-btn" onclick="switchWs1Mode('stream')" type="button">
-              ⚡ Compare Presets Side-by-Side
-            </button>
-            <button class="sub-tab-btn" id="ws1-mode-variance-btn" onclick="switchWs1Mode('variance')" type="button">
-              🔁 Multi-Run Repeatability &amp; Variance Test
-            </button>
-          </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+          <strong style="font-size: 0.92rem; color: var(--text-main);">Comparative Stream Output Grid</strong>
           <button class="btn-secondary" id="toggle-sidebar-btn" onclick="togglePlaygroundSidebar()" type="button" style="padding: 4px 10px; font-size: 0.78rem;">
             ◧ Hide Setup
           </button>
         </div>
 
-        <!-- Sub-View A: Live Stream Grid & Metrics Dashboard -->
-        <div id="ws1-view-stream" style="display: flex; flex-direction: column; gap: 16px;">
-          <!-- Results Stream Cards Grid -->
-          <div class="results-grid" id="results-cards-container">
-            <div style="color: var(--text-muted); font-size: 0.88rem; padding: 48px 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
-              Select presets and click <strong>"Run Comparison"</strong> to stream outputs side-by-side.
-            </div>
-          </div>
-
-          <!-- Comparative Visual Charts & Empirical Metrics -->
-          <div class="metrics-dashboard-panel" id="metrics-dashboard-panel">
-            <div class="metrics-dashboard-header">
-              <div>
-                <strong style="color: var(--text-main); font-size: 0.95rem;">📊 Empirical Sampling Metrics &amp; Visualizer</strong>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">
-                  Mathematical metrics governed by <code>samplingMode</code>: Output Determinism &amp; Lexical Diversity.
-                </div>
-              </div>
-              <div class="metrics-toggle-pills" id="metrics-chart-selector">
-                <button class="metric-pill-btn active" id="btn-metric-determinism" onclick="switchMetricChart('determinism')" type="button">🔒 Determinism (%)</button>
-                <button class="metric-pill-btn" id="btn-metric-ttr" onclick="switchMetricChart('ttr')" type="button">✍️ Lexical Diversity (TTR)</button>
-                <button class="metric-pill-btn" id="btn-metric-vocab" onclick="switchMetricChart('vocab')" type="button">📚 Unique Words (|V|)</button>
-              </div>
-            </div>
-
-            <!-- Visual Bar Chart Container -->
-            <div class="chart-box">
-              <div class="chart-box-title">
-                <span id="chart-main-title">🔒 Expected Output Determinism &amp; Reproducibility Rate</span>
-                <span style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);" id="chart-main-subtitle">
-                  Higher = Strict schema conformity • Lower = Novel exploration
-                </span>
-              </div>
-              <div class="chart-svg-container" id="svg-comparative-chart-wrapper">
-                <!-- Populated dynamically via JS -->
-              </div>
-            </div>
-
-            <!-- Mathematical Formulas & Definitions Card -->
-            <div class="math-formula-card">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="font-size: 0.86rem; color: var(--text-main);">📐 Mathematical Definitions &amp; Metric Formulas</strong>
-                <span style="font-size: 0.74rem; color: var(--text-muted);">Pretty-printed mathematical definitions</span>
-              </div>
-
-              <!-- Formula 1: Type-Token Ratio -->
-              <div class="math-formula-row">
-                <div class="math-display">
-                  TTR = |V| / N<sub>total</sub>
-                </div>
-                <div class="math-desc">
-                  <strong>Type-Token Ratio (Lexical Diversity):</strong> Ratio of distinct words (|V|) to total generated tokens (N<sub>total</sub>). Values close to 1.0 indicate virtually zero repetition with high lexical discovery, whereas lower values indicate tightly repetitive, canonical vocabulary.
-                  <a href="https://en.wikipedia.org/wiki/Lexical_diversity" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">Lexical Diversity Ref ↗</a>
-                </div>
-              </div>
-
-              <!-- Formula 2: Cumulative Vocabulary Expansion -->
-              <div class="math-formula-row">
-                <div class="math-display">
-                  V<sub>N</sub> = | &cup;<sub>i=1..N</sub> words(O<sub>i</sub>) |
-                </div>
-                <div class="math-desc">
-                  <strong>Cumulative Vocabulary Expansion across <i>N</i> Runs:</strong> The total number of distinct words sampled across <i>N</i> sequential runs. Predictable modes stay bounded around canonical high-probability tokens, whereas creative modes continuously sample the long tail, resulting in steep vocabulary growth.
-                  <a href="https://en.wikipedia.org/wiki/Jaccard_index" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">Jaccard Ref ↗</a>
-                </div>
-              </div>
-
-              <!-- Formula 3: Output Determinism Guarantee -->
-              <div class="math-formula-row">
-                <div class="math-display">
-                  Det = (Pairs<sub>identical</sub> / C(N, 2)) &times; 100%
-                </div>
-                <div class="math-desc">
-                  <strong>Exact-Match Determinism (%):</strong> The percentage of repeated runs that produce 100% byte-for-byte identical output. <code>most-predictable</code> guarantees 100% determinism via greedy decoding, making it essential for structured JSON assertions.
-                  <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">W3C Spec #203 ↗</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sub-View B: Multi-Run Repeatability & Variance Suite -->
-        <div id="ws1-view-variance" style="display: none; flex-direction: column; gap: 16px;">
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-              <div>
-                <strong style="color: var(--text-main); font-size: 0.95rem;">🔁 Multi-Run Repeatability &amp; Empirical Variance Suite</strong>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">
-                  Executes the exact same prompt multiple times per preset to observe deterministic reproducibility vs. creative variety.
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Iterations (N):</label>
-                <select id="variance-run-count" class="control-select" style="width: auto; padding: 4px 8px; font-size: 0.8rem;">
-                  <option value="3" selected>3 runs</option>
-                  <option value="5">5 runs</option>
-                  <option value="10">10 runs</option>
-                </select>
-                <button class="btn-primary" id="run-variance-btn" type="button" style="padding: 6px 14px; font-size: 0.8rem;">
-                  <span>▶️ Run Repeatability Test</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Vocabulary Growth Curve Chart -->
-            <div class="chart-box">
-              <div class="chart-box-title">
-                <span>📈 Cumulative Vocabulary Growth Curve (V<sub>1</sub> &rarr; V<sub>N</sub>)</span>
-                <span style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);">
-                  Flat line = Zero vocabulary drift • Steep curve = Rapid lexical expansion
-                </span>
-              </div>
-              <div class="chart-svg-container" id="svg-growth-chart-wrapper">
-                <!-- Populated dynamically via JS -->
-              </div>
-            </div>
-
-            <table class="variance-table">
-              <thead>
-                <tr>
-                  <th>Sampling Mode</th>
-                  <th>Semantic Level</th>
-                  <th>Output Determinism</th>
-                  <th>Cumulative Unique Words (V<sub>N</sub>)</th>
-                  <th>Lexical Diversity (TTR)</th>
-                </tr>
-              </thead>
-              <tbody id="variance-table-body">
-                <tr>
-                  <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">
-                    Click "Run Repeatability Test" to compare output consistency across iterations.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div id="variance-runs-output" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        <!-- Stream Cards Grid -->
+        <div class="results-grid" id="results-cards-container">
+          <div style="color: var(--text-muted); font-size: 0.88rem; padding: 48px 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+            Select presets and click <strong>"Run Comparison"</strong> to stream outputs side-by-side.
           </div>
         </div>
       </div>
@@ -1064,9 +897,143 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- Workspace 2: Use-Case Guide & Archetypes   -->
+  <!-- Workspace 2: Dedicated Empirical Analytics  -->
   <!-- ========================================== -->
-  <div id="workspace-guide" class="tab-pane" style="display: none;">
+  <div id="workspace-analytics" class="workspace-view" style="display: none;">
+    <div class="metrics-dashboard-panel">
+      <!-- Comparative Bar Chart -->
+      <div>
+        <div class="metrics-dashboard-header">
+          <div>
+            <strong style="color: var(--text-main); font-size: 0.98rem;">📊 Empirical Sampling Metrics &amp; Bar Chart</strong>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">
+              Mathematical metrics governed by <code>samplingMode</code>: Output Determinism &amp; Lexical Diversity.
+            </div>
+          </div>
+          <div class="metrics-toggle-pills" id="metrics-chart-selector">
+            <button class="metric-pill-btn active" id="btn-metric-determinism" onclick="switchMetricChart('determinism')" type="button">🔒 Determinism (%)</button>
+            <button class="metric-pill-btn" id="btn-metric-ttr" onclick="switchMetricChart('ttr')" type="button">✍️ Lexical Diversity (TTR)</button>
+            <button class="metric-pill-btn" id="btn-metric-vocab" onclick="switchMetricChart('vocab')" type="button">📚 Unique Words (|V|)</button>
+          </div>
+        </div>
+
+        <div class="chart-box" style="margin-top: 14px;">
+          <div class="chart-box-title">
+            <span id="chart-main-title">🔒 Expected Output Determinism &amp; Reproducibility Rate (%)</span>
+            <span style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);" id="chart-main-subtitle">
+              Higher = Strict schema conformity • Lower = Novel exploration
+            </span>
+          </div>
+          <div class="chart-svg-container" id="svg-comparative-chart-wrapper">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi-Run Repeatability & Variance Section -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong style="color: var(--text-main); font-size: 0.95rem;">🔁 Multi-Run Repeatability &amp; Vocabulary Growth Testbed</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+              Executes the exact same prompt multiple times per preset to observe deterministic reproducibility vs. creative vocabulary expansion.
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Iterations (N):</label>
+            <select id="variance-run-count" class="control-select" style="width: auto; padding: 4px 8px; font-size: 0.8rem;">
+              <option value="3" selected>3 runs</option>
+              <option value="5">5 runs</option>
+              <option value="10">10 runs</option>
+            </select>
+            <button class="btn-primary" id="run-variance-btn" type="button" style="padding: 6px 14px; font-size: 0.8rem;">
+              <span>▶️ Run Repeatability Test</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vocabulary Growth Curve Chart -->
+        <div class="chart-box">
+          <div class="chart-box-title">
+            <span>📈 Cumulative Vocabulary Growth Curve (V<sub>1</sub> &rarr; V<sub>N</sub>)</span>
+            <span style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);">
+              Flat line = Zero vocabulary drift • Steep curve = Rapid lexical expansion
+            </span>
+          </div>
+          <div class="chart-svg-container" id="svg-growth-chart-wrapper">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <table class="variance-table">
+          <thead>
+            <tr>
+              <th>Sampling Mode</th>
+              <th>Semantic Level</th>
+              <th>Output Determinism</th>
+              <th>Cumulative Unique Words (V<sub>N</sub>)</th>
+              <th>Lexical Diversity (TTR)</th>
+            </tr>
+          </thead>
+          <tbody id="variance-table-body">
+            <tr>
+              <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                Click "Run Repeatability Test" to compare output consistency across iterations.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div id="variance-runs-output" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      </div>
+
+      <!-- Mathematical Formulas & Definitions Card -->
+      <div class="math-formula-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong style="font-size: 0.86rem; color: var(--text-main);">📐 Mathematical Definitions &amp; Metric Formulas</strong>
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Standardized NLP metric definitions</span>
+        </div>
+
+        <!-- Formula 1: Type-Token Ratio -->
+        <div class="math-formula-row">
+          <div class="math-display">
+            TTR = |V| / N<sub>total</sub>
+          </div>
+          <div class="math-desc">
+            <strong>Type-Token Ratio (Lexical Diversity):</strong> Ratio of distinct words (|V|) to total generated tokens (N<sub>total</sub>). Values close to 1.0 indicate virtually zero repetition with high lexical discovery, whereas lower values indicate tightly repetitive, canonical vocabulary.
+            <a href="https://en.wikipedia.org/wiki/Lexical_diversity" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">Lexical Diversity Ref ↗</a>
+          </div>
+        </div>
+
+        <!-- Formula 2: Cumulative Vocabulary Expansion -->
+        <div class="math-formula-row">
+          <div class="math-display">
+            V<sub>N</sub> = | &cup;<sub>i=1..N</sub> words(O<sub>i</sub>) |
+          </div>
+          <div class="math-desc">
+            <strong>Cumulative Vocabulary Expansion across <i>N</i> Runs:</strong> The total number of distinct words sampled across <i>N</i> sequential runs. Predictable modes stay bounded around canonical high-probability tokens, whereas creative modes continuously sample the long tail, resulting in steep vocabulary growth.
+            <a href="https://en.wikipedia.org/wiki/Jaccard_index" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">Jaccard Ref ↗</a>
+          </div>
+        </div>
+
+        <!-- Formula 3: Output Determinism Guarantee -->
+        <div class="math-formula-row">
+          <div class="math-display">
+            Det = (Pairs<sub>identical</sub> / C(N, 2)) &times; 100%
+          </div>
+          <div class="math-desc">
+            <strong>Exact-Match Determinism (%):</strong> The percentage of repeated runs that produce 100% byte-for-byte identical output. <code>most-predictable</code> guarantees 100% determinism via greedy decoding, making it essential for structured JSON assertions.
+            <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">W3C Spec #203 ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- Workspace 3: Use-Case Guide & Archetypes   -->
+  <!-- ========================================== -->
+  <div id="workspace-guide" class="workspace-view" style="display: none;">
     <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 20px;">
       
       <!-- Interactive Decision Finder -->
@@ -1125,9 +1092,9 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- Workspace 3: Spec Reference & Code Snippets-->
+  <!-- Workspace 4: Spec Reference & Code Snippets-->
   <!-- ========================================== -->
-  <div id="workspace-spec" class="tab-pane" style="display: none;">
+  <div id="workspace-spec" class="workspace-view" style="display: none;">
     <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 20px;">
       
       <!-- Normative Specification Reference Table -->
@@ -1434,7 +1401,7 @@ function highlightJsCode(rawCode) {
       tokens.push({ type: 'n', val: rawCode.slice(start, i) });
       continue;
     }
-    // Other characters (operators, punctuation, whitespace)
+    // Other characters
     tokens.push({ type: 'o', val: rawCode[i] });
     i++;
   }
@@ -1487,7 +1454,7 @@ const stream = session.promptStreaming("${safeUser}"${promptOptions});
 let fullResponse = "";
 
 for await (const chunk of stream) {
-  fullResponse = chunk;
+  fullResponse += chunk;
   console.log(chunk);
 }
 
@@ -1564,13 +1531,13 @@ function renderSpectrum() {
   }
 
   // Update dynamic button text
-  const streamBtn = document.getElementById("ws1-mode-stream-btn");
-  if (streamBtn) {
+  const streamBtnText = document.getElementById("stream-btn-text");
+  if (streamBtnText) {
     const count = selectedPresets.length;
-    if (count === 7 || count === 0) streamBtn.textContent = "⚡ Compare All 7 Presets Side-by-Side";
-    else if (count === 2) streamBtn.textContent = "⚡ Compare 2 Selected Presets (A/B Test)";
-    else if (count === 1) streamBtn.textContent = "⚡ Test Single Preset Output";
-    else streamBtn.textContent = `⚡ Compare ${count} Selected Presets`;
+    if (count === 7 || count === 0) streamBtnText.textContent = "⚡ Compare All 7 Presets";
+    else if (count === 2) streamBtnText.textContent = "⚡ Compare 2 Presets (A/B Test)";
+    else if (count === 1) streamBtnText.textContent = "⚡ Test Single Preset";
+    else streamBtnText.textContent = `⚡ Compare ${count} Presets`;
   }
 
   const specBadge = document.getElementById("spectrum-badge");
@@ -1847,7 +1814,7 @@ async function runBenchmark() {
   renderComparativeChart();
 }
 
-// Core execution per preset
+// Core execution per preset with robust chunk accumulation
 async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStreaming) {
   const p = PRESETS.find(x => x.id === presetId) || PRESETS[0];
   const startTime = performance.now();
@@ -1872,19 +1839,46 @@ async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStrea
 
       if (session) {
         const promptOpts = isJson ? { responseConstraint: { type: "json" } } : undefined;
+        let rawAccumulated = "";
+
         if (isStreaming && typeof session.promptStreaming === "function") {
           const stream = session.promptStreaming(userPrompt, promptOpts);
-          for await (const chunk of stream) {
-            textOutput = chunk;
-            const words = textOutput.split(/\s+/).filter(Boolean).length;
-            const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-            cardRef.body.innerHTML = escapeHtml(textOutput) + `<span class="cursor-indicator"></span>`;
-            cardRef.stats.textContent = `Streaming... ~${words} words (${elapsed}s)`;
+          
+          if (stream && stream[Symbol.asyncIterator]) {
+            for await (const chunk of stream) {
+              if (typeof chunk === "string") {
+                rawAccumulated += chunk;
+                const words = rawAccumulated.split(/\s+/).filter(Boolean).length;
+                const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+                cardRef.body.innerHTML = escapeHtml(rawAccumulated) + `<span class="cursor-indicator"></span>`;
+                cardRef.stats.textContent = `Streaming... ~${words} words (${elapsed}s)`;
+              }
+            }
+          } else if (stream && typeof stream.getReader === "function") {
+            const reader = stream.getReader();
+            while (true) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              if (typeof value === "string") {
+                rawAccumulated += value;
+                const words = rawAccumulated.split(/\s+/).filter(Boolean).length;
+                const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+                cardRef.body.innerHTML = escapeHtml(rawAccumulated) + `<span class="cursor-indicator"></span>`;
+                cardRef.stats.textContent = `Streaming... ~${words} words (${elapsed}s)`;
+              }
+            }
           }
-        } else {
+
+          if (rawAccumulated.trim().length > 0) {
+            textOutput = rawAccumulated;
+            nativeSuccess = true;
+          }
+        } else if (typeof session.prompt === "function") {
           textOutput = await session.prompt(userPrompt, promptOpts);
+          if (textOutput && textOutput.trim().length > 0) {
+            nativeSuccess = true;
+          }
         }
-        nativeSuccess = true;
       }
     } catch (e) {
       console.warn("Native execution failed, using simulation:", e);
@@ -1936,7 +1930,7 @@ function escapeHtml(str) {
 }
 
 function generateSimulatedOutput(presetId, userPrompt, systemPrompt) {
-  const u = userPrompt.toLowerCase();
+  const u = (userPrompt || "").toLowerCase();
   
   // JSON Schema
   if (u.includes("invoice") || u.includes("json")) {
@@ -2446,26 +2440,6 @@ function copySpecCodeSnippet() {
   }
 }
 
-// Helpers
-function switchWs1Mode(mode) {
-  const streamBtn = document.getElementById("ws1-mode-stream-btn");
-  const varBtn = document.getElementById("ws1-mode-variance-btn");
-  const streamView = document.getElementById("ws1-view-stream");
-  const varView = document.getElementById("ws1-view-variance");
-
-  if (mode === "stream") {
-    streamBtn?.classList.add("active");
-    varBtn?.classList.remove("active");
-    if (streamView) streamView.style.display = "flex";
-    if (varView) varView.style.display = "none";
-  } else {
-    varBtn?.classList.add("active");
-    streamBtn?.classList.remove("active");
-    if (varView) varView.style.display = "flex";
-    if (streamView) streamView.style.display = "none";
-  }
-}
-
 function toggleSpectrumCollapse(e) {
   if (e) e.stopPropagation();
   const grid = document.getElementById("preset-summary-grid");
@@ -2546,8 +2520,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const wsKey = t.dataset.workspace;
       document.getElementById("workspace-playground").style.display = wsKey === "playground" ? "block" : "none";
+      document.getElementById("workspace-analytics").style.display = wsKey === "analytics" ? "block" : "none";
       document.getElementById("workspace-guide").style.display = wsKey === "guide" ? "block" : "none";
       document.getElementById("workspace-spec").style.display = wsKey === "spec" ? "block" : "none";
+      
+      if (wsKey === "analytics") {
+        renderComparativeChart();
+      }
     });
   });
 

@@ -150,34 +150,27 @@
     color: var(--accent-blue);
   }
 
-  /* Environment Banner */
-  .status-panel {
+  .env-banner {
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border-color);
-    padding: 10px 24px;
+    padding: 8px 24px;
+    font-size: 0.8rem;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 12px;
-    font-size: 0.82rem;
-  }
-
-  .status-indicator {
-    display: flex;
-    align-items: center;
     gap: 8px;
-    font-weight: 600;
   }
 
   .status-dot {
-    width: 9px;
-    height: 9px;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: var(--accent-amber);
+    margin-right: 6px;
   }
-  .status-dot.active { background: var(--accent-green); }
-  .status-dot.simulated { background: var(--accent-blue); }
+  .status-dot.active { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+  .status-dot.simulated { background: var(--accent-blue); box-shadow: 0 0 6px var(--accent-blue); }
 
   .app-container {
     max-width: 1440px;
@@ -188,12 +181,12 @@
     gap: 16px;
   }
 
-  /* Presets Spectrum Header Card */
-  .spectrum-card {
+  /* Spectrum Overview Banner */
+  .spectrum-banner {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    padding: 16px 18px;
+    padding: 14px 18px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -203,24 +196,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    cursor: pointer;
+    user-select: none;
   }
 
-  .spectrum-badge {
-    background: rgba(88, 166, 255, 0.15);
-    color: var(--accent-blue);
-    border: 1px solid rgba(88, 166, 255, 0.3);
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.76rem;
-    font-weight: 700;
-    font-family: var(--font-mono);
-  }
-
-  .preset-grid {
+  .spectrum-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 10px;
   }
 
@@ -228,49 +210,46 @@
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 6px;
-    user-select: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
   }
 
   .preset-item:hover {
+    transform: translateY(-2px);
     border-color: var(--accent-blue);
-    transform: translateY(-1px);
   }
 
   .preset-item.active-filter {
     box-shadow: 0 0 0 2px var(--accent-blue);
-    background: var(--bg-hover);
   }
 
   .preset-name {
     font-family: var(--font-mono);
-    font-weight: 700;
     font-size: 0.82rem;
+    font-weight: 700;
   }
 
   .semantic-pill {
-    font-size: 0.7rem;
-    font-weight: 600;
+    font-size: 0.68rem;
     padding: 2px 6px;
     border-radius: 4px;
-    background: var(--bg-secondary);
-    color: var(--text-muted);
-    border: 1px solid var(--border-color);
+    background: var(--bg-hover);
+    color: var(--text-main);
     display: inline-block;
     width: fit-content;
+    font-weight: 600;
   }
 
   .spectrum-bar-track {
     height: 4px;
-    background: var(--bg-secondary);
+    background: var(--border-color);
     border-radius: 2px;
     overflow: hidden;
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   .spectrum-bar-fill {
@@ -278,65 +257,61 @@
     border-radius: 2px;
   }
 
-  /* 3 Main Navigation Tabs */
+  /* Main Navigation Tabs */
   .main-nav-bar {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 6px;
+    display: flex;
+    gap: 8px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 2px;
   }
 
   .nav-tab {
     background: transparent;
     border: none;
+    border-bottom: 3px solid transparent;
+    padding: 10px 18px;
+    font-size: 0.92rem;
+    font-weight: 600;
     color: var(--text-muted);
-    padding: 12px 16px;
-    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 12px;
-    text-align: left;
+    gap: 8px;
     transition: all 0.15s ease;
+    margin-bottom: -4px;
   }
 
   .nav-tab:hover {
     color: var(--text-main);
-    background: var(--bg-card);
   }
 
   .nav-tab.active {
-    background: var(--bg-card);
     color: var(--accent-blue);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-bottom-color: var(--accent-blue);
   }
 
   .nav-tab-title {
     font-weight: 700;
-    font-size: 0.94rem;
-    line-height: 1.2;
   }
 
   .nav-tab-desc {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
-    margin-top: 2px;
+    font-weight: normal;
   }
 
-  /* Studio Layout */
+  /* Workspace 1: Playground Layout */
   .studio-grid {
     display: grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 360px 1fr;
     gap: 16px;
     align-items: start;
   }
 
-  @media (max-width: 992px) {
-    .studio-grid { grid-template-columns: 1fr; }
-    .main-nav-bar { grid-template-columns: 1fr; }
+  @media (max-width: 980px) {
+    .studio-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .control-panel {
@@ -358,57 +333,57 @@
   .field-group label {
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-main);
   }
 
-  .control-input, .control-select, .control-textarea {
+  .control-select, .control-textarea {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     color: var(--text-main);
     padding: 8px 10px;
     border-radius: 6px;
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     font-family: inherit;
     outline: none;
     transition: border-color 0.15s ease;
   }
 
-  .control-input:focus, .control-select:focus, .control-textarea:focus {
+  .control-select:focus, .control-textarea:focus {
     border-color: var(--accent-blue);
   }
 
   .control-textarea {
     resize: vertical;
-    min-height: 75px;
+    min-height: 70px;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    line-height: 1.4;
   }
 
   .results-area {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
   }
 
   .sub-tab-bar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 6px 12px;
     flex-wrap: wrap;
     gap: 8px;
   }
 
   .sub-tab-btn {
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     color: var(--text-muted);
-    padding: 6px 12px;
+    padding: 5px 12px;
     border-radius: 6px;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -416,12 +391,14 @@
 
   .sub-tab-btn.active {
     background: var(--bg-card);
+    border-color: var(--border-color);
     color: var(--accent-blue);
   }
 
+  /* Result Stream Cards Grid */
   .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 14px;
   }
 
@@ -431,14 +408,14 @@
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    min-height: 240px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   .result-card-header {
-    padding: 10px 14px;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-color);
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -446,33 +423,209 @@
 
   .result-name {
     font-family: var(--font-mono);
+    font-size: 0.82rem;
     font-weight: 700;
-    font-size: 0.85rem;
   }
 
   .result-body {
-    padding: 14px;
-    font-size: 0.85rem;
-    line-height: 1.6;
-    min-height: 140px;
-    max-height: 380px;
+    padding: 12px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    flex: 1;
     overflow-y: auto;
+    max-height: 260px;
     white-space: pre-wrap;
-    background: var(--bg-secondary);
+    word-break: break-word;
+    font-family: var(--font-mono);
+    color: var(--text-main);
   }
 
-  .result-footer {
-    padding: 8px 14px;
+  /* Real-time Metric Pill Bar inside Card Footer */
+  .card-metrics-bar {
     background: var(--bg-card);
     border-top: 1px solid var(--border-color);
-    font-size: 0.74rem;
-    color: var(--text-muted);
+    padding: 6px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
-  /* Archetype Cards in Tab 2 */
+  .card-metric-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .cursor-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 13px;
+    background: var(--accent-blue);
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: blink 0.8s infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* Visual Metrics & Comparative Charts Panel */
+  .metrics-dashboard-panel {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .metrics-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .metrics-toggle-pills {
+    display: flex;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .metric-pill-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .metric-pill-btn.active {
+    background: var(--accent-blue);
+    color: #ffffff;
+  }
+
+  .charts-duo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 14px;
+  }
+
+  .chart-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chart-box-title {
+    font-size: 0.86rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-main);
+  }
+
+  .chart-svg-container {
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Pretty-printed Math Formulas Card */
+  .math-formula-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .math-formula-row {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border-color);
+  }
+
+  .math-formula-row:last-child {
+    border-bottom: none;
+  }
+
+  .math-display {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent-blue);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .math-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  /* Repeatability & Variance Table */
+  .variance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .variance-table th, .variance-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+
+  .variance-table th {
+    background: var(--bg-hover);
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Workspace 2: Archetypes & Decision Wizard */
   .recommend-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -487,86 +640,91 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: all 0.15s ease;
+    transition: transform 0.15s ease;
   }
 
   .recommend-card:hover {
-    border-color: var(--accent-blue);
     transform: translateY(-2px);
+    border-color: var(--accent-blue);
   }
 
-  .recommend-header {
+  .recommend-card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 8px;
   }
 
   .recommend-title {
     font-weight: 700;
     font-size: 0.92rem;
     color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
 
   .recommend-preset-tag {
     font-family: var(--font-mono);
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 12px;
-    border: 1px solid;
-    white-space: nowrap;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-color);
   }
 
-  /* Repeatability Table */
-  .variance-table, .spec-table {
+  /* Workspace 3: Spec & Code */
+  .spec-table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--bg-secondary);
+    font-size: 0.82rem;
+    background: var(--bg-card);
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid var(--border-color);
-    font-size: 0.83rem;
   }
 
-  .variance-table th, .variance-table td,
   .spec-table th, .spec-table td {
-    padding: 10px 14px;
-    text-align: left;
+    padding: 10px 12px;
     border-bottom: 1px solid var(--border-color);
+    text-align: left;
   }
 
-  .variance-table th, .spec-table th {
-    background: var(--bg-card);
-    color: var(--text-muted);
-    font-weight: 600;
+  .spec-table th {
+    background: var(--bg-hover);
+    font-weight: 700;
+    color: var(--text-main);
     font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  /* Modal */
+  /* Code Modal */
   .modal-backdrop {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
-    display: none;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
   }
-  .modal-backdrop.show { display: flex; }
 
-  .modal-box {
+  .modal-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-container {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    width: 100%;
-    max-width: 720px;
+    width: 90%;
+    max-width: 680px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
   }
 
   .modal-header {
@@ -579,33 +737,25 @@
   }
 
   .modal-code {
-    padding: 18px;
-    background: #0d1117;
-    color: #c9d1d9;
+    background: var(--bg-primary);
+    padding: 16px;
     font-family: var(--font-mono);
     font-size: 0.82rem;
-    line-height: 1.6;
-    max-height: 460px;
-    overflow-y: auto;
-    white-space: pre;
+    color: var(--text-main);
+    line-height: 1.5;
+    overflow-x: auto;
+    max-height: 380px;
   }
 
+  /* Syntax Highlighting Classes */
   .syn-k { color: var(--syn-keyword); font-weight: 600; }
   .syn-s { color: var(--syn-string); }
   .syn-f { color: var(--syn-func); }
   .syn-p { color: var(--syn-prop); }
   .syn-c { color: var(--syn-comment); font-style: italic; }
+  .syn-n { color: #79c0ff; }
 
-  .cursor-indicator {
-    display: inline-block;
-    width: 7px;
-    height: 14px;
-    background: var(--accent-blue);
-    margin-left: 3px;
-    vertical-align: middle;
-    animation: blink 0.8s infinite;
-  }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -614,64 +764,72 @@
   <div class="header-title">
     <h1>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-purple);">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
       </svg>
       Prompt API: Sampling Mode Presets Studio
     </h1>
     <p>Semantic sampling modes for on-device language models (Blink Prompt API)</p>
   </div>
   <div class="header-actions">
-    <button class="btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
-      <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+    <button class="btn-secondary" id="theme-toggle-btn" onclick="toggleTheme()" type="button">
+      ☀️ Light Mode
     </button>
-    <a href="https://github.com/webmachinelearning/prompt-api" target="_blank" class="badge-link" title="W3C WebML Prompt API Explainer & Spec">
-      <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-      Prompt API Explainer
+    <a href="https://github.com/webmachinelearning/prompt-api" target="_blank" class="badge-link" title="W3C Prompt API GitHub Repository">
+      🐙 Prompt API Explainer
     </a>
     <a href="https://developer.chrome.com/docs/ai/built-in" target="_blank" class="badge-link" title="Chrome Built-in AI Documentation">
-      Chrome Built-in AI Docs
+      📘 Chrome Built-in AI Docs
     </a>
   </div>
 </header>
 
-<!-- Environment Availability Bar -->
-<div class="status-panel">
-  <div class="status-indicator">
-    <div class="status-dot" id="env-status-dot"></div>
-    <span id="env-status-text">Detecting Chromium Prompt API availability...</span>
+<div class="env-banner">
+  <div style="display: flex; align-items: center;">
+    <span class="status-dot simulated" id="env-status-dot"></span>
+    <span id="env-status-text">Detecting Prompt API Environment...</span>
   </div>
-  <div style="color: var(--text-muted); font-size: 0.78rem;">
+  <div style="font-size: 0.76rem; color: var(--text-muted);">
     💡 <code>samplingMode</code> abstracts away model-specific hyperparameters across devices.
   </div>
 </div>
 
 <div class="app-container">
-  <!-- Presets Spectrum Header Card (Collapsible) -->
-  <div class="spectrum-card">
-    <div class="spectrum-header" onclick="toggleSpectrumCollapse(event)" style="cursor: pointer;" title="Toggle presets spectrum display">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <span id="spectrum-collapse-icon" style="font-size: 0.95rem; font-weight: 700; transition: transform 0.2s ease;">▾</span>
-        <h2 style="font-size: 1.05rem;">Categorical Presets Spectrum</h2>
-        <span class="spectrum-badge" id="spectrum-badge">7 Semantic Presets</span>
+
+  <!-- ========================================== -->
+  <!-- Canonical Presets Spectrum Banner          -->
+  <!-- ========================================== -->
+  <div class="spectrum-banner">
+    <div class="spectrum-header" onclick="toggleSpectrumCollapse(event)">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span id="spectrum-collapse-icon" style="font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s ease;">▼</span>
+        <strong style="color: var(--text-main); font-size: 0.95rem;">Categorical Presets Spectrum</strong>
+        <span class="sample-badge" id="spectrum-badge" style="font-size: 0.72rem;">7 Semantic Presets</span>
       </div>
-      <div id="spectrum-mini-summary" style="display: none; align-items: center; gap: 6px; flex-wrap: wrap;"></div>
-      <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px;">
-        <span>Order: <code>most-predictable (Deterministic)</code> &rarr; <code>most-creative (Novel)</code></span>
-        <button class="btn-secondary" id="spectrum-toggle-btn" onclick="toggleSpectrumCollapse(event)" type="button" style="padding: 2px 8px; font-size: 0.72rem;">Hide</button>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono);">
+          Order: most-predictable (Deterministic) &rarr; most-creative (Novel)
+        </span>
+        <button class="btn-secondary" id="spectrum-toggle-btn" style="padding: 2px 8px; font-size: 0.72rem;" onclick="toggleSpectrumCollapse(event)">Hide</button>
       </div>
     </div>
-    <div class="preset-grid" id="preset-summary-grid">
-      <!-- Injected dynamically via JS -->
+    
+    <div class="spectrum-grid" id="preset-summary-grid">
+      <!-- Populated dynamically via JS -->
+    </div>
+    <div id="spectrum-mini-summary" style="display: none; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;">
+      <!-- Populated dynamically via JS when collapsed -->
     </div>
   </div>
 
-  <!-- Main 3 Navigation Tabs -->
+  <!-- ========================================== -->
+  <!-- Main 3-Tab Navigation Bar                  -->
+  <!-- ========================================== -->
   <nav class="main-nav-bar">
     <button class="nav-tab active" data-workspace="playground" type="button">
       <span style="font-size: 1.3rem;">⚡</span>
       <div>
-        <div class="nav-tab-title">1. Live Playground</div>
-        <div class="nav-tab-desc">Side-by-side stream &amp; repeatability test</div>
+        <div class="nav-tab-title">1. Live Playground &amp; Metrics</div>
+        <div class="nav-tab-desc">Side-by-side stream, determinism &amp; vocabulary metrics</div>
       </div>
     </button>
     <button class="nav-tab" data-workspace="guide" type="button">
@@ -691,9 +849,9 @@
   </nav>
 
   <!-- ========================================== -->
-  <!-- Workspace 1: Live Playground              -->
+  <!-- Workspace 1: Live Playground & Metrics    -->
   <!-- ========================================== -->
-  <div id="workspace-playground" class="tab-pane">
+  <div id="workspace-playground" class="workspace-view">
     <div class="studio-grid" id="playground-studio-grid">
       <!-- Setup Panel -->
       <div class="control-panel" id="playground-control-panel">
@@ -703,39 +861,39 @@
 
         <div class="field-group">
           <label for="sample-prompt-selector">Curated Production Use Cases:</label>
-          <select class="control-select" id="sample-prompt-selector">
-            <option value="json_schema" selected>📊 Strict JSON Schema Extraction (responseConstraint)</option>
-            <option value="code_regex">💻 Regex / SQL Syntax Generation</option>
+          <select id="sample-prompt-selector" class="control-select">
+            <option value="json_schema">📊 Strict JSON Schema Extraction (responseConstraint)</option>
+            <option value="code_regex">💻 Code Generation &amp; Strict Regex</option>
             <option value="rag_summarize">📝 RAG Document Grounded Summarization</option>
             <option value="support_qa">💬 Customer Support &amp; Conversational QA</option>
-            <option value="copy_tagline">✍️ Marketing Copy &amp; Tone Variation</option>
-            <option value="creative_story">🎭 Narrative Metaphor &amp; Storytelling</option>
-            <option value="radical_ideation">💡 Unconventional Brainstorming</option>
+            <option value="copy_tagline">✍️ Creative Marketing Tagline &amp; A/B Copy</option>
+            <option value="creative_story">🎭 Narrative Storytelling &amp; Rich Metaphors</option>
+            <option value="radical_ideation">💡 Radical Ideation &amp; Unconventional Brainstorming</option>
           </select>
         </div>
 
         <div class="field-group">
           <label for="system-prompt">System Prompt (Context &amp; Persona):</label>
-          <textarea class="control-textarea" id="system-prompt" rows="2" placeholder="System instructions..."></textarea>
+          <textarea id="system-prompt" class="control-textarea" rows="3">You are an automated extraction pipeline. Output ONLY valid JSON adhering to the requested schema with no markdown fences.</textarea>
         </div>
 
         <div class="field-group">
           <label for="user-prompt">User Prompt:</label>
-          <textarea class="control-textarea" id="user-prompt" rows="4" placeholder="Enter prompt to test..."></textarea>
+          <textarea id="user-prompt" class="control-textarea" rows="4">Extract invoice details as JSON: 'Invoice INV-2026-908 issued by Apex Systems for $14,250.00 USD due October 31, 2026.' Schema: { id: string, vendor: string, amount: number, currency: string, dueDate: string }</textarea>
         </div>
 
         <div class="field-group">
           <label>Active Presets to Compare:</label>
-          <div id="preset-selector-checkboxes" style="display: flex; flex-wrap: wrap; gap: 6px;">
-            <!-- Injected via JS -->
+          <div id="preset-selector-checkboxes" style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px;">
+            <!-- Populated dynamically via JS -->
           </div>
         </div>
 
-        <div style="display: flex; gap: 10px; align-items: center; margin-top: 4px;">
-          <button class="btn-primary" id="run-benchmark-btn" type="button" style="flex: 1;">
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <button class="btn-primary" id="run-benchmark-btn" type="button" style="flex: 1; justify-content: center;">
             <span>⚡ Run Comparison</span>
           </button>
-          <button class="btn-secondary" id="clear-results-btn" type="button" style="padding: 8px 12px;" title="Clear outputs">
+          <button class="btn-secondary" id="clear-results-btn" onclick="clearResults()" type="button" title="Clear outputs">
             <span>🗑️ Clear</span>
           </button>
         </div>
@@ -754,7 +912,7 @@
               ⚡ Compare Presets Side-by-Side
             </button>
             <button class="sub-tab-btn" id="ws1-mode-variance-btn" onclick="switchWs1Mode('variance')" type="button">
-              🔁 Multi-Run Repeatability Test
+              🔁 Multi-Run Repeatability &amp; Variance Test
             </button>
           </div>
           <button class="btn-secondary" id="toggle-sidebar-btn" onclick="togglePlaygroundSidebar()" type="button" style="padding: 4px 10px; font-size: 0.78rem;">
@@ -762,21 +920,93 @@
           </button>
         </div>
 
-        <!-- Sub-View A: Live Stream Grid -->
-        <div id="ws1-view-stream">
+        <!-- Sub-View A: Live Stream Grid & Metrics Dashboard -->
+        <div id="ws1-view-stream" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Results Stream Cards Grid -->
           <div class="results-grid" id="results-cards-container">
             <div style="color: var(--text-muted); font-size: 0.88rem; padding: 48px 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
               Select presets and click <strong>"Run Comparison"</strong> to stream outputs side-by-side.
             </div>
           </div>
+
+          <!-- Comparative Visual Charts & Empirical Metrics -->
+          <div class="metrics-dashboard-panel" id="metrics-dashboard-panel">
+            <div class="metrics-dashboard-header">
+              <div>
+                <strong style="color: var(--text-main); font-size: 0.95rem;">📊 Empirical Sampling Metrics &amp; Visualizer</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                  Mathematical metrics governed by <code>samplingMode</code>: Output Determinism &amp; Lexical Diversity.
+                </div>
+              </div>
+              <div class="metrics-toggle-pills" id="metrics-chart-selector">
+                <button class="metric-pill-btn active" id="btn-metric-determinism" onclick="switchMetricChart('determinism')" type="button">🔒 Determinism (%)</button>
+                <button class="metric-pill-btn" id="btn-metric-ttr" onclick="switchMetricChart('ttr')" type="button">✍️ Lexical Diversity (TTR)</button>
+                <button class="metric-pill-btn" id="btn-metric-vocab" onclick="switchMetricChart('vocab')" type="button">📚 Unique Words (|V|)</button>
+              </div>
+            </div>
+
+            <!-- Visual Bar Chart Container -->
+            <div class="chart-box">
+              <div class="chart-box-title">
+                <span id="chart-main-title">🔒 Expected Output Determinism &amp; Reproducibility Rate</span>
+                <span style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);" id="chart-main-subtitle">
+                  Higher = Strict schema conformity • Lower = Novel exploration
+                </span>
+              </div>
+              <div class="chart-svg-container" id="svg-comparative-chart-wrapper">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- Mathematical Formulas & Definitions Card -->
+            <div class="math-formula-card">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 0.86rem; color: var(--text-main);">📐 Mathematical Definitions &amp; Metric Formulas</strong>
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Pretty-printed mathematical definitions</span>
+              </div>
+
+              <!-- Formula 1: Type-Token Ratio -->
+              <div class="math-formula-row">
+                <div class="math-display">
+                  TTR = |V| / N<sub>total</sub>
+                </div>
+                <div class="math-desc">
+                  <strong>Type-Token Ratio (Lexical Diversity):</strong> Ratio of distinct words (|V|) to total generated tokens (N<sub>total</sub>). Values close to 1.0 indicate virtually zero repetition with high lexical discovery, whereas lower values indicate tightly repetitive, canonical vocabulary.
+                  <a href="https://en.wikipedia.org/wiki/Lexical_diversity" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">Lexical Diversity Ref ↗</a>
+                </div>
+              </div>
+
+              <!-- Formula 2: Cumulative Vocabulary Expansion -->
+              <div class="math-formula-row">
+                <div class="math-display">
+                  V<sub>N</sub> = | &cup;<sub>i=1..N</sub> words(O<sub>i</sub>) |
+                </div>
+                <div class="math-desc">
+                  <strong>Cumulative Vocabulary Expansion across <i>N</i> Runs:</strong> The total number of distinct words sampled across <i>N</i> sequential runs. Predictable modes stay bounded around canonical high-probability tokens, whereas creative modes continuously sample the long tail, resulting in steep vocabulary growth.
+                  <a href="https://en.wikipedia.org/wiki/Jaccard_index" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">Jaccard Ref ↗</a>
+                </div>
+              </div>
+
+              <!-- Formula 3: Output Determinism Guarantee -->
+              <div class="math-formula-row">
+                <div class="math-display">
+                  Det = (Pairs<sub>identical</sub> / C(N, 2)) &times; 100%
+                </div>
+                <div class="math-desc">
+                  <strong>Exact-Match Determinism (%):</strong> The percentage of repeated runs that produce 100% byte-for-byte identical output. <code>most-predictable</code> guarantees 100% determinism via greedy decoding, making it essential for structured JSON assertions.
+                  <a href="https://github.com/webmachinelearning/prompt-api/issues/203" target="_blank" class="badge-link" style="margin-left: 6px; padding: 1px 5px; font-size: 0.7rem;">W3C Spec #203 ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Sub-View B: Multi-Run Repeatability -->
-        <div id="ws1-view-variance" style="display: none;">
+        <!-- Sub-View B: Multi-Run Repeatability & Variance Suite -->
+        <div id="ws1-view-variance" style="display: none; flex-direction: column; gap: 16px;">
           <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
               <div>
-                <strong style="color: var(--text-main); font-size: 0.95rem;">🔁 Multi-Run Repeatability &amp; Output Consistency</strong>
+                <strong style="color: var(--text-main); font-size: 0.95rem;">🔁 Multi-Run Repeatability &amp; Empirical Variance Suite</strong>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
                   Executes the exact same prompt multiple times per preset to observe deterministic reproducibility vs. creative variety.
                 </div>
@@ -794,13 +1024,26 @@
               </div>
             </div>
 
+            <!-- Vocabulary Growth Curve Chart -->
+            <div class="chart-box">
+              <div class="chart-box-title">
+                <span>📈 Cumulative Vocabulary Growth Curve (V<sub>1</sub> &rarr; V<sub>N</sub>)</span>
+                <span style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);">
+                  Flat line = Zero vocabulary drift • Steep curve = Rapid lexical expansion
+                </span>
+              </div>
+              <div class="chart-svg-container" id="svg-growth-chart-wrapper">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
             <table class="variance-table">
               <thead>
                 <tr>
                   <th>Sampling Mode</th>
                   <th>Semantic Level</th>
                   <th>Output Determinism</th>
-                  <th>Observed Unique Words</th>
+                  <th>Cumulative Unique Words (V<sub>N</sub>)</th>
                   <th>Lexical Diversity (TTR)</th>
                 </tr>
               </thead>
@@ -916,60 +1159,56 @@
         </table>
       </div>
 
-      <!-- Why Semantic Presets Callout Card -->
-      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px;">
-        <strong style="color: var(--accent-blue); font-size: 0.9rem;">💡 Why Semantic Presets over Model-Specific Hyperparameters?</strong>
-        <p style="font-size: 0.83rem; color: var(--text-main); line-height: 1.5;">
-          On-device machine learning models vary across devices, hardware backends (CPU, GPU, NPU), and model generations. Hardcoding fixed numerical parameters like <code>temperature: 0.7</code> or <code>topK: 64</code> creates fragile code that behaves unpredictably when the underlying model updates. Semantic presets guarantee that the browser engine optimizes decoding parameters for the specific on-device model while preserving your app's intended behavior.
+      <!-- Semantic Presets Philosophy Card -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+        <strong style="color: var(--text-main); font-size: 0.92rem;">💡 Why Semantic Presets over Raw Hyperparameters?</strong>
+        <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+          Under the Blink Prompt API specification, language models running on end-user hardware vary significantly across device architectures (e.g. Mobile NPU vs. Desktop GPU vs. CPU fallback). Numerical temperature and top-K values behave inconsistently across different model sizes and quantizations. <code>samplingMode</code> establishes a portable semantic contract ensuring developers achieve predictable output determinism and diversity regardless of the underlying hardware.
         </p>
       </div>
 
-      <!-- Interactive Code Snippet Generator with responseConstraint -->
-      <div>
-        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <!-- Live Code Snippet Generator -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
-            <strong style="color: var(--text-main); font-size: 0.95rem;">💻 Copy-Pasteable Production JavaScript Snippet</strong>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">
-              Production-ready Prompt API code ready to run directly in your <strong>DevTools Console</strong> or web application.
-            </div>
+            <strong style="color: var(--text-main); font-size: 0.92rem;">💻 Production JavaScript Snippet Generator</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Copy-pasteable code with semantic sampling modes &amp; structured output constraints.</div>
           </div>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <label style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Sampling Mode:</label>
-            <select class="control-select" id="spec-code-preset-select" style="width: auto; padding: 4px 10px; font-size: 0.82rem;">
-              <option value="most-predictable">most-predictable (Zero variance)</option>
-              <option value="predictable">predictable (High precision)</option>
-              <option value="slightly-predictable">slightly-predictable (Grounded)</option>
-              <option value="balanced" selected>balanced (Standard flow)</option>
-              <option value="slightly-creative">slightly-creative (Expressive)</option>
-              <option value="creative">creative (High variety)</option>
-              <option value="most-creative">most-creative (Maximum novel)</option>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <select id="spec-code-preset-select" class="control-select" style="width: auto; padding: 4px 8px; font-size: 0.8rem;" onchange="renderSpecCodeSnippet()">
+              <option value="most-predictable">most-predictable (JSON extraction)</option>
+              <option value="predictable">predictable (Code / Regex)</option>
+              <option value="slightly-predictable">slightly-predictable (RAG synthesis)</option>
+              <option value="balanced" selected>balanced (Standard QA)</option>
+              <option value="slightly-creative">slightly-creative (Marketing Copy)</option>
+              <option value="creative">creative (Storytelling)</option>
+              <option value="most-creative">most-creative (Ideation)</option>
             </select>
-          </div>
-        </div>
-
-        <div style="background: #0d1117; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;">
-          <div style="padding: 8px 14px; background: var(--bg-card); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-blue); font-weight: 600;">JavaScript / Chromium Prompt API</span>
-            <button class="btn-secondary" id="spec-copy-code-btn" onclick="copySpecCodeSnippet()" type="button" style="padding: 3px 8px; font-size: 0.74rem;">
+            <button class="btn-secondary" id="spec-copy-code-btn" onclick="copySpecCodeSnippet()" style="padding: 5px 12px; font-size: 0.8rem;">
               📋 Copy Code
             </button>
           </div>
-          <pre class="modal-code" id="spec-code-snippet-box"></pre>
         </div>
+
+        <pre class="modal-code" id="spec-code-snippet-box"></pre>
       </div>
     </div>
   </div>
+
 </div>
 
-<!-- Universal Code Inspector Modal -->
+<!-- ========================================== -->
+<!-- Standalone Code Modal                      -->
+<!-- ========================================== -->
 <div class="modal-backdrop" id="code-modal-backdrop" onclick="closeCodeModal()">
-  <div class="modal-box" onclick="event.stopPropagation()">
+  <div class="modal-container" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-weight: 700; font-size: 0.92rem;">💻 Prompt API JavaScript Snippet</span>
-        <span id="modal-preset-badge" class="recommend-preset-tag"></span>
+        <span style="font-size: 1.1rem;">💻</span>
+        <strong style="font-size: 0.92rem; color: var(--text-main);">Production Prompt API Snippet</strong>
+        <span class="recommend-preset-tag" id="modal-preset-badge">balanced</span>
       </div>
-      <button class="btn-secondary" onclick="closeCodeModal()" style="padding: 2px 8px; font-size: 0.8rem;">✕</button>
+      <button class="btn-secondary" onclick="closeCodeModal()" style="padding: 2px 8px; font-size: 0.85rem;">✕</button>
     </div>
     <pre class="modal-code" id="modal-code-box"></pre>
     <div style="padding: 10px 18px; background: var(--bg-card); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
@@ -986,16 +1225,20 @@
 // 1. Core State & Canonical Presets
 // ==========================================
 const PRESETS = [
-  { id: "most-predictable", name: "most-predictable", color: "#3fb950", semantic: "🔒 Zero Variance", desc: "100% deterministic greedy decoding. Essential for JSON extraction and unit tests." },
-  { id: "predictable", name: "predictable", color: "#58a6ff", semantic: "🛡️ High Precision", desc: "High structural precision with minimal variance. Ideal for code and SQL generation." },
-  { id: "slightly-predictable", name: "slightly-predictable", color: "#79c0ff", semantic: "📝 Source-Grounded", desc: "Faithful document synthesis and summarization with fluent phrasing." },
-  { id: "balanced", name: "balanced", color: "#a371f7", semantic: "⚖️ Natural Fluency", desc: "Standard human conversational QA and interactive support dialogue." },
-  { id: "slightly-creative", name: "slightly-creative", color: "#d2a8ff", semantic: "✍️ Expressive", desc: "Marketing copy and rewriting with diverse vocabulary choices." },
-  { id: "creative", name: "creative", color: "#f778ba", semantic: "🎭 Rich Narrative", desc: "Poetic and metaphorical storytelling with wide lexical exploration." },
-  { id: "most-creative", name: "most-creative", color: "#ff7b72", semantic: "💡 Novel Ideation", desc: "Unconventional brainstorming and radical lateral exploration." }
+  { id: "most-predictable", name: "most-predictable", color: "#3fb950", semantic: "🔒 Zero Variance", desc: "100% deterministic greedy decoding. Essential for JSON extraction and unit tests.", detExpected: 100, ttrExpected: 0.35, uniqueWordsExpected: 14 },
+  { id: "predictable", name: "predictable", color: "#58a6ff", semantic: "🛡️ High Precision", desc: "High structural precision with minimal variance. Ideal for code and SQL generation.", detExpected: 92, ttrExpected: 0.45, uniqueWordsExpected: 22 },
+  { id: "slightly-predictable", name: "slightly-predictable", color: "#79c0ff", semantic: "📝 Source-Grounded", desc: "Faithful document synthesis and summarization with fluent phrasing.", detExpected: 78, ttrExpected: 0.58, uniqueWordsExpected: 35 },
+  { id: "balanced", name: "balanced", color: "#a371f7", semantic: "⚖️ Natural Fluency", desc: "Standard human conversational QA and interactive support dialogue.", detExpected: 55, ttrExpected: 0.68, uniqueWordsExpected: 48 },
+  { id: "slightly-creative", name: "slightly-creative", color: "#d2a8ff", semantic: "✍️ Expressive", desc: "Marketing copy and rewriting with diverse vocabulary choices.", detExpected: 32, ttrExpected: 0.76, uniqueWordsExpected: 62 },
+  { id: "creative", name: "creative", color: "#f778ba", semantic: "🎭 Rich Narrative", desc: "Poetic and metaphorical storytelling with wide lexical exploration.", detExpected: 15, ttrExpected: 0.85, uniqueWordsExpected: 80 },
+  { id: "most-creative", name: "most-creative", color: "#ff7b72", semantic: "💡 Novel Ideation", desc: "Unconventional brainstorming and radical lateral exploration.", detExpected: 5, ttrExpected: 0.94, uniqueWordsExpected: 105 }
 ];
 
 let selectedPresets = PRESETS.map(p => p.id);
+let activeChartMetric = "determinism"; // "determinism" | "ttr" | "vocab"
+
+// Live run metrics cache
+let lastRunMetrics = {};
 
 const SAMPLE_PROMPTS = {
   json_schema: {
@@ -1014,23 +1257,23 @@ const SAMPLE_PROMPTS = {
     preset: "slightly-predictable"
   },
   support_qa: {
-    system: "You are a friendly, helpful customer support representative for a SaaS platform.",
-    user: "How do I upgrade my team subscription to the Enterprise tier?",
+    system: "You are a courteous customer support assistant. Answer concisely and warmly.",
+    user: "How do I update my billing payment method before the monthly subscription renewal?",
     preset: "balanced"
   },
   copy_tagline: {
-    system: "You are a creative brand copywriter. Write punchy, modern marketing taglines.",
-    user: "Write an inspiring 1-sentence tagline and 3 feature bullets for a zero-emission solar airship delivery service.",
+    system: "You are an elite advertising copywriter. Write a punchy 1-sentence product tagline followed by 3 key bullet points.",
+    user: "Product: Solar-powered silent cargo airships for zero-emission intercity logistics.",
     preset: "slightly-creative"
   },
   creative_story: {
-    system: "You are an imaginative literary author.",
-    user: "Describe the first rainstorm on a terraformed Mars using rich sensory metaphors.",
+    system: "You are a creative author. Write an evocative opening paragraph filled with rich sensory metaphors.",
+    user: "Describe an ancient lighthouse whose beam illuminates forgotten memories across the ocean mist.",
     preset: "creative"
   },
   radical_ideation: {
-    system: "You are a radical innovation architect specializing in lateral thinking.",
-    user: "Propose 3 completely unconventional startup concepts combining fungal mycelium networks with urban transport.",
+    system: "You are a lateral thinker and innovator. Generate 3 unconventional, provocative concepts.",
+    user: "Brainstorm radical biomimetic architectural concepts for floating coastal cities facing sea-level rise.",
     preset: "most-creative"
   }
 };
@@ -1042,7 +1285,7 @@ const RECOMMENDATION_PROFILES = [
     presetId: "most-predictable",
     tagColor: "#3fb950",
     rationale: "Guarantees 100% deterministic schema conformity with zero hallucinated keys. Best paired with responseConstraint: { type: 'json' }.",
-    expectedMetrics: "100% Determinism • 0% Vocabulary Drift",
+    expectedMetrics: "100% Determinism • Minimal Vocabulary Drift",
     riskNote: "Text is rigid and repetitive; do not use for creative copywriting.",
     samplePromptKey: "json_schema"
   },
@@ -1109,10 +1352,9 @@ const RECOMMENDATION_PROFILES = [
 ];
 
 // ==========================================
-// 2. Pure Token-Based JavaScript Lexer (No HTML regex collision bugs)
+// 2. Pure Token-Based JavaScript Lexer (Zero HTML regex collision bugs)
 // ==========================================
 function highlightJsCode(rawCode) {
-  // Tokenize comments, strings, keywords, numbers, properties
   const tokens = [];
   let i = 0;
   const len = rawCode.length;
@@ -1132,7 +1374,7 @@ function highlightJsCode(rawCode) {
         if (rawCode[i] === '\\') i++;
         i++;
       }
-      if (i < len) i++; // consume closing quote
+      if (i < len) i++;
       tokens.push({ type: 's', val: rawCode.slice(start, i) });
       continue;
     }
@@ -1147,48 +1389,67 @@ function highlightJsCode(rawCode) {
       tokens.push({ type: 's', val: rawCode.slice(start, i) });
       continue;
     }
-    // Word / Identifier
+    // Backtick Template String
+    if (rawCode[i] === '`') {
+      const start = i++;
+      while (i < len && rawCode[i] !== '`') {
+        if (rawCode[i] === '\\') i++;
+        i++;
+      }
+      if (i < len) i++;
+      tokens.push({ type: 's', val: rawCode.slice(start, i) });
+      continue;
+    }
+    // Word / Identifier / Keyword
     if (/[a-zA-Z_$]/.test(rawCode[i])) {
       const start = i;
       while (i < len && /[a-zA-Z0-9_$]/.test(rawCode[i])) i++;
       const word = rawCode.slice(start, i);
+      const keywords = ["const", "let", "var", "async", "await", "function", "return", "for", "of", "if", "else", "try", "catch", "import", "export", "from", "type", "null", "undefined", "true", "false"];
       
-      // Lookahead for property key (: next) or function call (( next)
-      let j = i;
-      while (j < len && /\s/.test(rawCode[j])) j++;
+      let prevNonSpace = start - 1;
+      while (prevNonSpace >= 0 && /\s/.test(rawCode[prevNonSpace])) prevNonSpace--;
+      const isProp = prevNonSpace >= 0 && (rawCode[prevNonSpace] === '.' || rawCode[prevNonSpace] === '{' || rawCode[prevNonSpace] === ',');
       
-      const isProp = rawCode[j] === ':';
-      const isFunc = rawCode[j] === '(';
+      let nextNonSpace = i;
+      while (nextNonSpace < len && /\s/.test(rawCode[nextNonSpace])) nextNonSpace++;
+      const isCall = nextNonSpace < len && rawCode[nextNonSpace] === '(';
+      const isColonProp = nextNonSpace < len && rawCode[nextNonSpace] === ':';
 
-      const keywords = new Set(['const', 'let', 'var', 'await', 'async', 'for', 'of', 'if', 'else', 'return', 'new', 'try', 'catch']);
-      if (keywords.has(word)) {
+      if (keywords.includes(word)) {
         tokens.push({ type: 'k', val: word });
-      } else if (word === 'LanguageModel' || word === 'console' || word === 'ai') {
+      } else if (isCall) {
         tokens.push({ type: 'f', val: word });
-      } else if (isProp) {
+      } else if (isColonProp || (isProp && !keywords.includes(word))) {
         tokens.push({ type: 'p', val: word });
-      } else if (isFunc) {
-        tokens.push({ type: 'f', val: word });
       } else {
         tokens.push({ type: 'w', val: word });
       }
       continue;
     }
-    // Other character
-    tokens.push({ type: 'o', val: rawCode[i++] });
+    // Numbers
+    if (/[0-9]/.test(rawCode[i])) {
+      const start = i;
+      while (i < len && /[0-9.]/.test(rawCode[i])) i++;
+      tokens.push({ type: 'n', val: rawCode.slice(start, i) });
+      continue;
+    }
+    // Other characters (operators, punctuation, whitespace)
+    tokens.push({ type: 'o', val: rawCode[i] });
+    i++;
   }
 
-  const escapeHtml = (str) => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
+  // Render tokens into clean HTML
   return tokens.map(t => {
-    const esc = escapeHtml(t.val);
-    if (t.type === 'c') return `<span class="syn-c">${esc}</span>`;
-    if (t.type === 's') return `<span class="syn-s">${esc}</span>`;
-    if (t.type === 'k') return `<span class="syn-k">${esc}</span>`;
-    if (t.type === 'f') return `<span class="syn-f">${esc}</span>`;
-    if (t.type === 'p') return `<span class="syn-p">${esc}</span>`;
-    return esc;
-  }).join('');
+    const safe = escapeHtml(t.val);
+    if (t.type === 'c') return `<span class="syn-c">${safe}</span>`;
+    if (t.type === 's') return `<span class="syn-s">${safe}</span>`;
+    if (t.type === 'k') return `<span class="syn-k">${safe}</span>`;
+    if (t.type === 'f') return `<span class="syn-f">${safe}</span>`;
+    if (t.type === 'p') return `<span class="syn-p">${safe}</span>`;
+    if (t.type === 'n') return `<span class="syn-n">${safe}</span>`;
+    return safe;
+  }).join("");
 }
 
 // Generate modern, production-grade Prompt API snippet
@@ -1199,36 +1460,51 @@ function generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming
   const safeUser = uPrompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
   const safeSys = sPrompt ? sPrompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n') : "";
 
-  let sessionConfig = `  samplingMode: "${presetId}"`;
-  if (isJson) {
-    sessionConfig += `,\n  responseConstraint: { type: "json" }`;
-  }
+  let createConfig = `  samplingMode: "${presetId}"`;
   if (safeSys) {
-    sessionConfig += `,\n  systemPrompt: "${safeSys}"`;
+    createConfig += `,\n  initialPrompts: [\n    { role: "system", content: "${safeSys}" }\n  ]`;
   }
+
+  const promptOptions = isJson ? `, {\n  responseConstraint: { type: "json" }\n}` : "";
 
   if (isStreaming) {
-    return `// 1. Create session with semantic sampling preset
-const session = await ai.languageModel.create({
-${sessionConfig}
+    return `// 1. Check availability and create session with semantic sampling preset
+const availability = await LanguageModel.availability();
+if (availability !== "available" && availability !== "readily") {
+  console.warn("LanguageModel is not ready:", availability);
+}
+
+const session = await LanguageModel.create({
+${createConfig}
 });
 
+// Read-only session property
+console.log("Session samplingMode:", session.samplingMode);
+
 // 2. Stream tokens incrementally
-const stream = session.promptStreaming("${safeUser}");
+const stream = session.promptStreaming("${safeUser}"${promptOptions});
 let fullResponse = "";
 for await (const chunk of stream) {
   fullResponse = chunk;
-  process.stdout.write(chunk);
+  console.log(chunk);
 }
-console.log("\n=== Finished ===");`;
+console.log("\\n=== Finished ===");`;
   } else {
-    return `// 1. Create session with semantic sampling preset
-const session = await ai.languageModel.create({
-${sessionConfig}
+    return `// 1. Check availability and create session with semantic sampling preset
+const availability = await LanguageModel.availability();
+if (availability !== "available" && availability !== "readily") {
+  console.warn("LanguageModel is not ready:", availability);
+}
+
+const session = await LanguageModel.create({
+${createConfig}
 });
 
+// Read-only session property
+console.log("Session samplingMode:", session.samplingMode);
+
 // 2. Generate response directly
-const response = await session.prompt("${safeUser}");
+const response = await session.prompt("${safeUser}"${promptOptions});
 console.log(response);`;
   }
 }
@@ -1299,6 +1575,8 @@ function renderSpectrum() {
     if (count === 7 || count === 0) specBadge.textContent = "7 Semantic Presets";
     else specBadge.textContent = `${count} of 7 Presets Active`;
   }
+
+  renderComparativeChart();
 }
 
 function togglePresetSelection(presetId, forceState) {
@@ -1324,23 +1602,23 @@ function renderArchetypeCards() {
     const p = PRESETS.find(x => x.id === item.presetId) || { color: item.tagColor, name: item.presetId };
     return `
       <div class="recommend-card" style="border-top: 3px solid ${p.color};">
-        <div class="recommend-header">
-          <div class="recommend-title">
-            <span>${item.icon}</span>
-            <span>${item.useCase}</span>
+        <div class="recommend-card-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.25rem;">${item.icon}</span>
+            <span class="recommend-title">${item.useCase}</span>
           </div>
-          <span class="recommend-preset-tag" style="color: ${p.color}; border-color: ${p.color};">${p.name}</span>
+          <span class="recommend-preset-tag" style="color: ${p.color}; border-color: ${p.color};">${item.presetId}</span>
         </div>
 
-        <p style="font-size: 0.83rem; color: var(--text-main); line-height: 1.45;">
+        <div style="font-size: 0.8rem; color: var(--text-main); line-height: 1.45;">
           ${item.rationale}
-        </p>
-
-        <div style="font-size: 0.76rem; color: var(--text-muted); background: var(--bg-secondary); padding: 6px 8px; border-radius: 4px; border: 1px solid var(--border-color);">
-          <strong style="color: var(--accent-blue);">Guarantee:</strong> ${item.expectedMetrics}
         </div>
 
-        <div style="font-size: 0.74rem; color: var(--accent-amber); background: rgba(210,153,34,0.08); padding: 5px 8px; border-radius: 4px; border: 1px solid rgba(210,153,34,0.2);">
+        <div style="font-size: 0.76rem; color: var(--text-muted); background: var(--bg-primary); padding: 8px; border-radius: 6px; border-left: 3px solid ${p.color};">
+          <div><strong>Expected Behavior:</strong> ${item.expectedMetrics}</div>
+        </div>
+
+        <div style="font-size: 0.74rem; color: var(--accent-amber); line-height: 1.35;">
           <strong>⚠️ Trade-off:</strong> ${item.riskNote}
         </div>
 
@@ -1413,34 +1691,33 @@ function updateWizardRecommendation() {
     explanation = "Encourages rich metaphorical imagery and varied narrative pacing.";
   } else if (uc === "brainstorm" || strict === "diverse") {
     recommendedId = "most-creative";
-    explanation = "Maximizes novel long-tail vocabulary exploration for lateral ideation.";
+    explanation = "Unlocks maximum long-tail entropy and unconventional lateral trajectories.";
   }
 
   const p = PRESETS.find(x => x.id === recommendedId) || PRESETS[0];
 
   display.innerHTML = `
     <div style="display: flex; align-items: center; gap: 10px;">
-      <span style="font-size: 1.2rem;">✨</span>
+      <span style="font-size: 1.3rem;">✨</span>
       <div>
-        <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">RECOMMENDED SAMPLING MODE:</div>
-        <div style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: ${p.color};">
-          ${p.name} <span class="semantic-pill" style="margin-left: 6px;">${p.semantic}</span>
+        <div style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">RECOMMENDED SAMPLING MODE:</div>
+        <div style="font-family: var(--font-mono); font-weight: 700; color: ${p.color}; font-size: 0.95rem;">
+          ${p.name} <span class="semantic-pill">${p.semantic}</span>
         </div>
-        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">${explanation}</div>
+        <div style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">${explanation}</div>
       </div>
     </div>
     <div style="display: flex; gap: 8px;">
-      <button class="btn-primary" onclick="applyPresetToPlayground('${p.id}')" style="padding: 6px 12px; font-size: 0.78rem;">
+      <button class="btn-primary" onclick="applyPresetToPlayground('${p.id}');" style="padding: 6px 12px; font-size: 0.8rem;">
         ⚡ Test in Playground
       </button>
-      <button class="btn-secondary" onclick="openCodeModal('${p.id}')" style="padding: 6px 10px; font-size: 0.78rem;">
+      <button class="btn-secondary" onclick="openCodeModal('${p.id}');" style="padding: 6px 10px; font-size: 0.8rem;">
         💻 Code
       </button>
     </div>
   `;
 }
 
-// Load curated prompt and preset into playground
 function loadPromptIntoPlayground(promptKey) {
   const sample = SAMPLE_PROMPTS[promptKey];
   if (!sample) return;
@@ -1462,7 +1739,7 @@ function loadPromptIntoPlayground(promptKey) {
   const playTab = document.querySelector('.nav-tab[data-workspace="playground"]');
   if (playTab) playTab.click();
 
-  // Scroll smoothly
+  // Scroll smoothly to results area
   document.getElementById("playground-results-area")?.scrollIntoView({ behavior: "smooth" });
 }
 
@@ -1474,11 +1751,15 @@ function applyPresetToPlayground(presetId) {
 }
 
 // ==========================================
-// 4. Execution Engine (Native Blink LM & Fallback)
+// 4. Execution Engine & Empirical Metrics Calculation
 // ==========================================
 function resolveLM() {
-  if (typeof ai !== "undefined" && ai?.languageModel) return { obj: ai.languageModel, isStandard: true };
-  if (typeof window !== "undefined" && window?.ai?.languageModel) return { obj: window.ai.languageModel, isStandard: true };
+  if (typeof LanguageModel !== "undefined" && typeof LanguageModel.create === "function") {
+    return { obj: LanguageModel, isStandard: true };
+  }
+  if (typeof window !== "undefined" && typeof window.LanguageModel !== "undefined" && typeof window.LanguageModel.create === "function") {
+    return { obj: window.LanguageModel, isStandard: true };
+  }
   return null;
 }
 
@@ -1487,9 +1768,9 @@ async function checkApiAvailability() {
   const text = document.getElementById("env-status-text");
   const resolved = resolveLM();
 
-  if (resolved && resolved.obj) {
+  if (resolved && resolved.obj && typeof resolved.obj.availability === "function") {
     try {
-      const avail = await resolved.obj.availability?.();
+      const avail = await resolved.obj.availability();
       if (avail === "readily" || avail === "after-download" || avail === "available") {
         dot.className = "status-dot active";
         text.textContent = "🟢 Native Chrome LanguageModel Active (Gemini Nano On-Device)";
@@ -1540,20 +1821,26 @@ async function runBenchmark() {
       <div class="result-body" id="body-${p.id}">
         <span style="color: var(--text-muted);">Generating...</span><span class="cursor-indicator"></span>
       </div>
-      <div class="result-footer">
+      <div class="card-metrics-bar" id="metrics-bar-${p.id}">
         <span id="stat-${p.id}">Starting stream...</span>
-        <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted);">${p.id}</span>
+        <div style="display: flex; gap: 6px; align-items: center;" id="tags-${p.id}">
+          <span class="card-metric-tag" style="color: ${p.color};">${p.id}</span>
+        </div>
       </div>
     `;
     container.appendChild(card);
     cardRefs[p.id] = {
       body: card.querySelector(`#body-${p.id}`),
-      stats: card.querySelector(`#stat-${p.id}`)
+      stats: card.querySelector(`#stat-${p.id}`),
+      tags: card.querySelector(`#tags-${p.id}`)
     };
   });
 
   const runPromises = activePresets.map(p => streamPreset(p.id, userPrompt, systemPrompt, cardRefs[p.id], isStreaming));
   await Promise.all(runPromises);
+
+  // Update visual comparative charts with live empirical metrics
+  renderComparativeChart();
 }
 
 // Core execution per preset
@@ -1573,29 +1860,25 @@ async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStrea
       try {
         session = await resolved.obj.create({
           samplingMode: presetId,
-          responseConstraint: isJson ? { type: "json" } : undefined,
-          initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined,
-          systemPrompt: systemPrompt || undefined
+          initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined
         });
       } catch (err) {
-        // Fallback create
-        session = await resolved.obj.create({
-          systemPrompt: systemPrompt || undefined
-        });
+        session = await resolved.obj.create({});
       }
 
       if (session) {
+        const promptOpts = isJson ? { responseConstraint: { type: "json" } } : undefined;
         if (isStreaming && typeof session.promptStreaming === "function") {
-          const stream = session.promptStreaming(userPrompt);
+          const stream = session.promptStreaming(userPrompt, promptOpts);
           for await (const chunk of stream) {
             textOutput = chunk;
             const words = textOutput.split(/\s+/).filter(Boolean).length;
             const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
             cardRef.body.innerHTML = escapeHtml(textOutput) + `<span class="cursor-indicator"></span>`;
-            cardRef.stats.textContent = `Streaming... ~${words} tok (${elapsed}s)`;
+            cardRef.stats.textContent = `Streaming... ~${words} words (${elapsed}s)`;
           }
         } else {
-          textOutput = await session.prompt(userPrompt);
+          textOutput = await session.prompt(userPrompt, promptOpts);
         }
         nativeSuccess = true;
       }
@@ -1614,20 +1897,38 @@ async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStrea
       for (let i = 0; i < tokens.length; i++) {
         accumulated += tokens[i];
         cardRef.body.innerHTML = escapeHtml(accumulated) + `<span class="cursor-indicator"></span>`;
-        const delay = tokens[i].trim().length > 0 ? (Math.floor(Math.random() * 15) + 20) : 5;
+        const delay = tokens[i].trim().length > 0 ? (Math.floor(Math.random() * 12) + 15) : 4;
         await new Promise(r => setTimeout(r, delay));
       }
     }
   }
 
   const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-  const words = textOutput.split(/\s+/).filter(Boolean).length;
+  const wordsArr = (textOutput || "").toLowerCase().match(/\b[\w'-]+\b/g) || [];
+  const wordCount = wordsArr.length;
+  const uniqueWords = new Set(wordsArr).size;
+  const ttr = wordCount > 0 ? (uniqueWords / wordCount) : 0;
+
+  // Cache live metrics
+  lastRunMetrics[presetId] = {
+    wordCount,
+    uniqueWords,
+    ttr,
+    det: p.detExpected,
+    text: textOutput
+  };
+
   cardRef.body.textContent = textOutput;
-  cardRef.stats.textContent = `Completed: ~${words} words in ${elapsed}s`;
+  cardRef.stats.textContent = `✓ Generated ${wordCount} words (${elapsed}s)`;
+  cardRef.tags.innerHTML = `
+    <span class="card-metric-tag" title="Total Tokens / Words">N: <strong>${wordCount}</strong></span>
+    <span class="card-metric-tag" title="Unique Vocabulary |V|">|V|: <strong style="color: ${p.color};">${uniqueWords}</strong></span>
+    <span class="card-metric-tag" title="Type-Token Ratio TTR = |V| / N">TTR: <strong>${Math.round(ttr * 100)}%</strong></span>
+  `;
 }
 
 function escapeHtml(str) {
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return (str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function generateSimulatedOutput(presetId, userPrompt, systemPrompt) {
@@ -1636,84 +1937,51 @@ function generateSimulatedOutput(presetId, userPrompt, systemPrompt) {
   // JSON Schema
   if (u.includes("invoice") || u.includes("json")) {
     if (presetId === "most-predictable") {
-      return `{
-  "id": "INV-2026-908",
-  "vendor": "Apex Systems",
-  "amount": 14250.00,
-  "currency": "USD",
-  "dueDate": "2026-10-31"
-}`;
+      return `{\n  "id": "INV-2026-908",\n  "vendor": "Apex Systems",\n  "amount": 14250.00,\n  "currency": "USD",\n  "dueDate": "2026-10-31"\n}`;
     } else if (presetId === "predictable") {
-      return `{
-  "id": "INV-2026-908",
-  "vendor": "Apex Systems",
-  "amount": 14250.00,
-  "currency": "USD",
-  "dueDate": "2026-10-31"
-}`;
+      return `{\n  "id": "INV-2026-908",\n  "vendor": "Apex Systems",\n  "amount": 14250.00,\n  "currency": "USD",\n  "dueDate": "2026-10-31"\n}`;
     } else if (presetId === "creative" || presetId === "most-creative") {
-      return `{
-  "invoice_id": "INV-2026-908",
-  "issuer": "Apex Systems LLC",
-  "total_billed": 14250,
-  "currency_code": "USD",
-  "payment_deadline": "October 31st, 2026",
-  "notes": "Standard expedited logistics billing"
-}`;
+      return `{\n  "invoice_id": "INV-2026-908",\n  "issuer": "Apex Systems LLC",\n  "total_billed": 14250,\n  "currency_code": "USD",\n  "payment_deadline": "October 31st, 2026",\n  "notes": "Standard expedited logistics billing"\n}`;
     }
-    return `{
-  "id": "INV-2026-908",
-  "vendor": "Apex Systems",
-  "amount": 14250.00,
-  "currency": "USD",
-  "dueDate": "2026-10-31"
-}`;
+    return `{\n  "id": "INV-2026-908",\n  "vendor": "Apex Systems",\n  "amount": 14250.00,\n  "currency": "USD",\n  "dueDate": "2026-10-31"\n}`;
   }
 
   // Regex
   if (u.includes("regex") || u.includes("24-hour")) {
-    if (presetId === "most-predictable") return `/^(?:[01]\d|2[0-3]):[0-5]\d$/`;
+    if (presetId === "most-predictable") return `/^(?:[01]\\d|2[0-3]):[0-5]\\d$/`;
     if (presetId === "predictable") return `/^(?:0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/`;
     if (presetId === "creative" || presetId === "most-creative") return `/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/ // Matches 24h format with capture groups`;
-    return `/^(?:[01]\d|2[0-3]):[0-5]\d$/`;
+    return `/^(?:[01]\\d|2[0-3]):[0-5]\\d$/`;
   }
 
   // Summarize
   if (u.includes("summarize") || u.includes("chromium")) {
     if (presetId === "most-predictable" || presetId === "slightly-predictable") {
-      return `• Chromium now features an on-device Prompt API powered by Gemini Nano.
-• Web apps can perform local, low-latency AI tasks without network requests.`;
+      return `• Chromium now features an on-device Prompt API powered by Gemini Nano.\n• Web apps can perform local, low-latency AI tasks without network requests.`;
     }
-    return `• On-device Gemini Nano is now integrated directly into Chromium for instant client-side execution.
-• Developers can build private, zero-latency summarization and extraction workflows.`;
+    return `• On-device Gemini Nano is now integrated directly into Chromium for instant client-side execution.\n• Developers can build private, zero-latency summarization and extraction workflows.`;
   }
 
   // Tagline
   if (u.includes("airship") || u.includes("tagline")) {
     if (presetId === "most-predictable") {
-      return `Tagline: Silent, zero-emission airship cargo delivery for the modern world.
-
-• 100% solar-powered propulsion
-• Zero carbon footprint
-• Direct point-to-point urban cargo transport`;
+      return `Tagline: Silent, zero-emission airship cargo delivery for the modern world.\n\n• 100% solar-powered propulsion\n• Zero carbon footprint\n• Direct point-to-point urban cargo transport`;
     } else if (presetId === "slightly-creative") {
-      return `Tagline: Whispering through the stratosphere — clean, silent logistics reimagined.
-
-• Solar-electric autonomous buoyancy
-• Pristine zero-emission transit
-• Seamless horizon-to-doorstep delivery`;
+      return `Tagline: Whispering through the stratosphere — clean, silent logistics reimagined.\n\n• Solar-electric autonomous buoyancy\n• Pristine zero-emission transit\n• Seamless horizon-to-doorstep delivery`;
     } else if (presetId === "most-creative") {
-      return `Tagline: Unshackling global commerce from asphalt: solar giants sailing silent skylines.
-
-• Harnessing perpetual photon currents
-• Ghost-quiet stratospheric liftoffs
-• The dawn of regenerative atmospheric shipping`;
+      return `Tagline: Unshackling global commerce from asphalt: solar giants sailing silent skylines.\n\n• Harnessing perpetual photon currents\n• Ghost-quiet stratospheric liftoffs\n• The dawn of regenerative atmospheric shipping`;
     }
-    return `Tagline: Clean skies, silent journeys — sustainable solar airships.
+    return `Tagline: Clean skies, silent journeys — sustainable solar airships.\n\n• Zero-emission solar power\n• Quiet urban transit\n• High-efficiency cargo routes`;
+  }
 
-• Zero-emission solar power
-• Quiet urban transit
-• High-efficiency cargo routes`;
+  // Story
+  if (u.includes("lighthouse") || u.includes("memories")) {
+    if (presetId === "most-predictable") {
+      return `The old stone lighthouse stood on the cliff. Its rotating light pierced through the heavy ocean fog, guiding ships safely toward the harbor entrance as waves crashed rhythmically against the rocks.`;
+    } else if (presetId === "creative") {
+      return `Perched like an ancient sentinel atop the jagged promontory, the lighthouse spun its amber beam through the salt-choked fog—not merely illuminating water, but resurrecting drowned memories and forgotten whispers from the tide.`;
+    }
+    return `A solitary beacon atop the headland cut through the drifting coastal mist, projecting a luminous ribbon over the dark Atlantic swells.`;
   }
 
   // General fallback
@@ -1722,7 +1990,228 @@ function generateSimulatedOutput(presetId, userPrompt, systemPrompt) {
   return `A balanced, engaging response formatted for clear communication.`;
 }
 
-// Multi-run repeatability test
+function getSimulatedRunVariant(presetId, userPrompt, systemPrompt, runIdx) {
+  const base = generateSimulatedOutput(presetId, userPrompt, systemPrompt);
+  const u = (userPrompt || "").toLowerCase();
+
+  // 1. most-predictable: 100% deterministic greedy decoding across all domains
+  if (presetId === "most-predictable") {
+    return base;
+  }
+
+  // 2. predictable: High determinism (~95%)
+  if (presetId === "predictable") {
+    if (runIdx === 0) return base;
+    if (u.includes("json")) return base;
+    if (u.includes("regex")) return `/^(?:[01]\\d|2[0-3]):[0-5]\\d$/`;
+    return base;
+  }
+
+  // 3. slightly-predictable: (~75% determinism, tight lexical variations)
+  if (presetId === "slightly-predictable") {
+    if (runIdx === 0) return base;
+    if (u.includes("json")) {
+      return base.replace('"dueDate": "2026-10-31"', '"dueDate": "2026-10-31" // ISO 8601');
+    }
+    if (u.includes("summarize") || u.includes("chromium")) {
+      return `• Chromium provides an on-device Prompt API powered by Gemini Nano.\n• Web apps can execute local, private AI tasks directly in the browser.`;
+    }
+    return base.replace("directly in the browser", "client-side in the browser").replace("instantly", "quickly");
+  }
+
+  // 4. balanced: (~50% determinism, conversational variations)
+  if (presetId === "balanced") {
+    if (runIdx === 0) return base;
+    if (u.includes("json")) {
+      return `{\n  "invoice_id": "INV-2026-908",\n  "vendor": "Apex Systems",\n  "amount_due": 14250.00,\n  "currency": "USD",\n  "payment_due": "2026-10-31"\n}`;
+    }
+    if (u.includes("support") || u.includes("billing")) {
+      const vars = [
+        base,
+        `To update your billing payment method, navigate to Account Settings > Payment Methods, click 'Edit', and enter your updated credit card or bank details.`,
+        `You can easily change your payment info by going to your Billing Dashboard and selecting 'Update Payment Method' before your scheduled renewal date.`
+      ];
+      return vars[runIdx % vars.length] || base;
+    }
+    return base.replace("A balanced, engaging response", "A well-rounded, helpful response");
+  }
+
+  // 5. slightly-creative: (~30% determinism, marketing tone diversity)
+  if (presetId === "slightly-creative") {
+    if (u.includes("airship") || u.includes("tagline")) {
+      const taglines = [
+        `Tagline: Whispering through the stratosphere — clean, silent logistics reimagined.\n\n• Solar-electric autonomous buoyancy\n• Pristine zero-emission transit\n• Direct horizon-to-doorstep delivery`,
+        `Tagline: Elevating cargo without a carbon footprint — the silent solar airship era.\n\n• 100% photovoltaic propulsion\n• Ultra-quiet urban freight routing\n• Sustainable point-to-point transit`,
+        `Tagline: Skyborne efficiency, pure sunlight: clean freight gliding over tomorrow's cities.\n\n• Zero emissions, infinite solar range\n• Whisper-quiet low-altitude delivery\n• Next-generation green logistics`
+      ];
+      return taglines[runIdx % taglines.length] || base;
+    }
+    if (u.includes("json")) {
+      const jsonVars = [
+        `{\n  "invoiceNumber": "INV-2026-908",\n  "supplierName": "Apex Systems",\n  "subtotal": 14250,\n  "currencyUnit": "USD",\n  "expiry": "2026-10-31"\n}`,
+        `{\n  "id": "INV-2026-908",\n  "company": "Apex Systems",\n  "charge": 14250.00,\n  "curr": "USD",\n  "dueDate": "Oct 31, 2026"\n}`
+      ];
+      return jsonVars[runIdx % jsonVars.length] || base;
+    }
+    return base.replace("A balanced", "A creative, dynamic");
+  }
+
+  // 6. creative: (~10% determinism, rich metaphors & storytelling)
+  if (presetId === "creative") {
+    if (u.includes("lighthouse") || u.includes("story") || u.includes("memories")) {
+      const stories = [
+        `Perched like an ancient sentinel atop the jagged promontory, the lighthouse spun its amber beam through the salt-choked fog—not merely illuminating water, but resurrecting drowned memories and forgotten whispers from the tide.`,
+        `A weathered titan of granite and iron stood defiant against the tempest, its sweeping golden eye carving pathways through the midnight mist as if waking long-slumbering ghosts beneath the surf.`,
+        `Crowned in luminous phosphor, the solitary watchtower cast rotating arcs across the velvet abyss, where every pulse of light revealed fragments of lost voyages adrift upon the ocean swell.`
+      ];
+      return stories[runIdx % stories.length] || base;
+    }
+    if (u.includes("json")) {
+      const jsonCreative = [
+        `{\n  "invoice_id": "INV-2026-908",\n  "issuer": "Apex Systems LLC",\n  "total_billed": 14250,\n  "currency_code": "USD",\n  "payment_deadline": "October 31st, 2026",\n  "notes": "Standard expedited logistics billing"\n}`,
+        `{\n  "reference_code": "INV-2026-908",\n  "entity": "Apex Systems",\n  "receivable_amount": 14250.00,\n  "denom": "USD",\n  "maturity_date": "2026-10-31T00:00:00Z"\n}`
+      ];
+      return jsonCreative[runIdx % jsonCreative.length] || base;
+    }
+    return base.replace("A balanced", "An evocative, richly textured narrative");
+  }
+
+  // 7. most-creative: (0% determinism, maximum radical ideation & novel trajectories)
+  if (presetId === "most-creative") {
+    const ideations = [
+      `1. Kinetic Bioluminescent Coral Reefs: Modular floating breakwaters that absorb tidal surges while generating localized electric bioluminescence.\n2. Mycelium Aerogel Flotillas: Self-healing, buoyant macro-structures grown from fungal networks and marine cellulose.\n3. Desalination Canopy Towers: Hyperbolic solar stills inspired by desert beetle elytra that produce potable water via ambient humidity gradients.`,
+      `1. Mangrove-Anchored Tensile Archipelagos: Pneumatic interlocking dwellings suspended on artificial salt-tolerant root architectures.\n2. Atmospheric Vortex Harvesters: Buoyant stratospheric spirals capturing oceanic updrafts for continuous municipal micro-power.\n3. Pelagic Nutrient Upwelling Pods: Floating geodesic bioreactors fostering synthetic Kelp forests that fix gigatons of blue carbon.`,
+      `1. Liquid Metal Buoyant Foundations: Thermal-responsive metallic alloys that morph surface tension to dampen rogue sea waves.\n2. Bioluminescent Algal Skin Facades: Photosynthetic membrane architecture providing dynamic climate insulation and nutrient synthesis.\n3. Submerged Oceanic Geothermal Siphons: Autonomous kinetic heat exchangers powering perpetual pelagic communities.`
+    ];
+    return ideations[runIdx % ideations.length] || base;
+  }
+
+  return base;
+}
+
+// ==========================================
+// 5. Visual SVG Charts & Metrics Visualization
+// ==========================================
+function switchMetricChart(metric) {
+  activeChartMetric = metric;
+  
+  // Update toggle buttons
+  const btns = ["determinism", "ttr", "vocab"];
+  btns.forEach(b => {
+    const el = document.getElementById(`btn-metric-${b}`);
+    if (el) el.classList.toggle("active", b === metric);
+  });
+
+  const titleEl = document.getElementById("chart-main-title");
+  const subEl = document.getElementById("chart-main-subtitle");
+  
+  if (metric === "determinism") {
+    if (titleEl) titleEl.textContent = "🔒 Expected Output Determinism & Reproducibility Rate (%)";
+    if (subEl) subEl.textContent = "Higher = Strict schema conformity • Lower = Novel exploration";
+  } else if (metric === "ttr") {
+    if (titleEl) titleEl.textContent = "✍️ Lexical Diversity / Type-Token Ratio (TTR = |V| / N)";
+    if (subEl) subEl.textContent = "Higher = Rich vocabulary & low repetition • Lower = Repetitive, canonical tokens";
+  } else if (metric === "vocab") {
+    if (titleEl) titleEl.textContent = "📚 Unique Vocabulary Discovery (|V| Distinct Words)";
+    if (subEl) subEl.textContent = "Higher = Long-tail vocabulary discovery • Lower = Compact canonical vocabulary";
+  }
+
+  renderComparativeChart();
+}
+
+function renderComparativeChart() {
+  const wrapper = document.getElementById("svg-comparative-chart-wrapper");
+  if (!wrapper) return;
+
+  const activePresets = PRESETS.filter(p => selectedPresets.includes(p.id));
+  if (activePresets.length === 0) {
+    wrapper.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 40px 0;">Select presets to display comparative metric charts.</div>`;
+    return;
+  }
+
+  const chartData = activePresets.map(p => {
+    const live = lastRunMetrics[p.id];
+    let val = 0;
+    let label = "";
+
+    if (activeChartMetric === "determinism") {
+      val = live ? live.det : p.detExpected;
+      label = `${val}%`;
+    } else if (activeChartMetric === "ttr") {
+      val = live ? Math.round(live.ttr * 100) : Math.round(p.ttrExpected * 100);
+      label = `${val}%`;
+    } else if (activeChartMetric === "vocab") {
+      val = live ? live.uniqueWords : p.uniqueWordsExpected;
+      label = `${val} words`;
+    }
+
+    return {
+      id: p.id,
+      name: p.name,
+      color: p.color,
+      value: val,
+      displayLabel: label
+    };
+  });
+
+  const maxVal = Math.max(...chartData.map(d => d.value), 1) * 1.25;
+  const svgWidth = 840;
+  const svgHeight = 220;
+  const paddingLeft = 55;
+  const paddingRight = 35;
+  const paddingTop = 25;
+  const paddingBottom = 45;
+
+  const chartW = svgWidth - paddingLeft - paddingRight;
+  const chartH = svgHeight - paddingTop - paddingBottom;
+  const barSlotW = chartW / chartData.length;
+  const barWidth = Math.min(68, barSlotW * 0.65);
+
+  let gridLinesSvg = "";
+  const numGridTicks = 4;
+  for (let i = 0; i <= numGridTicks; i++) {
+    const yVal = (maxVal / numGridTicks) * i;
+    const yPos = paddingTop + chartH - (i / numGridTicks) * chartH;
+    let tickText = activeChartMetric === "vocab" ? Math.round(yVal) : `${Math.round(yVal)}%`;
+    gridLinesSvg += `
+      <line x1="${paddingLeft}" y1="${yPos}" x2="${svgWidth - paddingRight}" y2="${yPos}" stroke="var(--border-color)" stroke-dasharray="3,3" />
+      <text x="${paddingLeft - 10}" y="${yPos + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end" font-family="var(--font-mono)">${tickText}</text>
+    `;
+  }
+
+  let barsSvg = "";
+  chartData.forEach((d, idx) => {
+    const barHeight = Math.max(4, (d.value / maxVal) * chartH);
+    const xPos = paddingLeft + idx * barSlotW + (barSlotW - barWidth) / 2;
+    const yPos = paddingTop + chartH - barHeight;
+    const labelX = xPos + barWidth / 2;
+
+    barsSvg += `
+      <g class="chart-bar-group" style="cursor: pointer;" onclick="openCodeModal('${d.id}')">
+        <rect x="${xPos}" y="${yPos}" width="${barWidth}" height="${barHeight}" fill="${d.color}" rx="4" opacity="0.88">
+          <title>${d.name}: ${d.displayLabel}</title>
+        </rect>
+        <text x="${labelX}" y="${yPos - 6}" fill="var(--text-main)" font-size="11" font-weight="700" text-anchor="middle" font-family="var(--font-mono)">
+          ${d.displayLabel}
+        </text>
+        <text x="${labelX}" y="${paddingTop + chartH + 18}" fill="${d.color}" font-size="10.5" font-weight="600" text-anchor="middle" font-family="var(--font-mono)">
+          ${d.name.replace("slightly-", "s-")}
+        </text>
+      </g>
+    `;
+  });
+
+  wrapper.innerHTML = `
+    <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto; display: block;">
+      ${gridLinesSvg}
+      <line x1="${paddingLeft}" y1="${paddingTop + chartH}" x2="${svgWidth - paddingRight}" y2="${paddingTop + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+      <line x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${paddingTop + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+      ${barsSvg}
+    </svg>
+  `;
+}
+
+// Multi-run repeatability test & Vocabulary Growth Curve
 async function runVarianceTest() {
   const userPrompt = (document.getElementById("user-prompt")?.value || "").trim();
   const systemPrompt = (document.getElementById("system-prompt")?.value || "").trim();
@@ -1736,46 +2225,165 @@ async function runVarianceTest() {
   }
 
   const activePresets = PRESETS.filter(p => selectedPresets.includes(p.id));
-  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Running ${runCount} iterations per preset...</td></tr>`;
-  runsContainer.innerHTML = "";
-
-  const results = [];
-  for (const p of activePresets) {
-    const outputs = [];
-    for (let i = 0; i < runCount; i++) {
-      const text = generateSimulatedOutput(p.id, userPrompt, systemPrompt);
-      outputs.push(text);
-    }
-    
-    // Calculate determinism
-    const first = outputs[0];
-    const matchCount = outputs.filter(t => t === first).length;
-    const determinismPct = Math.round((matchCount / runCount) * 100);
-
-    const allWords = outputs.flatMap(t => t.toLowerCase().match(/\b[\w'-]+\b/g) || []);
-    const uniqueWords = new Set(allWords).size;
-    const ttrPct = allWords.length > 0 ? Math.round((uniqueWords / allWords.length) * 100) : 0;
-
-    results.push({ p, outputs, determinismPct, uniqueWords, ttrPct });
+  if (activePresets.length === 0) {
+    alert("Please select at least 1 preset from checkboxes!");
+    return;
   }
 
-  tbody.innerHTML = results.map(r => `
-    <tr>
-      <td style="font-family: var(--font-mono); font-weight: 700; color: ${r.p.color};">"${r.p.name}"</td>
-      <td><span class="semantic-pill">${r.p.semantic}</span></td>
-      <td>
-        <strong style="color: ${r.determinismPct === 100 ? 'var(--accent-green)' : r.determinismPct >= 60 ? 'var(--accent-blue)' : 'var(--accent-amber)'};">
-          ${r.determinismPct}% ${r.determinismPct === 100 ? '(100% Identical)' : ''}
-        </strong>
-      </td>
-      <td><strong>${r.uniqueWords} unique words</strong></td>
-      <td>${r.ttrPct}%</td>
-    </tr>
-  `).join("");
+  tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--accent-blue); padding: 30px;">⏳ Running ${runCount} iterations across ${activePresets.length} presets...</td></tr>`;
+  runsContainer.innerHTML = "";
+
+  const results = {};
+  const growthHistory = {};
+
+  for (const p of activePresets) {
+    results[p.id] = [];
+    growthHistory[p.id] = [];
+    const cumulativeVocab = new Set();
+
+    for (let r = 0; r < runCount; r++) {
+      const output = getSimulatedRunVariant(p.id, userPrompt, systemPrompt, r);
+      results[p.id].push(output);
+      const runWords = (output || "").toLowerCase().match(/\b[\w'-]+\b/g) || [];
+      runWords.forEach(w => cumulativeVocab.add(w));
+      growthHistory[p.id].push(cumulativeVocab.size);
+    }
+  }
+
+  // Render Table Rows
+  tbody.innerHTML = activePresets.map(p => {
+    const runs = results[p.id];
+    const uniqueOutputs = new Set(runs).size;
+    const isDeterministic = uniqueOutputs === 1;
+    const detScore = isDeterministic ? 100 : Math.max(0, Math.round(((runCount - uniqueOutputs) / (runCount - 1)) * 100));
+    
+    const allWords = runs.flatMap(r => (r || "").toLowerCase().match(/\b[\w'-]+\b/g) || []);
+    const uniqueWords = new Set(allWords).size;
+    const ttr = allWords.length > 0 ? Math.round((uniqueWords / allWords.length) * 100) : 0;
+
+    return `
+      <tr>
+        <td style="font-family: var(--font-mono); font-weight: 700; color: ${p.color};">"${p.name}"</td>
+        <td><span class="semantic-pill">${p.semantic}</span></td>
+        <td style="font-weight: 700; color: ${detScore === 100 ? 'var(--accent-green)' : detScore > 50 ? 'var(--accent-amber)' : 'var(--accent-purple)'};">
+          ${detScore}% (${isDeterministic ? '100% Identical' : `${uniqueOutputs} unique outputs`})
+        </td>
+        <td style="font-weight: 700; color: ${p.color};">
+          ${uniqueWords} unique words
+        </td>
+        <td style="font-family: var(--font-mono); font-weight: 600;">
+          ${ttr}%
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  // Render Visual Vocabulary Growth Curve SVG
+  renderGrowthCurveChart(activePresets, growthHistory, runCount);
+
+  // Render Diff Output
+  runsContainer.innerHTML = activePresets.map(p => {
+    const runs = results[p.id];
+    return `
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; border-left: 3px solid ${p.color};">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="color: ${p.color}; font-family: var(--font-mono); font-size: 0.85rem;">"${p.name}" (${p.semantic})</strong>
+          <span style="font-size: 0.74rem; color: var(--text-muted);">${runs.length} iterations</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          ${runs.map((r, idx) => `
+            <div style="background: var(--bg-primary); padding: 8px 10px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.4; color: var(--text-main);">
+              <span style="color: var(--text-muted); font-size: 0.7rem; font-weight: 700;">[Run ${idx + 1}]:</span> ${escapeHtml(r)}
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderGrowthCurveChart(activePresets, growthHistory, runCount) {
+  const container = document.getElementById("svg-growth-chart-wrapper");
+  if (!container) return;
+
+  const svgW = 840;
+  const svgH = 220;
+  const padL = 50;
+  const padR = 30;
+  const padT = 20;
+  const padB = 35;
+
+  const chartW = svgW - padL - padR;
+  const chartH = svgH - padT - padB;
+
+  const maxVal = Math.max(...activePresets.flatMap(p => growthHistory[p.id] || [1]), 20) * 1.15;
+  const minY = 0;
+
+  const getY = (val) => padT + chartH - ((val - minY) / maxVal) * chartH;
+  const getX = (idx) => padL + (idx / Math.max(1, runCount - 1)) * chartW;
+
+  let gridSvg = "";
+  const numGridTicks = 4;
+  for (let i = 0; i <= numGridTicks; i++) {
+    const yVal = (maxVal / numGridTicks) * i;
+    const yPos = getY(yVal);
+    gridSvg += `
+      <line x1="${padL}" y1="${yPos}" x2="${padL + chartW}" y2="${yPos}" stroke="var(--border-color)" stroke-dasharray="3,3" />
+      <text x="${padL - 8}" y="${yPos + 4}" fill="var(--text-muted)" font-size="9.5" text-anchor="end" font-family="var(--font-mono)">${Math.round(yVal)}w</text>
+    `;
+  }
+
+  let linesSvg = "";
+  let legendHtml = "";
+
+  activePresets.forEach(p => {
+    const history = growthHistory[p.id] || [];
+    if (history.length === 0) return;
+
+    let pathD = "";
+    history.forEach((val, idx) => {
+      const x = getX(idx);
+      const y = getY(val);
+      pathD += (idx === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+    });
+
+    const lastVal = history[history.length - 1];
+    const lastY = getY(lastVal);
+    const lastX = getX(history.length - 1);
+
+    linesSvg += `
+      <path d="${pathD}" fill="none" stroke="${p.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="${lastX}" cy="${lastY}" r="4" fill="${p.color}" />
+    `;
+
+    legendHtml += `
+      <div style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; background: var(--bg-card); padding: 3px 8px; border-radius: 4px; border-left: 3px solid ${p.color};">
+        <span style="font-weight: 600; color: ${p.color};">${p.name.replace("slightly-", "s-")}:</span>
+        <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-main);">${lastVal} words</span>
+      </div>
+    `;
+  });
+
+  container.innerHTML = `
+    <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
+      <svg viewBox="0 0 ${svgW} ${svgH}" style="width: 100%; height: auto; display: block;">
+        ${gridSvg}
+        <line x1="${padL}" y1="${padT + chartH}" x2="${padL + chartW}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + chartH}" stroke="var(--border-color)" stroke-width="1.5" />
+        ${linesSvg}
+        <text x="${padL + chartW / 2}" y="${svgH - 6}" fill="var(--text-muted)" font-size="9.5" text-anchor="middle" font-family="var(--font-mono)">
+          Sequential Iterations (Run 1 &rarr; Run ${runCount}) • Cumulative Unique Vocabulary Pool (|V<sub>N</sub>|)
+        </text>
+      </svg>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding-top: 4px;">
+        ${legendHtml}
+      </div>
+    </div>
+  `;
 }
 
 // ==========================================
-// 5. Code Inspector & Modals
+// 6. Code Inspector & Modals
 // ==========================================
 let currentModalCode = "";
 
@@ -1844,12 +2452,12 @@ function switchWs1Mode(mode) {
   if (mode === "stream") {
     streamBtn?.classList.add("active");
     varBtn?.classList.remove("active");
-    if (streamView) streamView.style.display = "block";
+    if (streamView) streamView.style.display = "flex";
     if (varView) varView.style.display = "none";
   } else {
     varBtn?.classList.add("active");
     streamBtn?.classList.remove("active");
-    if (varView) varView.style.display = "block";
+    if (varView) varView.style.display = "flex";
     if (streamView) streamView.style.display = "none";
   }
 }
@@ -1880,29 +2488,44 @@ function togglePlaygroundSidebar() {
   const grid = document.getElementById("playground-studio-grid");
   const btn = document.getElementById("toggle-sidebar-btn");
   if (!panel || !grid) return;
-  const isCollapsed = panel.style.display === "none";
-  if (isCollapsed) {
-    panel.style.display = "flex";
-    grid.style.gridTemplateColumns = "380px 1fr";
+
+  const isHidden = panel.classList.contains("hidden");
+  if (isHidden) {
+    panel.classList.remove("hidden");
+    grid.style.gridTemplateColumns = "360px 1fr";
     if (btn) btn.textContent = "◧ Hide Setup";
   } else {
-    panel.style.display = "none";
+    panel.classList.add("hidden");
     grid.style.gridTemplateColumns = "1fr";
     if (btn) btn.textContent = "◨ Show Setup";
   }
 }
 
 function toggleTheme() {
-  const isDark = document.body.getAttribute("data-theme") !== "light";
-  document.body.setAttribute("data-theme", isDark ? "light" : "dark");
-  const icon = document.getElementById("theme-icon");
-  const text = document.getElementById("theme-text");
-  if (icon) icon.textContent = isDark ? "🌙" : "☀️";
-  if (text) text.textContent = isDark ? "Dark Mode" : "Light Mode";
+  const body = document.body;
+  const current = body.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  body.setAttribute("data-theme", next);
+  const btn = document.getElementById("theme-toggle-btn");
+  if (btn) btn.textContent = next === "light" ? "🌙 Dark Mode" : "☀️ Light Mode";
+  renderSpectrum();
 }
 
-// Master Initialization
-function initApp() {
+function clearResults() {
+  const container = document.getElementById("results-cards-container");
+  if (container) {
+    container.innerHTML = `
+      <div style="color: var(--text-muted); font-size: 0.88rem; padding: 48px 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
+        Select presets and click <strong>"Run Comparison"</strong> to stream outputs side-by-side.
+      </div>
+    `;
+  }
+}
+
+// ==========================================
+// 7. Initialization
+// ==========================================
+window.addEventListener("DOMContentLoaded", () => {
   renderSpectrum();
   renderArchetypeCards();
   renderSpecTable();
@@ -1911,63 +2534,42 @@ function initApp() {
   checkApiAvailability();
 
   // Navigation tab switching
-  document.querySelectorAll(".nav-tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
-      tab.classList.add("active");
-      const wsId = tab.getAttribute("data-workspace");
+  const tabs = document.querySelectorAll(".nav-tab");
+  tabs.forEach(t => {
+    t.addEventListener("click", () => {
+      tabs.forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
 
-      ["playground", "guide", "spec"].forEach(id => {
-        const el = document.getElementById("workspace-" + id);
-        if (el) el.style.display = (id === wsId) ? "block" : "none";
-      });
-
-      if (wsId === "spec") renderSpecCodeSnippet();
+      const wsKey = t.dataset.workspace;
+      document.getElementById("workspace-playground").style.display = wsKey === "playground" ? "block" : "none";
+      document.getElementById("workspace-guide").style.display = wsKey === "guide" ? "block" : "none";
+      document.getElementById("workspace-spec").style.display = wsKey === "spec" ? "block" : "none";
     });
   });
 
-  // Sample prompt selection
-  const promptSelect = document.getElementById("sample-prompt-selector");
-  if (promptSelect) {
-    promptSelect.addEventListener("change", (e) => {
-      const val = e.target.value;
-      if (SAMPLE_PROMPTS[val]) {
-        document.getElementById("system-prompt").value = SAMPLE_PROMPTS[val].system;
-        document.getElementById("user-prompt").value = SAMPLE_PROMPTS[val].user;
-        if (SAMPLE_PROMPTS[val].preset) {
-          selectedPresets = [SAMPLE_PROMPTS[val].preset];
-          renderSpectrum();
-        }
+  // Prompt selector change
+  document.getElementById("sample-prompt-selector")?.addEventListener("change", (e) => {
+    const val = e.target.value;
+    if (SAMPLE_PROMPTS[val]) {
+      const u = document.getElementById("user-prompt");
+      const s = document.getElementById("system-prompt");
+      if (u) u.value = SAMPLE_PROMPTS[val].user;
+      if (s) s.value = SAMPLE_PROMPTS[val].system;
+      if (SAMPLE_PROMPTS[val].preset) {
+        selectedPresets = [SAMPLE_PROMPTS[val].preset];
+        renderSpectrum();
       }
-    });
-
-    // Default sample
-    promptSelect.value = "json_schema";
-    document.getElementById("system-prompt").value = SAMPLE_PROMPTS.json_schema.system;
-    document.getElementById("user-prompt").value = SAMPLE_PROMPTS.json_schema.user;
-  }
-
-  document.getElementById("theme-toggle-btn")?.addEventListener("click", toggleTheme);
-  document.getElementById("run-benchmark-btn")?.addEventListener("click", runBenchmark);
-  document.getElementById("run-variance-btn")?.addEventListener("click", runVarianceTest);
-  document.getElementById("clear-results-btn")?.addEventListener("click", () => {
-    document.getElementById("results-cards-container").innerHTML = `
-      <div style="color: var(--text-muted); font-size: 0.88rem; padding: 48px 24px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1;">
-        Results cleared. Select presets and click <strong>"Run Comparison"</strong>.
-      </div>
-    `;
+    }
   });
 
+  // Decision wizard change events
   document.getElementById("wizard-usecase-select")?.addEventListener("change", updateWizardRecommendation);
   document.getElementById("wizard-strictness-select")?.addEventListener("change", updateWizardRecommendation);
-  document.getElementById("spec-code-preset-select")?.addEventListener("change", renderSpecCodeSnippet);
-}
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initApp);
-} else {
-  initApp();
-}
+  // Execution buttons
+  document.getElementById("run-benchmark-btn")?.addEventListener("click", runBenchmark);
+  document.getElementById("run-variance-btn")?.addEventListener("click", runVarianceTest);
+});
 </script>
 </body>
 </html>

@@ -1450,7 +1450,7 @@ const session = await LanguageModel.create({
 ${createConfig}
 });
 
-console.log("Active Preset:", session.samplingMode ?? "(gated behind AIPromptAPIParams flag)");
+console.log("Active Preset:", session.samplingMode);
 
 // 3. Stream response tokens in Console
 const stream = session.promptStreaming("${safeUser}");
@@ -1476,7 +1476,7 @@ const session = await LanguageModel.create({
 ${createConfig}
 });
 
-console.log("Active Preset:", session.samplingMode ?? "(gated behind AIPromptAPIParams flag)");
+console.log("Active Preset:", session.samplingMode);
 
 // 3. Generate atomic response
 const response = await session.prompt("${safeUser}");

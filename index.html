@@ -1452,7 +1452,7 @@ function highlightJsCode(rawCode) {
   }).join("");
 }
 
-// Generate modern, production-grade Prompt API snippet
+// Generate immediately runnable JavaScript code for DevTools Console / web apps
 function generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming) {
   const isJson = presetId === "most-predictable";
   const uPrompt = (userPrompt || (isJson ? "Extract invoice data: 'INV-2045 for $850 due Nov 12'" : "Write an inspiring 1-sentence tagline.")).trim();
@@ -1468,44 +1468,48 @@ function generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming
   const promptOptions = isJson ? `, {\n  responseConstraint: { type: "json" }\n}` : "";
 
   if (isStreaming) {
-    return `// 1. Check availability and create session with semantic sampling preset
-const availability = await LanguageModel.availability();
-if (availability !== "available" && availability !== "readily") {
-  console.warn("LanguageModel is not ready:", availability);
-}
+    return `// 1. Check model availability for "${presetId}" preset
+const availability = await LanguageModel.availability({
+  samplingMode: "${presetId}"
+});
+console.log("Model Status:", availability);
 
+// 2. Initialize LanguageModel session with categorical preset
+// Note: Requires flag --enable-features=AIPromptAPI,AIPromptAPIParams
 const session = await LanguageModel.create({
 ${createConfig}
 });
 
-// Read-only session property
-console.log("Session samplingMode:", session.samplingMode);
+console.log("Active Preset:", session.samplingMode);
 
-// 2. Stream tokens incrementally
+// 3. Stream response tokens in Console
 const stream = session.promptStreaming("${safeUser}"${promptOptions});
 let fullResponse = "";
+
 for await (const chunk of stream) {
   fullResponse = chunk;
   console.log(chunk);
 }
-console.log("\\n=== Finished ===");`;
-  } else {
-    return `// 1. Check availability and create session with semantic sampling preset
-const availability = await LanguageModel.availability();
-if (availability !== "available" && availability !== "readily") {
-  console.warn("LanguageModel is not ready:", availability);
-}
 
+console.log("\\n=== Response (${presetId}) ===\\n" + fullResponse);`;
+  } else {
+    return `// 1. Check model availability for "${presetId}" preset
+const availability = await LanguageModel.availability({
+  samplingMode: "${presetId}"
+});
+console.log("Model Status:", availability);
+
+// 2. Initialize LanguageModel session with categorical preset
+// Note: Requires flag --enable-features=AIPromptAPI,AIPromptAPIParams
 const session = await LanguageModel.create({
 ${createConfig}
 });
 
-// Read-only session property
-console.log("Session samplingMode:", session.samplingMode);
+console.log("Active Preset:", session.samplingMode);
 
-// 2. Generate response directly
+// 3. Generate atomic response
 const response = await session.prompt("${safeUser}"${promptOptions});
-console.log(response);`;
+console.log("\\n=== Response (${presetId}) ===\\n" + response);`;
   }
 }
 

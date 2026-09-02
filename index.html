@@ -1436,8 +1436,6 @@ function generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming
     createConfig += `,\n  initialPrompts: [\n    { role: "system", content: "${safeSys}" }\n  ]`;
   }
 
-  const promptOptions = isJson ? `, {\n  responseConstraint: { type: "json" }\n}` : "";
-
   if (isStreaming) {
     return `// 1. Check model availability for "${presetId}" preset
 const availability = await LanguageModel.availability({
@@ -1446,15 +1444,16 @@ const availability = await LanguageModel.availability({
 console.log("Model Status:", availability);
 
 // 2. Initialize LanguageModel session with categorical preset
-// Note: Requires flag --enable-features=AIPromptAPI,AIPromptAPIParams
+// Note: session.samplingMode is exposed when Chrome is launched with:
+// --enable-features=AIPromptAPI,AIPromptAPIParams
 const session = await LanguageModel.create({
 ${createConfig}
 });
 
-console.log("Active Preset:", session.samplingMode);
+console.log("Active Preset:", session.samplingMode ?? "(gated behind AIPromptAPIParams flag)");
 
 // 3. Stream response tokens in Console
-const stream = session.promptStreaming("${safeUser}"${promptOptions});
+const stream = session.promptStreaming("${safeUser}");
 let fullResponse = "";
 
 for await (const chunk of stream) {
@@ -1471,15 +1470,16 @@ const availability = await LanguageModel.availability({
 console.log("Model Status:", availability);
 
 // 2. Initialize LanguageModel session with categorical preset
-// Note: Requires flag --enable-features=AIPromptAPI,AIPromptAPIParams
+// Note: session.samplingMode is exposed when Chrome is launched with:
+// --enable-features=AIPromptAPI,AIPromptAPIParams
 const session = await LanguageModel.create({
 ${createConfig}
 });
 
-console.log("Active Preset:", session.samplingMode);
+console.log("Active Preset:", session.samplingMode ?? "(gated behind AIPromptAPIParams flag)");
 
 // 3. Generate atomic response
-const response = await session.prompt("${safeUser}"${promptOptions});
+const response = await session.prompt("${safeUser}");
 console.log("\\n=== Response (${presetId}) ===\\n" + response);`;
   }
 }
@@ -1746,9 +1746,14 @@ async function checkApiAvailability() {
   if (resolved && resolved.obj && typeof resolved.obj.availability === "function") {
     try {
       const avail = await resolved.obj.availability();
+      const hasSamplingProp = typeof resolved.obj.prototype !== "undefined" && "samplingMode" in resolved.obj.prototype;
       if (avail === "readily" || avail === "after-download" || avail === "available") {
         dot.className = "status-dot active";
-        text.textContent = "🟢 Native Chrome LanguageModel Active (Gemini Nano On-Device)";
+        if (hasSamplingProp) {
+          text.textContent = "🟢 Native Chrome LanguageModel Active (AIPromptAPIParams enabled)";
+        } else {
+          text.textContent = "🟢 Native Chrome LanguageModel Active (session.samplingMode requires: --enable-features=AIPromptAPI,AIPromptAPIParams)";
+        }
         return;
       }
     } catch (e) {
@@ -1829,7 +1834,6 @@ async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStrea
   if (resolved && resolved.obj) {
     try {
       cardRef.stats.textContent = `Creating session (${p.name})...`;
-      const isJson = presetId === "most-predictable" && userPrompt.toLowerCase().includes("json");
       
       let session = null;
       try {
@@ -1842,11 +1846,10 @@ async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStrea
       }
 
       if (session) {
-        const promptOpts = isJson ? { responseConstraint: { type: "json" } } : undefined;
         let rawAccumulated = "";
 
         if (isStreaming && typeof session.promptStreaming === "function") {
-          const stream = session.promptStreaming(userPrompt, promptOpts);
+          const stream = session.promptStreaming(userPrompt);
           
           if (stream && stream[Symbol.asyncIterator]) {
             for await (const chunk of stream) {

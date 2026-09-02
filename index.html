@@ -1196,13 +1196,13 @@
 // 1. Core State & Canonical Presets
 // ==========================================
 const PRESETS = [
-  { id: "most-predictable", name: "most-predictable", color: "#3fb950", semantic: "🔒 Zero Variance", desc: "100% deterministic greedy decoding. Essential for JSON extraction and unit tests.", detExpected: 100, ttrExpected: 0.35, uniqueWordsExpected: 14 },
-  { id: "predictable", name: "predictable", color: "#58a6ff", semantic: "🛡️ High Precision", desc: "High structural precision with minimal variance. Ideal for code and SQL generation.", detExpected: 92, ttrExpected: 0.45, uniqueWordsExpected: 22 },
-  { id: "slightly-predictable", name: "slightly-predictable", color: "#79c0ff", semantic: "📝 Source-Grounded", desc: "Faithful document synthesis and summarization with fluent phrasing.", detExpected: 78, ttrExpected: 0.58, uniqueWordsExpected: 35 },
-  { id: "balanced", name: "balanced", color: "#a371f7", semantic: "⚖️ Natural Fluency", desc: "Standard human conversational QA and interactive support dialogue.", detExpected: 55, ttrExpected: 0.68, uniqueWordsExpected: 48 },
-  { id: "slightly-creative", name: "slightly-creative", color: "#d2a8ff", semantic: "✍️ Expressive", desc: "Marketing copy and rewriting with diverse vocabulary choices.", detExpected: 32, ttrExpected: 0.76, uniqueWordsExpected: 62 },
-  { id: "creative", name: "creative", color: "#f778ba", semantic: "🎭 Rich Narrative", desc: "Poetic and metaphorical storytelling with wide lexical exploration.", detExpected: 15, ttrExpected: 0.85, uniqueWordsExpected: 80 },
-  { id: "most-creative", name: "most-creative", color: "#ff7b72", semantic: "💡 Novel Ideation", desc: "Unconventional brainstorming and radical lateral exploration.", detExpected: 5, ttrExpected: 0.94, uniqueWordsExpected: 105 }
+  { id: "most-predictable", name: "most-predictable", color: "#3fb950", semantic: "🔒 Zero Variance", desc: "100% deterministic greedy decoding. Essential for JSON extraction and unit tests.", detExpected: 100, ttrExpected: 0.35, uniqueWordsExpected: 14, temp: 0.0, topK: 1 },
+  { id: "predictable", name: "predictable", color: "#58a6ff", semantic: "🛡️ High Precision", desc: "High structural precision with minimal variance. Ideal for code and SQL generation.", detExpected: 92, ttrExpected: 0.45, uniqueWordsExpected: 22, temp: 0.2, topK: 3 },
+  { id: "slightly-predictable", name: "slightly-predictable", color: "#79c0ff", semantic: "📝 Source-Grounded", desc: "Faithful document synthesis and summarization with fluent phrasing.", detExpected: 78, ttrExpected: 0.58, uniqueWordsExpected: 35, temp: 0.5, topK: 8 },
+  { id: "balanced", name: "balanced", color: "#a371f7", semantic: "⚖️ Natural Fluency", desc: "Standard human conversational QA and interactive support dialogue.", detExpected: 55, ttrExpected: 0.68, uniqueWordsExpected: 48, temp: 0.8, topK: 16 },
+  { id: "slightly-creative", name: "slightly-creative", color: "#d2a8ff", semantic: "✍️ Expressive", desc: "Marketing copy and rewriting with diverse vocabulary choices.", detExpected: 32, ttrExpected: 0.76, uniqueWordsExpected: 62, temp: 1.1, topK: 24 },
+  { id: "creative", name: "creative", color: "#f778ba", semantic: "🎭 Rich Narrative", desc: "Poetic and metaphorical storytelling with wide lexical exploration.", detExpected: 15, ttrExpected: 0.85, uniqueWordsExpected: 80, temp: 1.4, topK: 32 },
+  { id: "most-creative", name: "most-creative", color: "#ff7b72", semantic: "💡 Novel Ideation", desc: "Unconventional brainstorming and radical lateral exploration.", detExpected: 5, ttrExpected: 0.94, uniqueWordsExpected: 105, temp: 1.8, topK: 40 }
 ];
 
 let selectedPresets = PRESETS.map(p => p.id);
@@ -1842,7 +1842,25 @@ async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStrea
           initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined
         });
       } catch (err) {
-        session = await resolved.obj.create({});
+        session = await resolved.obj.create({
+          topK: Math.max(1, p.topK),
+          temperature: p.temp,
+          initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined
+        });
+      }
+
+      // If Blink silently dropped samplingMode because AIPromptAPIParams runtime flag is off:
+      if (session && session.samplingMode === undefined && p.temp !== 1.0) {
+        try {
+          if (typeof session.destroy === "function") session.destroy();
+          session = await resolved.obj.create({
+            topK: Math.max(1, p.topK),
+            temperature: p.temp,
+            initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined
+          });
+        } catch (e) {
+          // Keep initial session if recreate fails
+        }
       }
 
       if (session) {
@@ -1881,7 +1899,7 @@ async function streamPreset(presetId, userPrompt, systemPrompt, cardRef, isStrea
             nativeSuccess = true;
           }
         } else if (typeof session.prompt === "function") {
-          textOutput = await session.prompt(userPrompt, promptOpts);
+          textOutput = await session.prompt(userPrompt);
           if (textOutput && textOutput.trim().length > 0) {
             nativeSuccess = true;
           }

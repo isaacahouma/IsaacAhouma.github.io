@@ -1437,22 +1437,18 @@ function generateRunnableSnippet(presetId, userPrompt, systemPrompt, isStreaming
   }
 
   if (isStreaming) {
-    return `// 1. Check model availability for "${presetId}" preset
+    return `// 1. Check model availability
 const availability = await LanguageModel.availability({
   samplingMode: "${presetId}"
 });
 console.log("Model Status:", availability);
 
-// 2. Initialize LanguageModel session with categorical preset
-// Note: session.samplingMode is exposed when Chrome is launched with:
-// --enable-features=AIPromptAPI,AIPromptAPIParams
+// 2. Initialize LanguageModel session
 const session = await LanguageModel.create({
 ${createConfig}
 });
 
-console.log("Active Preset:", session.samplingMode);
-
-// 3. Stream response tokens in Console
+// 3. Stream response tokens
 const stream = session.promptStreaming("${safeUser}");
 let fullResponse = "";
 
@@ -1463,22 +1459,18 @@ for await (const chunk of stream) {
 
 console.log("\\n=== Response (${presetId}) ===\\n" + fullResponse);`;
   } else {
-    return `// 1. Check model availability for "${presetId}" preset
+    return `// 1. Check model availability
 const availability = await LanguageModel.availability({
   samplingMode: "${presetId}"
 });
 console.log("Model Status:", availability);
 
-// 2. Initialize LanguageModel session with categorical preset
-// Note: session.samplingMode is exposed when Chrome is launched with:
-// --enable-features=AIPromptAPI,AIPromptAPIParams
+// 2. Initialize LanguageModel session
 const session = await LanguageModel.create({
 ${createConfig}
 });
 
-console.log("Active Preset:", session.samplingMode);
-
-// 3. Generate atomic response
+// 3. Generate response
 const response = await session.prompt("${safeUser}");
 console.log("\\n=== Response (${presetId}) ===\\n" + response);`;
   }

@@ -1545,12 +1545,24 @@
           <span id="schema-active-badge" class="sample-badge" style="display: none; background: rgba(88, 166, 255, 0.15); color: var(--accent-blue); border: 1px solid rgba(88, 166, 255, 0.3);" title="Passes LanguageModelPromptOptions.responseConstraint schema to session.promptStreaming / prompt">🧩 responseConstraint Active</span>
         </div>
         <select id="sample-prompt-selector">
-          <optgroup label="Everyday Web Application Integrations">
+          <optgroup label="Everyday Web Application Integrations (Published Test Corpus)">
             <option value="review_summary" selected>⭐ Product Review Summarizer (Summarization)</option>
             <option value="query_refinement">🔍 E-Commerce Search Autocomplete (Query Refinement)</option>
             <option value="intent_routing">🎯 Support Chat Intent Routing (Classification)</option>
             <option value="travel_itinerary">✈️ Travel Itinerary Extraction (Structured JSON)</option>
             <option value="tag_generator">🏷️ Blog Post Tag Generator (Categorization)</option>
+          </optgroup>
+          <optgroup label="Creative &amp; Divergent Benchmarks">
+            <option value="airship_pitch">🏷️ Solar Cargo Airship Pitch &amp; 3 Bullets (Green Logistics)</option>
+            <option value="poem_3line">🎭 Radio Frequency Metaphor in 3 Lines (Tactile Acoustics)</option>
+            <option value="butcher_thriller">🔪 Seville Butcher Micro-Thriller (Suspense Hook)</option>
+          </optgroup>
+          <optgroup label="Reasoning, Logic &amp; Grounded Language">
+            <option value="regex_code">💻 24-Hour Time Regex Generator (Code Gen)</option>
+            <option value="logic_breakdown">🧠 Multi-Step Parallel Rate Logic (Reasoning)</option>
+            <option value="translation_nuance">🌐 Spanish Football Idiom &amp; Localization (Nuance)</option>
+            <option value="crisis_email">✉️ Architecture Crisis Email Rewrite (Tone Modulation)</option>
+            <option value="sentiment_breakdown">🎯 Ceramic Delivery Friction &amp; Delight (Multi-Aspect NLP)</option>
           </optgroup>
           <optgroup label="Custom Input">
             <option value="custom">✍️ Custom Prompt (Type your own)</option>
@@ -2138,6 +2150,7 @@ const PRESETS = [
 
 // Rich, Multi-Line Curated Benchmarks (2-4 lines, structured, easily scannable)
 const SAMPLE_PROMPTS = {
+  // Everyday Web Application Integrations (Published Test Corpus)
   review_summary: {
     system: "You are a helpful shopping assistant integrated into an e-commerce site. Summarize the provided product reviews into a concise, balanced 2-sentence overview highlighting the main consensus, pros, and cons. Output only the summary without conversational filler.",
     user: `Provide a summary for these reviews of the 'Levellers Coat Rack':
@@ -2161,6 +2174,44 @@ const SAMPLE_PROMPTS = {
     system: "You are an integrated content management tool. Extract 5 highly relevant SEO tags based on the provided text. Output only the tags separated by commas, with no introductory text.",
     user: "The new mood journal by Toshi Anne is built to ensure you have a morning or a before bed time routine that helps you set intention and ground yourself. The new Toshi Anne journals come with app connect, guided ADHD strategies, and videos to keep you motivated."
   },
+
+  // Creative & Divergent Benchmarks
+  airship_pitch: {
+    system: "You are a clean-tech product strategist. Provide a punchy tagline followed by 3 short bullet points. Output ONLY the tagline and bullets with no conversational preamble or intro text.",
+    user: "Write a punchy tagline and 3 feature bullets for a silent, solar-powered cargo airship designed for remote island freight."
+  },
+  poem_3line: {
+    system: "You are a poet. Write exactly 3 lines of tactile poetry. Output ONLY the 3 lines of the poem with no title, intro, or commentary.",
+    user: "Describe the concept of an old forgotten radio frequency using an unusual physical or tactile metaphor in exactly 3 lines."
+  },
+  butcher_thriller: {
+    system: "You are a noir thriller author. Write exactly 2 sentences of a suspense scene. Output ONLY the 2 sentences with no conversational intro, title, or commentary.",
+    user: "Write a 2-sentence suspense hook about a celebrated jamón butcher in Seville who secretly cultivates an illegal heirloom tomato greenhouse behind his walk-in meat locker."
+  },
+
+  // Reasoning, Logic & Grounded Language
+  regex_code: {
+    system: "You are a developer. Output ONLY the clean JavaScript regex literal with a 1-line JSDoc comment and no conversational preamble.",
+    user: "Write a regular expression to validate a standard 24-hour time string (00:00 to 23:59)."
+  },
+  logic_breakdown: {
+    system: "You are a math logic tutor. Show a 2-step calculation breakdown followed by the final answer. Output ONLY the steps and answer with no conversational filler.",
+    user: "If 5 machines make 5 widgets in 5 minutes, how many minutes do 100 machines take to make 100 widgets?"
+  },
+  translation_nuance: {
+    system: "You are a localization specialist. Output ONLY the Spanish translation and 1-line cultural nuance note with no conversational greeting or intro.",
+    user: "Translate into natural Spanish with a nuance note: 'The goalkeeper pulled off a miracle save in the dying seconds of stoppage time.'"
+  },
+  crisis_email: {
+    system: "You are an executive communications advisor. Provide a professional Subject line and a diplomatic 2-sentence email body. Output ONLY the email text with no conversational intro.",
+    user: "Rewrite this blunt message professionally: 'The client rejected the architectural blueprint and demands an emergency review in 30 minutes.'"
+  },
+  sentiment_breakdown: {
+    system: "You are an advanced customer insights analyst. Output the Primary Sentiment, Customer Friction, and Resolution Impact as clean bullet points with no introductory filler.",
+    user: "Analyze customer sentiment and friction: 'The handmade ceramic espresso set arrived cracked, but customer service overnighted a replacement with a handwritten apology note and a bag of artisan coffee beans.'"
+  },
+
+  // Custom User Prompt
   custom: {
     system: "",
     user: ""
@@ -2169,7 +2220,6 @@ const SAMPLE_PROMPTS = {
 
 // Aliases for backward compatibility
 SAMPLE_PROMPTS.json_schema = SAMPLE_PROMPTS.travel_itinerary;
-SAMPLE_PROMPTS.airship_pitch = SAMPLE_PROMPTS.review_summary;
 
 // Global State with Cumulative Multi-Run Samples
 let selectedPresets = ["most-predictable", "predictable", "balanced", "creative", "most-creative"];
@@ -2969,8 +3019,8 @@ function applyAndTestPreset(presetId) {
     "slightly-predictable": "query_refinement",
     "balanced": "review_summary",
     "slightly-creative": "tag_generator",
-    "creative": "tag_generator",
-    "most-creative": "tag_generator"
+    "creative": "airship_pitch",
+    "most-creative": "poem_3line"
   };
 
   const targetPromptKey = promptMap[presetId] || "review_summary";

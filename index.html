@@ -1374,6 +1374,43 @@
       gap: 16px;
     }
 
+    /* Multi-run stat boxes: title above value, refreshed after every run */
+    .metrics-summary-grid {
+      gap: 12px;
+    }
+
+    .metric-stat-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .metric-stat-box .title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted) !important;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-stat-box .value {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-stat-progress {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted) !important;
+    }
+
     .match-badge {
       display: inline-flex;
       align-items: center;
@@ -1675,6 +1712,7 @@
             <div class="metric-stat-box">
               <span class="title">Selected Preset</span>
               <span class="value" id="var-stat-preset" style="font-size: 1.05rem;">-</span>
+              <span class="metric-stat-progress" id="var-stat-progress" aria-live="polite"></span>
             </div>
             <div class="metric-stat-box">
               <span class="title metric-tooltip-wrap">
@@ -3324,10 +3362,11 @@ async function streamPreset(presetId, userPrompt, systemPrompt, card, runIndex =
       return { latency: 0, tokens: 0, text: "" };
     }
 
+    let session = null;
     try {
       card.stats.textContent = `Creating session (${p.name})...`;
       
-      const session = await resolved.obj.create({
+      session = await resolved.obj.create({
         samplingMode: presetId,
         initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined,
         systemPrompt: systemPrompt || undefined
@@ -3410,6 +3449,18 @@ async function streamPreset(presetId, userPrompt, systemPrompt, card, runIndex =
       card.body.innerHTML = errorHtml;
       card.stats.textContent = `❌ ${e.name || 'Error'}`;
       return { latency: 0, tokens: 0, text: "", error: e };
+    } finally {
+      // Free the session as soon as the run ends. Each live session keeps its
+      // model state in the browser's on-device model process, and garbage
+      // collection does not reclaim abandoned sessions in time, so a few
+      // hundred runs without destroy() exhaust that process.
+      if (session) {
+        try {
+          session.destroy();
+        } catch (destroyErr) {
+          console.warn(`destroy() failed for "${presetId}":`, destroyErr);
+        }
+      }
     }
   }
 
@@ -3496,6 +3547,96 @@ async function runBenchmark() {
   runBtn.disabled = false;
 }
 
+// Groups the finished runs into exact-match clusters and refreshes the
+// multi-run stat boxes and match badges. runVarianceTest calls it before every
+// run and once at the end, so the boxes never show a previous test's numbers.
+// state is "running", "done" or "stopped".
+function renderVarianceStats(completedOutputs, runCards, numRuns, state) {
+  // Normalization helper for robust cross-run matching
+  const normText = (s) => (s || "").trim().replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ');
+
+  // Group identical runs into distinct variation clusters
+  const variationGroups = [];
+  const runVariationMap = [];
+
+  completedOutputs.forEach((output, idx) => {
+    const nOut = normText(output);
+    const matchGroupIndex = variationGroups.findIndex(g => normText(g.text) === nOut);
+    if (matchGroupIndex === -1) {
+      // New unique variation found
+      const newGroupId = variationGroups.length + 1;
+      variationGroups.push({ id: newGroupId, text: output, firstRunIdx: idx });
+      runVariationMap.push({ groupId: newGroupId, isFirstInGroup: true, matchesRunIdx: idx });
+    } else {
+      // Duplicate of an earlier run
+      const matchedGroup = variationGroups[matchGroupIndex];
+      runVariationMap.push({ groupId: matchedGroup.id, isFirstInGroup: false, matchesRunIdx: matchedGroup.firstRunIdx });
+    }
+  });
+
+  completedOutputs.forEach((output, idx) => {
+    const info = runVariationMap[idx];
+    const header = runCards[idx].card.querySelector(".result-card-header");
+    if (!header) return;
+
+    // Clear any prior badge
+    header.querySelectorAll(".match-badge").forEach(b => b.remove());
+
+    const badge = document.createElement("span");
+    if (idx === 0) {
+      badge.className = "match-badge match-badge-identical";
+      badge.textContent = "Baseline (Var #1)";
+    } else if (!info.isFirstInGroup) {
+      badge.className = "match-badge match-badge-identical";
+      badge.textContent = `✓ Matches Run #${info.matchesRunIdx + 1}`;
+    } else {
+      badge.className = "match-badge match-badge-divergent";
+      badge.textContent = `✦ Variation #${info.groupId}`;
+    }
+    header.appendChild(badge);
+  });
+
+  const completed = completedOutputs.length;
+  const totalUnique = variationGroups.length;
+
+  // Determinism compares runs with each other, so it needs two finished runs.
+  const detBox = document.getElementById("var-stat-determinism");
+  if (detBox) {
+    if (completed < 2) {
+      detBox.textContent = "…";
+      detBox.style.color = "var(--text-muted)";
+      detBox.title = "Needs at least 2 finished runs";
+    } else {
+      const determinismPercent = (totalUnique === 1) ? 100 : Math.max(0, Math.round(((completed - totalUnique) / (completed - 1)) * 100));
+      detBox.textContent = `${determinismPercent}%`;
+      detBox.style.color = (totalUnique === 1) ? "var(--accent-green)" : "var(--accent-purple)";
+      detBox.title = `Over ${completed} finished runs`;
+    }
+  }
+
+  const uniqueBox = document.getElementById("var-stat-unique");
+  if (uniqueBox) {
+    uniqueBox.textContent = completed > 0 ? `${totalUnique} of ${completed}` : "…";
+  }
+
+  const vocabBox = document.getElementById("var-stat-vocab");
+  if (vocabBox) {
+    const varVocabStats = getVocabularyStats(completedOutputs);
+    vocabBox.textContent = completed > 0 ? `${varVocabStats.uniqueWords} words (${varVocabStats.ttr}% TTR)` : "…";
+  }
+
+  const progressBox = document.getElementById("var-stat-progress");
+  if (progressBox) {
+    if (state === "running") {
+      progressBox.textContent = `Run ${completed + 1} of ${numRuns} in progress`;
+    } else if (state === "stopped") {
+      progressBox.textContent = `Stopped after ${completed} of ${numRuns} runs`;
+    } else {
+      progressBox.textContent = `${completed} of ${numRuns} runs complete`;
+    }
+  }
+}
+
 // Multi-Run Repeatability & Variance Runner
 async function runVarianceTest() {
   if (!resolveLM()) {
@@ -3553,88 +3694,38 @@ async function runVarianceTest() {
     });
   }
 
-  for (let r = 0; r < numRuns; r++) {
-    const res = await streamPreset(presetId, userPrompt, systemPrompt, runCards[r], r, isStreaming, isPlainTextOnly);
-    if (res.error) {
-      // If native session creation threw an error (e.g. TypeError on unsupported enum), abort subsequent repeat runs
-      runBtn.disabled = false;
-      return;
-    }
-    completedOutputs.push(res.text ? res.text.trim() : "");
+  try {
+    for (let r = 0; r < numRuns; r++) {
+      // Refresh the stats before every run: the first call clears the
+      // previous test's numbers, later calls add the run that just finished.
+      renderVarianceStats(completedOutputs, runCards, numRuns, "running");
 
-    if (!res.error && res.text) {
-      if (!cumulativeBenchmarkHistory[presetId]) {
-        cumulativeBenchmarkHistory[presetId] = [];
+      const res = await streamPreset(presetId, userPrompt, systemPrompt, runCards[r], r, isStreaming, isPlainTextOnly);
+      if (res.error) {
+        // If native session creation threw an error (e.g. TypeError on unsupported enum), abort subsequent repeat runs
+        break;
       }
-      cumulativeBenchmarkHistory[presetId].push({
-        latency: res.latency,
-        tokens: res.tokens,
-        throughput: res.latency > 0 ? (res.tokens / res.latency) : 0,
-        entropy: 0,
-        text: res.text
-      });
+      completedOutputs.push(res.text ? res.text.trim() : "");
+
+      if (res.text) {
+        if (!cumulativeBenchmarkHistory[presetId]) {
+          cumulativeBenchmarkHistory[presetId] = [];
+        }
+        cumulativeBenchmarkHistory[presetId].push({
+          latency: res.latency,
+          tokens: res.tokens,
+          throughput: res.latency > 0 ? (res.tokens / res.latency) : 0,
+          entropy: 0,
+          text: res.text
+        });
+        // Keep the vocabulary and diversity metrics tab in step with every run
+        updateMetricsTab();
+      }
     }
+  } finally {
+    renderVarianceStats(completedOutputs, runCards, numRuns, completedOutputs.length === numRuns ? "done" : "stopped");
+    runBtn.disabled = false;
   }
-
-  // Normalization helper for robust cross-run matching
-  const normText = (s) => (s || "").trim().replace(/\r\n/g, '\n').replace(/[ \t]+/g, ' ');
-
-  // Group identical runs into distinct variation clusters
-  const variationGroups = [];
-  const runVariationMap = [];
-
-  completedOutputs.forEach((output, idx) => {
-    const nOut = normText(output);
-    const matchGroupIndex = variationGroups.findIndex(g => normText(g.text) === nOut);
-    if (matchGroupIndex === -1) {
-      // New unique variation found
-      const newGroupId = variationGroups.length + 1;
-      variationGroups.push({ id: newGroupId, text: output, firstRunIdx: idx });
-      runVariationMap.push({ groupId: newGroupId, isFirstInGroup: true, matchesRunIdx: idx });
-    } else {
-      // Duplicate of an earlier run
-      const matchedGroup = variationGroups[matchGroupIndex];
-      runVariationMap.push({ groupId: matchedGroup.id, isFirstInGroup: false, matchesRunIdx: matchedGroup.firstRunIdx });
-    }
-  });
-
-  completedOutputs.forEach((output, idx) => {
-    const info = runVariationMap[idx];
-    const header = runCards[idx].card.querySelector(".result-card-header");
-    if (!header) return;
-
-    // Clear any prior badge
-    header.querySelectorAll(".match-badge").forEach(b => b.remove());
-
-    const badge = document.createElement("span");
-    if (idx === 0) {
-      badge.className = "match-badge match-badge-identical";
-      badge.textContent = "Baseline (Var #1)";
-    } else if (!info.isFirstInGroup) {
-      badge.className = "match-badge match-badge-identical";
-      badge.textContent = `✓ Matches Run #${info.matchesRunIdx + 1}`;
-    } else {
-      badge.className = "match-badge match-badge-divergent";
-      badge.textContent = `✦ Variation #${info.groupId}`;
-    }
-    header.appendChild(badge);
-  });
-
-  const totalUnique = variationGroups.length;
-  const determinismPercent = (totalUnique === 1) ? 100 : Math.max(0, Math.round(((numRuns - totalUnique) / (numRuns - 1)) * 100));
-
-  const varVocabStats = getVocabularyStats(completedOutputs);
-
-  document.getElementById("var-stat-determinism").textContent = `${totalUnique === 1 ? 100 : determinismPercent}%`;
-  document.getElementById("var-stat-determinism").style.color = (totalUnique === 1) ? "var(--accent-green)" : "var(--accent-purple)";
-  document.getElementById("var-stat-unique").textContent = `${totalUnique} of ${numRuns}`;
-  const vocabBox = document.getElementById("var-stat-vocab");
-  if (vocabBox) {
-    vocabBox.textContent = `${varVocabStats.uniqueWords} words (${varVocabStats.ttr}% TTR)`;
-  }
-
-  updateMetricsTab();
-  runBtn.disabled = false;
 }
 
 // Master Initialization Function

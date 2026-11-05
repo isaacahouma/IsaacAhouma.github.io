@@ -1502,33 +1502,33 @@
       </div>
 
       <div class="activation-grid">
-        <!-- Method A: Flags UI -->
+        <!-- Method A: Flags & Settings UI -->
         <div class="activation-col">
-          <strong style="color: var(--accent-blue);">Method A: Configure via <code id="method-a-code">chrome://flags</code></strong>
+          <strong style="color: var(--accent-blue);">Method A: Configure via <code id="method-a-code">chrome://flags</code> &amp; <code id="method-a-settings-code">chrome://settings/ai</code></strong>
           <ul class="flags-step-list">
             <li class="flags-step-item">
               <span><strong>1. Enable Prompt API Flag:</strong></span>
               <div class="cmd-bar">
-                <span id="flag-prompt">chrome://flags/#prompt-api-for-gemini-nano</span>
+                <span id="flag-prompt">chrome://flags/#prompt-api</span>
                 <button class="copy-btn" onclick="copyText('flag-prompt')">Copy URL</button>
               </div>
-              <span style="color: var(--text-muted); font-size: 0.75rem;">Set to <strong>Enabled</strong>.</span>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">Set to <strong>Enabled</strong> (for localhost or non-OT origins, also enable <code id="flag-sampling-inline">chrome://flags/#prompt-api-sampling-mode</code>).</span>
             </li>
             <li class="flags-step-item">
-              <span><strong>2. Enable On-Device Model &amp; Bypass Perf:</strong></span>
+              <span><strong>2. Enable On-Device AI Setting:</strong></span>
               <div class="cmd-bar">
-                <span id="flag-optguide">chrome://flags/#optimization-guide-on-device-model</span>
+                <span id="flag-optguide">chrome://settings/ai</span>
                 <button class="copy-btn" onclick="copyText('flag-optguide')">Copy URL</button>
               </div>
-              <span style="color: var(--text-muted); font-size: 0.75rem;">Set to <strong>Enabled BypassPerfRequirement</strong>.</span>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">Turn <strong>On-device AI</strong> toggle <strong>ON</strong> (requires &ge;20 GB free disk space for initial install).</span>
             </li>
             <li class="flags-step-item">
-              <span><strong>3. Verify Model in <code id="flag-components-code">chrome://components</code>:</strong></span>
+              <span><strong>3. Download &amp; Inspect Model:</strong></span>
               <div class="cmd-bar">
-                <span id="flag-components">chrome://components</span>
+                <span id="flag-components">chrome://on-device-internals</span>
                 <button class="copy-btn" onclick="copyText('flag-components')">Copy URL</button>
               </div>
-              <span style="color: var(--text-muted); font-size: 0.75rem;">Find <em>Optimization Guide On Device Model</em> &rarr; Click <em>Check for update</em> until status says <strong>Up-to-date</strong>.</span>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">Click <strong>Download On-Device Model</strong> above, or inspect <strong>Broker State</strong> (enable debug pages at <code id="flag-chrome-urls-code">chrome://chrome-urls</code> first) and <em>Optimization Guide On DeviceModels Manifest</em> in <code id="flag-components-code">chrome://components</code>.</span>
             </li>
           </ul>
         </div>
@@ -1540,7 +1540,7 @@
           <div style="display: flex; flex-direction: column; gap: 4px;">
             <span id="cmd-canary-label" style="font-size: 0.8rem; font-weight: 600;">Chrome Canary / Dev:</span>
             <div class="cmd-bar">
-              <span id="cmd-canary">/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --enable-blink-features=AIPromptAPI,AIPromptAPIParams --enable-features=OptimizationGuideModelDownloading --optimization-guide-model-execution-override=1 https://isaacahouma.github.io/prompt-api-sampling-presets/</span>
+              <span id="cmd-canary">/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --enable-blink-features=AIPromptAPI,AIPromptAPIParams https://isaacahouma.github.io/prompt-api-sampling-presets/</span>
               <button class="copy-btn" onclick="copyText('cmd-canary')">Copy</button>
             </div>
           </div>
@@ -1552,6 +1552,7 @@
               <button class="copy-btn" onclick="copyText('cmd-chromium')">Copy</button>
             </div>
           </div>
+          <span style="color: var(--text-muted); font-size: 0.75rem; margin-top: 2px;">On a fresh profile, also toggle <strong>On-device AI</strong> ON in <code id="method-b-settings-code">chrome://settings/ai</code>.</span>
         </div>
       </div>
     </div>
@@ -2641,30 +2642,42 @@ function switchGuideBrowser(key) {
   const methodACode = document.getElementById("method-a-code");
   if (methodACode) methodACode.textContent = `${guide.scheme}flags`;
 
+  const methodASettingsCode = document.getElementById("method-a-settings-code");
+  if (methodASettingsCode) methodASettingsCode.textContent = `${guide.scheme}settings/ai`;
+
   const flagPrompt = document.getElementById("flag-prompt");
-  if (flagPrompt) flagPrompt.textContent = `${guide.scheme}flags/#prompt-api-for-gemini-nano`;
+  if (flagPrompt) flagPrompt.textContent = `${guide.scheme}flags/#prompt-api`;
+
+  const flagSamplingInline = document.getElementById("flag-sampling-inline");
+  if (flagSamplingInline) flagSamplingInline.textContent = `${guide.scheme}flags/#prompt-api-sampling-mode`;
 
   const flagOptguide = document.getElementById("flag-optguide");
-  if (flagOptguide) flagOptguide.textContent = `${guide.scheme}flags/#optimization-guide-on-device-model`;
+  if (flagOptguide) flagOptguide.textContent = `${guide.scheme}settings/ai`;
+
+  const flagComponents = document.getElementById("flag-components");
+  if (flagComponents) flagComponents.textContent = `${guide.scheme}on-device-internals`;
+
+  const flagChromeUrlsCode = document.getElementById("flag-chrome-urls-code");
+  if (flagChromeUrlsCode) flagChromeUrlsCode.textContent = `${guide.scheme}chrome-urls`;
 
   const flagCompCode = document.getElementById("flag-components-code");
   if (flagCompCode) flagCompCode.textContent = `${guide.scheme}components`;
-
-  const flagComponents = document.getElementById("flag-components");
-  if (flagComponents) flagComponents.textContent = `${guide.scheme}components`;
 
   const canaryLabel = document.getElementById("cmd-canary-label");
   if (canaryLabel) canaryLabel.textContent = guide.canaryLabel;
 
   const cmdCanary = document.getElementById("cmd-canary");
   if (cmdCanary) {
-    cmdCanary.textContent = `${guide.canaryPath} --enable-blink-features=AIPromptAPI,AIPromptAPIParams --enable-features=OptimizationGuideModelDownloading --optimization-guide-model-execution-override=1 ${currentUrl}`;
+    cmdCanary.textContent = `${guide.canaryPath} --enable-blink-features=AIPromptAPI,AIPromptAPIParams ${currentUrl}`;
   }
 
   const cmdChromium = document.getElementById("cmd-chromium");
   if (cmdChromium) {
     cmdChromium.textContent = `$CHROMIUM_SRC/out/Default/Chromium.app/Contents/MacOS/Chromium --enable-blink-features=AIPromptAPI,AIPromptAPIParams ${currentUrl}`;
   }
+
+  const methodBSettingsCode = document.getElementById("method-b-settings-code");
+  if (methodBSettingsCode) methodBSettingsCode.textContent = `${guide.scheme}settings/ai`;
 
   document.querySelectorAll(".browser-tab-btn").forEach(btn => {
     if (btn.getAttribute("data-browser") === key) {
@@ -2890,6 +2903,7 @@ async function checkApiAvailability() {
   const guideConfig = BROWSER_GUIDES[detectedBrowserKey] || BROWSER_GUIDES.chrome;
   const componentsUrl = `${guideConfig.scheme}components`;
   const internalsUrl = `${guideConfig.scheme}on-device-internals`;
+  const settingsUrl = `${guideConfig.scheme}settings/ai`;
   const resolved = resolveLM();
 
   if (!resolved) {
@@ -2912,7 +2926,7 @@ async function checkApiAvailability() {
       container.innerHTML = `
         <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1; line-height: 1.6;">
           <strong style="color: var(--accent-red); font-size: 1rem;">⚠️ Prompt API (<code>window.LanguageModel</code>) is not available in this browser.</strong><br><br>
-          This studio requires native on-device Prompt API execution (e.g. Chromium M151+ with on-device model enabled).<br>
+          This studio requires native on-device Prompt API execution (enable <code>${guideConfig.scheme}flags/#prompt-api</code> and <code>${settingsUrl}</code>).<br>
           Click <strong>🚀 Setup &amp; Flags Guide</strong> above for activation instructions.
         </div>
       `;
@@ -2945,7 +2959,7 @@ async function checkApiAvailability() {
       dot.className = "status-dot green";
       await syncSupportedPresets(fullVersion, resolved);
       guide.classList.remove("show");
-      text.innerHTML = `● <strong>LanguageModel Ready</strong>`;
+      text.innerHTML = `<strong>LanguageModel Ready</strong>`;
     } else if (availability === "unavailable" || availability === "no") {
       stopAvailabilityPolling();
       if (downloadBtn) downloadBtn.style.display = "none";
@@ -2966,7 +2980,7 @@ async function checkApiAvailability() {
         container.innerHTML = `
           <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1; line-height: 1.6;">
             <strong style="color: var(--accent-red); font-size: 1rem;">⚠️ Prompt API model availability returned <code>"${availability}"</code>.</strong><br><br>
-            The on-device model is disabled, unsupported on this device, or temporarily paused after repeated model crashes (check <code>${internalsUrl}</code> &rarr; <em>Reset</em> crash count).<br>
+            The on-device model is turned off in <code>${settingsUrl}</code>, unsupported on this device (&lt;20 GB free disk space), or paused after repeated crashes (check <code>${internalsUrl}</code> &rarr; <em>Reset</em> crash count).<br>
             Click <strong>🚀 Setup &amp; Flags Guide</strong> above for activation instructions.
           </div>
         `;
@@ -3528,7 +3542,7 @@ async function streamPreset(presetId, userPrompt, systemPrompt, card, runIndex =
         const statusText = document.getElementById("status-text");
         const downloadBtn = document.getElementById("download-model-btn");
         if (statusDot) statusDot.className = "status-dot green";
-        if (statusText) statusText.innerHTML = `● <strong>LanguageModel Ready</strong>`;
+        if (statusText) statusText.innerHTML = `<strong>LanguageModel Ready</strong>`;
         if (downloadBtn) downloadBtn.style.display = "none";
       }
 

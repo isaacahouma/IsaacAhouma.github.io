@@ -1468,8 +1468,11 @@
       <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
         <div class="status-badge">
           <span class="status-dot green" id="status-dot"></span>
-          <span id="status-text">Detecting Prompt API Environment...</span>
+          <span id="status-text" role="status" aria-live="polite">Detecting Prompt API Environment...</span>
         </div>
+        <button type="button" id="download-model-btn" onclick="triggerModelDownload()" style="display:none; padding: 5px 12px; font-size: 0.78rem; font-weight: 600;" title="Request and download the on-device language model via LanguageModel.create()">
+          ⬇️ Download On-Device Model
+        </button>
         <div class="status-badge" id="browser-version-pill" style="font-family:var(--font-mono); font-size:0.76rem; font-weight:600; background:var(--bg-secondary); border:1px solid var(--border-color); color:var(--text-main); display:none;">
           <span id="browser-version-text">Detecting browser...</span>
         </div>
@@ -2761,18 +2764,137 @@ async function detectBrowserVersion() {
   return { fullVersion, brandName, detectedBrowserKey };
 }
 
+let availabilityPollTimer = null;
+let currentModelAvailability = "unknown";
+let isDownloadingModel = false;
+let isBenchmarkRunning = false;
+let presetsInitializedForMajor = false;
+
+function stopAvailabilityPolling() {
+  if (availabilityPollTimer) {
+    clearInterval(availabilityPollTimer);
+    availabilityPollTimer = null;
+  }
+}
+
+function startAvailabilityPolling(intervalMs = 2000) {
+  if (availabilityPollTimer) return;
+  availabilityPollTimer = setInterval(() => {
+    if (!isBenchmarkRunning) {
+      checkApiAvailability();
+    }
+  }, intervalMs);
+}
+
+async function syncSupportedPresets(fullVersion, resolved) {
+  const major = parseInt((fullVersion || "").split('.')[0], 10) || 0;
+  let supportedModes = [];
+
+  if (major >= 154) {
+    // Chromium M154+ (Canary / CL 8119572) supports all 7 presets
+    supportedModes = PRESETS.map(p => p.id);
+    if (!presetsInitializedForMajor && selectedPresets.length === 5) {
+      selectedPresets = PRESETS.map(p => p.id);
+      presetsInitializedForMajor = true;
+    }
+  } else if (major > 0 && major < 154) {
+    // Chromium M151-M153 (CL 7801217) supports the 5 baseline presets
+    supportedModes = ["most-predictable", "predictable", "balanced", "creative", "most-creative"];
+    selectedPresets = selectedPresets.filter(id => supportedModes.includes(id));
+  } else if (resolved?.obj?.availability) {
+    for (const p of PRESETS) {
+      try {
+        const availTest = await resolved.obj.availability({ samplingMode: p.id });
+        if (availTest && availTest !== "unavailable" && availTest !== "no") {
+          supportedModes.push(p.id);
+        }
+      } catch (e) {}
+    }
+  }
+
+  window.supportedSamplingModes = new Set(
+    supportedModes.length > 0
+      ? supportedModes
+      : ["most-predictable", "predictable", "balanced", "creative", "most-creative"]
+  );
+  selectedPresets = selectedPresets.filter(id => window.supportedSamplingModes.has(id));
+  if (selectedPresets.length === 0) {
+    selectedPresets = ["balanced"];
+  }
+  renderSpectrum();
+  updateVarianceSelect();
+}
+
+async function triggerModelDownload() {
+  const resolved = resolveLM();
+  if (!resolved || isDownloadingModel) return;
+
+  const dot = document.getElementById("status-dot");
+  const text = document.getElementById("status-text");
+  const downloadBtn = document.getElementById("download-model-btn");
+
+  isDownloadingModel = true;
+  if (downloadBtn) {
+    downloadBtn.disabled = true;
+    downloadBtn.textContent = "⏳ Requesting Download...";
+  }
+  if (dot) dot.className = "status-dot yellow";
+  if (text) {
+    text.innerHTML = `⏳ <strong>Downloading on-device model...</strong> (Starting download via <code>LanguageModel.create()</code>)`;
+  }
+  startAvailabilityPolling(2000);
+
+  let session = null;
+  try {
+    session = await resolved.obj.create({
+      monitor(m) {
+        m.addEventListener("downloadprogress", (e) => {
+          const pct = typeof e.loaded === "number" ? Math.min(100, Math.max(0, Math.round(e.loaded * 100))) : null;
+          if (pct !== null) {
+            if (downloadBtn) downloadBtn.textContent = `⏳ Downloading (${pct}%)`;
+            if (text) {
+              text.innerHTML = `⏳ <strong>Downloading on-device model (${pct}%)...</strong>`;
+            }
+          }
+        });
+      }
+    });
+  } catch (e) {
+    console.warn("Model download / warm-up create() failed:", e);
+    if (dot) dot.className = "status-dot red";
+    if (text) {
+      text.innerHTML = `⚠️ <strong>Model Download Failed</strong> (${e.message || e})`;
+    }
+  } finally {
+    if (session) {
+      try { session.destroy(); } catch (destroyErr) {}
+    }
+    isDownloadingModel = false;
+    if (downloadBtn) {
+      downloadBtn.disabled = false;
+      downloadBtn.textContent = "⬇️ Download On-Device Model";
+    }
+    await checkApiAvailability();
+  }
+}
+window.triggerModelDownload = triggerModelDownload;
+
 // Check Environment Diagnostics
 async function checkApiAvailability() {
   const dot = document.getElementById("status-dot");
   const text = document.getElementById("status-text");
   const guide = document.getElementById("activation-guide-box");
+  const downloadBtn = document.getElementById("download-model-btn");
 
-  const { fullVersion, brandName, detectedBrowserKey } = await detectBrowserVersion();
+  const { fullVersion, detectedBrowserKey } = await detectBrowserVersion();
   const guideConfig = BROWSER_GUIDES[detectedBrowserKey] || BROWSER_GUIDES.chrome;
   const componentsUrl = `${guideConfig.scheme}components`;
+  const internalsUrl = `${guideConfig.scheme}on-device-internals`;
   const resolved = resolveLM();
 
   if (!resolved) {
+    stopAvailabilityPolling();
+    if (downloadBtn) downloadBtn.style.display = "none";
     dot.className = "status-dot red";
     text.innerHTML = `⚠️ <strong>Prompt API Unavailable</strong> (<code>window.LanguageModel</code> not detected)`;
     const runBtn = document.getElementById("run-benchmark-btn");
@@ -2786,7 +2908,7 @@ async function checkApiAvailability() {
       varBtn.title = "Prompt API (window.LanguageModel) is not available in this browser.";
     }
     const container = document.getElementById("results-cards-container");
-    if (container) {
+    if (container && !container.querySelector(".result-card")) {
       container.innerHTML = `
         <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1; line-height: 1.6;">
           <strong style="color: var(--accent-red); font-size: 1rem;">⚠️ Prompt API (<code>window.LanguageModel</code>) is not available in this browser.</strong><br><br>
@@ -2799,94 +2921,98 @@ async function checkApiAvailability() {
   }
 
   try {
-    let availability = "readily";
-    if (typeof resolved.obj.availability === "function") {
-      availability = await resolved.obj.availability();
-    } else if (typeof resolved.obj.capabilities === "function") {
-      const caps = await resolved.obj.capabilities();
-      availability = caps.available || "readily";
-    }
+    const availability = typeof resolved.obj.availability === "function"
+      ? await resolved.obj.availability()
+      : "available";
+    currentModelAvailability = availability;
 
     const runBtn = document.getElementById("run-benchmark-btn");
     const varBtn = document.getElementById("run-variance-btn");
 
-    if (availability === "readily" || availability === "available" || availability === "readily-available") {
-      if (runBtn) {
-        runBtn.disabled = false;
-        runBtn.title = "Run comparison benchmark across active presets";
-      }
-      if (varBtn) {
-        varBtn.disabled = false;
-        varBtn.title = "Run repeatability test on selected preset";
+    if (availability === "available" || availability === "readily" || availability === "readily-available") {
+      stopAvailabilityPolling();
+      if (downloadBtn) downloadBtn.style.display = "none";
+      if (!isBenchmarkRunning) {
+        if (runBtn) {
+          runBtn.disabled = false;
+          runBtn.title = "Run comparison benchmark across active presets";
+        }
+        if (varBtn) {
+          varBtn.disabled = false;
+          varBtn.title = "Run repeatability test on selected preset";
+        }
       }
       dot.className = "status-dot green";
-      const major = parseInt((fullVersion || "").split('.')[0], 10) || 0;
-      let supportedModes = [];
-
-      if (major >= 154) {
-        // Chromium M154+ (Canary / CL 8119572) supports all 7 presets
-        supportedModes = PRESETS.map(p => p.id);
-        // On 154+, enable all 7 presets by default if not yet modified
-        if (selectedPresets.length === 5) {
-          selectedPresets = PRESETS.map(p => p.id);
-        }
-      } else if (major > 0 && major < 154) {
-        // Chromium M151-M153 (CL 7801217) strictly supports the 5 baseline presets
-        supportedModes = ["most-predictable", "predictable", "balanced", "creative", "most-creative"];
-        selectedPresets = selectedPresets.filter(id => supportedModes.includes(id));
-      } else {
-        // Fallback: probe via availability
-        for (const p of PRESETS) {
-          try {
-            const availTest = await resolved.obj.availability?.({ samplingMode: p.id });
-            if (availTest && availTest !== "no") supportedModes.push(p.id);
-          } catch (e) {}
-        }
-      }
-
-      window.supportedSamplingModes = new Set(supportedModes.length > 0 ? supportedModes : ["most-predictable", "predictable", "balanced", "creative", "most-creative"]);
-      selectedPresets = selectedPresets.filter(id => window.supportedSamplingModes.has(id));
-      if (selectedPresets.length === 0) {
-        selectedPresets = ["balanced"];
-      }
-      renderSpectrum();
-      updateVarianceSelect();
-
+      await syncSupportedPresets(fullVersion, resolved);
+      guide.classList.remove("show");
       text.innerHTML = `● <strong>LanguageModel Ready</strong>`;
-    } else if (availability === "no") {
-      if (runBtn) {
-        runBtn.disabled = true;
-        runBtn.title = "Prompt API is disabled or unavailable on this device (availability returned 'no').";
-      }
-      if (varBtn) {
-        varBtn.disabled = true;
-        varBtn.title = "Prompt API is disabled or unavailable on this device (availability returned 'no').";
+    } else if (availability === "unavailable" || availability === "no") {
+      stopAvailabilityPolling();
+      if (downloadBtn) downloadBtn.style.display = "none";
+      if (!isBenchmarkRunning) {
+        if (runBtn) {
+          runBtn.disabled = true;
+          runBtn.title = `Prompt API is disabled or unavailable on this device (availability returned "${availability}").`;
+        }
+        if (varBtn) {
+          varBtn.disabled = true;
+          varBtn.title = `Prompt API is disabled or unavailable on this device (availability returned "${availability}").`;
+        }
       }
       dot.className = "status-dot red";
-      text.innerHTML = `⚠️ <strong>Prompt API Disabled</strong> (Model availability: "no")`;
+      text.innerHTML = `⚠️ <strong>Prompt API Unavailable</strong> (Model availability: <code>"${availability}"</code>)`;
       const container = document.getElementById("results-cards-container");
-      if (container) {
+      if (container && !container.querySelector(".result-card")) {
         container.innerHTML = `
           <div style="color: var(--text-muted); font-size: 0.9rem; padding: 40px; text-align: center; border: 1px dashed var(--border-color); border-radius: 8px; grid-column: 1 / -1; line-height: 1.6;">
-            <strong style="color: var(--accent-red); font-size: 1rem;">⚠️ Prompt API model availability returned "no".</strong><br><br>
-            The on-device model is disabled or not available on this device.<br>
+            <strong style="color: var(--accent-red); font-size: 1rem;">⚠️ Prompt API model availability returned <code>"${availability}"</code>.</strong><br><br>
+            The on-device model is disabled, unsupported on this device, or temporarily paused after repeated model crashes (check <code>${internalsUrl}</code> &rarr; <em>Reset</em> crash count).<br>
             Click <strong>🚀 Setup &amp; Flags Guide</strong> above for activation instructions.
           </div>
         `;
       }
       guide.classList.add("show");
-    } else if (availability === "after-download" || availability === "downloadable") {
-      if (runBtn) {
-        runBtn.disabled = true;
-        runBtn.title = `On-device model is downloading. Check progress in ${componentsUrl}.`;
-      }
-      if (varBtn) {
-        varBtn.disabled = true;
-        varBtn.title = `On-device model is downloading. Check progress in ${componentsUrl}.`;
+    } else if (availability === "downloadable" || availability === "after-download") {
+      await syncSupportedPresets(fullVersion, resolved);
+      if (!isBenchmarkRunning) {
+        if (runBtn) {
+          runBtn.disabled = false;
+          runBtn.title = "Click to download the on-device model (if needed) and run comparison";
+        }
+        if (varBtn) {
+          varBtn.disabled = false;
+          varBtn.title = "Click to download the on-device model (if needed) and run repeatability test";
+        }
       }
       dot.className = "status-dot yellow";
-      text.innerHTML = `⏳ <strong>Downloading on-device model...</strong> (Check status in <code>${componentsUrl}</code>)`;
-      guide.classList.add("show");
+      if (downloadBtn) {
+        downloadBtn.style.display = "inline-flex";
+        downloadBtn.disabled = isDownloadingModel;
+      }
+      if (!isDownloadingModel) {
+        text.innerHTML = `📥 <strong>On-Device Model Ready to Download</strong> (Click <strong>Download On-Device Model</strong> or <strong>Run Comparison</strong> to start)`;
+      }
+      startAvailabilityPolling(3000);
+    } else if (availability === "downloading") {
+      await syncSupportedPresets(fullVersion, resolved);
+      if (!isBenchmarkRunning) {
+        if (runBtn) {
+          runBtn.disabled = false;
+          runBtn.title = "Model is downloading; clicking Run Comparison will wait until ready";
+        }
+        if (varBtn) {
+          varBtn.disabled = false;
+          varBtn.title = "Model is downloading; clicking Run Repeatability will wait until ready";
+        }
+      }
+      dot.className = "status-dot yellow";
+      if (downloadBtn) {
+        downloadBtn.style.display = isDownloadingModel ? "inline-flex" : "none";
+      }
+      if (!isDownloadingModel) {
+        text.innerHTML = `⏳ <strong>Downloading on-device model...</strong> (Auto-detecting completion; see <code>${internalsUrl}</code> or <code>${componentsUrl}</code>)`;
+      }
+      startAvailabilityPolling(2000);
     } else {
       dot.className = "status-dot blue";
       text.innerHTML = `● <strong>Prompt API Status: ${availability}</strong>`;
@@ -2894,13 +3020,15 @@ async function checkApiAvailability() {
   } catch (e) {
     const runBtn = document.getElementById("run-benchmark-btn");
     const varBtn = document.getElementById("run-variance-btn");
-    if (runBtn) {
-      runBtn.disabled = true;
-      runBtn.title = `Prompt API Error: ${e.message || e}`;
-    }
-    if (varBtn) {
-      varBtn.disabled = true;
-      varBtn.title = `Prompt API Error: ${e.message || e}`;
+    if (!isBenchmarkRunning) {
+      if (runBtn) {
+        runBtn.disabled = true;
+        runBtn.title = `Prompt API Error: ${e.message || e}`;
+      }
+      if (varBtn) {
+        varBtn.disabled = true;
+        varBtn.title = `Prompt API Error: ${e.message || e}`;
+      }
     }
     dot.className = "status-dot red";
     text.innerHTML = `⚠️ <strong>Prompt API Error</strong> (${e.message || e})`;
@@ -3364,13 +3492,45 @@ async function streamPreset(presetId, userPrompt, systemPrompt, card, runIndex =
 
     let session = null;
     try {
-      card.stats.textContent = `Creating session (${p.name})...`;
-      
+      const needsDownload = currentModelAvailability === "downloadable" ||
+                            currentModelAvailability === "after-download" ||
+                            currentModelAvailability === "downloading";
+      card.stats.textContent = needsDownload
+        ? `Downloading model (${p.name})...`
+        : `Creating session (${p.name})...`;
+
       session = await resolved.obj.create({
         samplingMode: presetId,
         initialPrompts: systemPrompt ? [{ role: "system", content: systemPrompt }] : undefined,
-        systemPrompt: systemPrompt || undefined
+        monitor(m) {
+          m.addEventListener("downloadprogress", (e) => {
+            if (!needsDownload && !(typeof e.loaded === "number" && e.loaded > 0 && e.loaded < 1)) {
+              return;
+            }
+            const pct = typeof e.loaded === "number" ? Math.min(100, Math.max(0, Math.round(e.loaded * 100))) : null;
+            if (pct !== null) {
+              card.stats.textContent = `⏳ Downloading (${pct}%)...`;
+              const statusText = document.getElementById("status-text");
+              const statusDot = document.getElementById("status-dot");
+              if (statusDot) statusDot.className = "status-dot yellow";
+              if (statusText) {
+                statusText.innerHTML = `⏳ <strong>Downloading on-device model (${pct}%)...</strong>`;
+              }
+            }
+          });
+        }
       });
+
+      if (session && needsDownload) {
+        currentModelAvailability = "available";
+        stopAvailabilityPolling();
+        const statusDot = document.getElementById("status-dot");
+        const statusText = document.getElementById("status-text");
+        const downloadBtn = document.getElementById("download-model-btn");
+        if (statusDot) statusDot.className = "status-dot green";
+        if (statusText) statusText.innerHTML = `● <strong>LanguageModel Ready</strong>`;
+        if (downloadBtn) downloadBtn.style.display = "none";
+      }
 
       if (session) {
         const isJsonPrompt = (document.getElementById("sample-prompt-selector")?.value === "travel_itinerary") ||
@@ -3493,8 +3653,11 @@ async function runBenchmark() {
 
   const container = document.getElementById("results-cards-container");
   const runBtn = document.getElementById("run-benchmark-btn");
+  const varBtn = document.getElementById("run-variance-btn");
   container.innerHTML = "";
+  isBenchmarkRunning = true;
   runBtn.disabled = true;
+  if (varBtn) varBtn.disabled = true;
 
   const activePresets = getSortedActivePresets(selectedPresets.length > 0 ? selectedPresets : ["most-predictable", "balanced", "creative"]);
   const cards = {};
@@ -3525,26 +3688,32 @@ async function runBenchmark() {
 
   switchTab("stream");
 
-  for (const presetId of activePresets) {
-    const res = await streamPreset(presetId, userPrompt, systemPrompt, cards[presetId], 0, isStreaming, isPlainTextOnly);
-    
-    // Accumulate into historical multi-sample array only if inference succeeded
-    if (!res.error && res.text) {
-      if (!cumulativeBenchmarkHistory[presetId]) {
-        cumulativeBenchmarkHistory[presetId] = [];
+  try {
+    for (const presetId of activePresets) {
+      const res = await streamPreset(presetId, userPrompt, systemPrompt, cards[presetId], 0, isStreaming, isPlainTextOnly);
+      
+      // Accumulate into historical multi-sample array only if inference succeeded
+      if (!res.error && res.text) {
+        if (!cumulativeBenchmarkHistory[presetId]) {
+          cumulativeBenchmarkHistory[presetId] = [];
+        }
+        cumulativeBenchmarkHistory[presetId].push({
+          latency: res.latency,
+          tokens: res.tokens,
+          throughput: res.latency > 0 ? (res.tokens / res.latency) : 0,
+          entropy: 0,
+          text: res.text
+        });
+        // Incrementally update vocabulary and diversity metrics tab
+        updateMetricsTab();
       }
-      cumulativeBenchmarkHistory[presetId].push({
-        latency: res.latency,
-        tokens: res.tokens,
-        throughput: res.latency > 0 ? (res.tokens / res.latency) : 0,
-        entropy: 0,
-        text: res.text
-      });
-      // Incrementally update vocabulary and diversity metrics tab
-      updateMetricsTab();
     }
+  } finally {
+    isBenchmarkRunning = false;
+    runBtn.disabled = false;
+    if (varBtn) varBtn.disabled = false;
+    await checkApiAvailability();
   }
-  runBtn.disabled = false;
 }
 
 // Groups the finished runs into exact-match clusters and refreshes the
@@ -3659,10 +3828,13 @@ async function runVarianceTest() {
   const container = document.getElementById("variance-results-container");
   const statsBoxes = document.getElementById("variance-metrics-boxes");
   const runBtn = document.getElementById("run-variance-btn");
+  const benchBtn = document.getElementById("run-benchmark-btn");
 
   container.innerHTML = "";
   statsBoxes.style.display = "grid";
+  isBenchmarkRunning = true;
   runBtn.disabled = true;
+  if (benchBtn) benchBtn.disabled = true;
 
   document.getElementById("var-stat-preset").textContent = p.name;
   document.getElementById("var-stat-preset").style.color = p.color;
@@ -3724,7 +3896,10 @@ async function runVarianceTest() {
     }
   } finally {
     renderVarianceStats(completedOutputs, runCards, numRuns, completedOutputs.length === numRuns ? "done" : "stopped");
+    isBenchmarkRunning = false;
     runBtn.disabled = false;
+    if (benchBtn) benchBtn.disabled = false;
+    await checkApiAvailability();
   }
 }
 
